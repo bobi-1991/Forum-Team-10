@@ -26,11 +26,10 @@ namespace ForumTemplate.Repositories
 
         public PostDTO GetById(int id)
         {
-            PostDTO post = this.posts.Where(p => p.Id == id).FirstOrDefault();
-
-            return post ?? throw new EntityNotFoundException($"Post with id={id} doesn't exist.");
+            return this.posts.Where(p => p.Id == id).FirstOrDefault();
         }
 
+        //Not Configured for any EndPoint yet
         public PostDTO GetByTitle(string title)
         {
             PostDTO post = this.posts.Where(p => p.Title == title).FirstOrDefault();
@@ -45,7 +44,7 @@ namespace ForumTemplate.Repositories
 
         public PostDTO Create(PostDTO postDTO)
         {
-            postDTO.Id = this.posts.Count+1;
+            postDTO.Id = this.posts.Count + 1;
             this.posts.Add(postDTO);
 
             return postDTO;

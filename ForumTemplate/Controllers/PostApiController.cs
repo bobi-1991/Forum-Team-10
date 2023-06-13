@@ -36,9 +36,9 @@ namespace ForumTemplate.Controllers
 
                 return StatusCode(StatusCodes.Status200OK, post);
             }
-            catch (EntityNotFoundException e)
+            catch (ValidationException e)
             {
-                return StatusCode(StatusCodes.Status404NotFound, e.Message);
+                return BadRequest(e.Message);
             }
         }
 
@@ -52,9 +52,9 @@ namespace ForumTemplate.Controllers
 
                 return StatusCode(StatusCodes.Status201Created, post);
             }
-            catch (DuplicateEntityException e)
+            catch (ValidationException e)
             {
-                return StatusCode(StatusCodes.Status409Conflict, e.Message);
+                return BadRequest(e.Message);
             }
         }
 
@@ -67,9 +67,9 @@ namespace ForumTemplate.Controllers
 
                 return StatusCode(StatusCodes.Status200OK, updatedPost);
             }
-            catch (EntityNotFoundException e)
+            catch (ValidationException e)
             {
-                return StatusCode(StatusCodes.Status404NotFound, e.Message);
+                return BadRequest(e.Message);
             }
         }
 
@@ -82,9 +82,9 @@ namespace ForumTemplate.Controllers
 
                 return StatusCode(StatusCodes.Status200OK, result);
             }
-            catch (EntityNotFoundException e)
+            catch (ValidationException e)
             {
-                return StatusCode(StatusCodes.Status404NotFound, e.Message);
+                return BadRequest(e.Message);
             }
         }
 

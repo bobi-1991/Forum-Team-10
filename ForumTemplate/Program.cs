@@ -28,6 +28,7 @@ namespace ForumTemplate
 
             //Validators
             builder.Services.AddScoped<ICommentsValidator, CommentsValidator>();
+            builder.Services.AddScoped<IPostsValidator, PostsValidator>();
 
             // Helpers
             builder.Services.AddScoped<UserMapper>();

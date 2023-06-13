@@ -6,6 +6,7 @@ using ForumTemplate.Models.Result;
 using ForumTemplate.Repositories;
 using ForumTemplate.Repositories.DTO_s;
 using Microsoft.Extensions.Hosting;
+using ForumTemplate.Validation;
 
 namespace ForumTemplate.Services
 {
@@ -13,11 +14,13 @@ namespace ForumTemplate.Services
     {
         private readonly IPostRepository repository;
         private readonly ICommentService commentService;
+        private readonly IPostsValidator postsValidator;
 
-        public PostService(IPostRepository repository, ICommentService commentService)
+        public PostService(IPostRepository repository, ICommentService commentService, IPostsValidator postsValidator)
         {
             this.repository = repository;
             this.commentService = commentService;
+            this.postsValidator = postsValidator;
         }
 
         public List<PostResultModel> GetAll()
@@ -51,16 +54,21 @@ namespace ForumTemplate.Services
 
         public PostResultModel GetById(int id)
         {
+            //Validation
+            postsValidator.Validate(id);
+
             var post = this.repository.GetById(id);
 
             var commentsResult = this.commentService.GetComments(post.Id);
             return post.MapToPostResultModel(commentsResult);
-            
+
         }
 
         public PostResultModel Create(PostInputModel post)
         {
-            //validation
+            //Validation
+            postsValidator.Validate(post);
+
             var postDTO = post.MapToPostDTO(2);
 
             var createdPost = this.repository.Create(postDTO);
@@ -70,12 +78,8 @@ namespace ForumTemplate.Services
 
         public PostResultModel Update(int id, PostInputModel post)
         {
-            var postToUpdate = this.repository.GetById(id);
-
-            if (postToUpdate == null)
-            {
-                throw new EntityNotFoundException($"Post with ID: {id} not found.");
-            }
+            //Validation
+            postsValidator.Validate(id, post);
 
             var postDTO = post.MapToPostDTO();
 
@@ -86,12 +90,10 @@ namespace ForumTemplate.Services
 
         public string Delete(int id)
         {
-            var postToDelete = this.repository.GetById(id);
+            //Validation
+            postsValidator.Validate(id);
 
-            if (postToDelete == null)
-            {
-                throw new EntityNotFoundException($"Post with ID: {id} not found.");
-            }
+            var postToDelete = this.repository.GetById(id);
 
             commentService.DeleteByPostId(postToDelete.Id);
 
