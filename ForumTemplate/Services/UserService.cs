@@ -49,6 +49,8 @@ namespace ForumTemplate.Services
             return this.userRepository.Create(user);
         }
 
+        
+
         public User Update(int id, User user)
         {
             var userToUpdate = this.userRepository.GetById(id);

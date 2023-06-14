@@ -5,6 +5,9 @@ using ForumTemplate.Mappers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using ForumTemplate.Validation;
+using ForumTemplate.Services.Interfaces;
+using ForumTemplate.Services.Authentication;
+using ForumTemplate.Repositories.UserNewPersistence;
 
 namespace ForumTemplate
 {
@@ -25,6 +28,10 @@ namespace ForumTemplate
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IPostService, PostService>();
             builder.Services.AddScoped<ICommentService, CommentService>();
+            builder.Services.AddSingleton<IAuthenticationService, AuthenticationService>();
+
+            // New Services (just to separate the logic)
+            builder.Services.AddSingleton<IUserNewRepository, UserNewRepository>();
 
             //Validators
             builder.Services.AddScoped<ICommentsValidator, CommentsValidator>();
