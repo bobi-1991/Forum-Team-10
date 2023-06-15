@@ -9,14 +9,12 @@ namespace ForumTemplate.Repositories.UserPersistence
 
         public UserRepository()
         {
-            this._users.Add(User.Create("borislav", "penchev","bobi","bobi@email","strongPass"));
-            this._users.Add(User.Create("strahil", "mladenov","strahil","strahil@email","veryStrongPass"));
-            this._users.Add(User.Create("iliyan", "tsvetkov","iliyan","iliyan@email","strongestPass"));
+            this._users.Add(User.Create("borislav", "penchev", "bobi", "bobi@email", "strongPass"));
+            this._users.Add(User.Create("strahil", "mladenov", "strahil", "strahil@email", "veryStrongPass"));
+            this._users.Add(User.Create("iliyan", "tsvetkov", "iliyan", "iliyan@email", "strongestPass"));
         }
-
         public void AddUser(User user)
         {
-
             _users.Add(user);
         }
 

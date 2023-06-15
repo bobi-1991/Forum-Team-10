@@ -1,10 +1,12 @@
 ﻿using ForumTemplate.DTOs.CommentDTOs;
 using ForumTemplate.Exceptions;
+using ForumTemplate.Mappers;
 using ForumTemplate.Models;
 using ForumTemplate.Repositories;
 using ForumTemplate.Repositories.CommentPersistence;
 using ForumTemplate.Validation;
 using System.Runtime.InteropServices;
+using System.Xml.Linq;
 
 namespace ForumTemplate.Services.CommentService
 {
@@ -12,128 +14,59 @@ namespace ForumTemplate.Services.CommentService
     {
         private readonly ICommentRepository commentRepository;
         private readonly ICommentsValidator commentsValidator;
+        private readonly CommentMapper commentMapper;
 
-        public CommentService(ICommentRepository commentRepository, ICommentsValidator commentsValidator)
+        public CommentService(ICommentRepository commentRepository, ICommentsValidator commentsValidator, CommentMapper commentMapper)
         {
             this.commentRepository = commentRepository;
             this.commentsValidator = commentsValidator;
+            this.commentMapper = commentMapper;
         }
 
         public List<CommentResponse> GetAll()
         {
             var comments = commentRepository.GetAll();
-            var result = new List<CommentResponse>();
 
-            foreach (var comment in comments)
-            {
-                CommentResponse commentResult = new CommentResponse
-                (
-                    comment.Id,
-                    comment.Content,
-                    comment.UserId,
-                    comment.PostId,
-                    comment.CreatedAt,
-                    comment.UpdatedAt
-                );
-
-                result.Add(commentResult);
-            }
-
-            return result;
+            return this.commentMapper.MapToCommentResponse(comments);
         }
 
         public List<CommentResponse> GetComments(Guid postId)
         {
 
-            var commentsById = commentRepository.GetByPostId(postId);
-            var result = new List<CommentResponse>();
-
-            foreach (var comment in commentsById)
-            {
-                var commentResult = new CommentResponse
-                (
-                   comment.Id,
-                    comment.Content,
-                    comment.UserId,
-                    comment.PostId,
-                    comment.CreatedAt,
-                    comment.UpdatedAt
-                );
-
-                result.Add(commentResult);
-            }
-
-            return result;
+            var commentsById = this.commentRepository.GetByPostId(postId);
+            return this.commentMapper.MapToCommentResponse(commentsById);
         }
 
         public CommentResponse GetById(Guid id)
         {
             //Validation
-            commentsValidator.Validate(id);
+            this.commentsValidator.Validate(id);
 
             var comment = commentRepository.GetById(id);
 
-            var commentResult = new CommentResponse
-            (
-                    comment.Id,
-                    comment.Content,
-                    comment.UserId,
-                    comment.PostId,
-                    comment.CreatedAt,
-                    comment.UpdatedAt
-            );
-
-            return commentResult;
+            return this.commentMapper.MapToCommentResponse(comment);
         }
 
         public CommentResponse Create(CommentRequest commentRequest)
         {
             //Validation
-            commentsValidator.Validate(commentRequest);
+            this.commentsValidator.Validate(commentRequest);
 
-            var comment = Comment.Create
-            (        
-               commentRequest.Content,
-               commentRequest.UserId,
-               commentRequest.PostId
-            );
+            var comment = this.commentMapper.MapToComment(commentRequest);
+            var createdComment = commentRepository.Create(comment);
 
-           var createdComment = commentRepository.Create(comment);
-
-           return new CommentResponse
-                (
-                createdComment.Id,
-                createdComment.Content,
-                createdComment.UserId,
-                createdComment.PostId,
-                createdComment.CreatedAt,
-                createdComment.UpdatedAt
-                );
+            return this.commentMapper.MapToCommentResponse(createdComment);
         }
 
         public CommentResponse Update(Guid id, CommentRequest commentRequest)
         {
             //Validation
             commentsValidator.Validate(id, commentRequest);
-
-            var comment = Comment.Create
-            (
-               commentRequest.Content,
-               commentRequest.UserId,
-               commentRequest.PostId
-            );
+            var comment = this.commentMapper.MapToComment(commentRequest);
 
             var updatedComment = commentRepository.Update(id, comment);
 
-            return new CommentResponse
-              (
-              updatedComment.Id,
-              updatedComment.Content,
-              updatedComment.UserId,
-              updatedComment.PostId,
-              updatedComment.CreatedAt,
-              updatedComment.UpdatedAt
-              );
+            return this.commentMapper.MapToCommentResponse(updatedComment);
         }
 
         public string Delete(Guid id)
@@ -141,14 +74,14 @@ namespace ForumTemplate.Services.CommentService
             //Validation
             commentsValidator.Validate(id);
 
-            return commentRepository.Delete(id);
+            return this.commentRepository.Delete(id);
         }
 
         public void DeleteByPostId(Guid postId)
         {
             var commentToDelete = commentRepository.GetById(postId);
 
-            commentRepository.DeleteByPostId(postId);
+            this.commentRepository.DeleteByPostId(postId);
         }
     }
 }

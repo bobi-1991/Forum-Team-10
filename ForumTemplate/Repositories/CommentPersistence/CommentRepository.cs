@@ -8,14 +8,6 @@ namespace ForumTemplate.Repositories.CommentPersistence
     public class CommentRepository : ICommentRepository
     {
         private readonly List<Comment> comments = new();
-
-        //public CommentRepository()
-        //{
-        //    this.comments.Add(Comment.Create("Comment1", Guid.NewGuid(), Guid.NewGuid()));
-        //    this.comments.Add(Comment.Create("Comment2", Guid.NewGuid(), Guid.NewGuid()));
-        //    this.comments.Add(Comment.Create("Comment3", Guid.NewGuid(), Guid.NewGuid()));
-        //}
-
         public List<Comment> GetAll()
         {
             if (comments.Count == 0)
@@ -27,7 +19,7 @@ namespace ForumTemplate.Repositories.CommentPersistence
 
         public Comment GetById(Guid id)
         {
-            return comments.Where(c => c.Id == id).FirstOrDefault();
+            return comments.Where(c => c.Id == id).FirstOrDefault(); 
         }
 
         public List<Comment> GetByPostId(Guid postId)
@@ -42,7 +34,7 @@ namespace ForumTemplate.Repositories.CommentPersistence
 
         public Comment Create(Comment comment)
         {
-            comments.Add(comment);
+            this.comments.Add(comment);
 
             return comment;
         }
@@ -50,13 +42,14 @@ namespace ForumTemplate.Repositories.CommentPersistence
         public Comment Update(Guid id, Comment comment)
         {
             Comment commentToUpdate = GetById(id);
+
             return commentToUpdate.Update(comment);
         }
 
         public string Delete(Guid id)
         {
             Comment existingComment = GetById(id);
-            comments.Remove(existingComment);
+            this.comments.Remove(existingComment);
 
             return "Comment was successfully deleted.";
         }
@@ -64,12 +57,11 @@ namespace ForumTemplate.Repositories.CommentPersistence
         public void DeleteByPostId(Guid postId)
         {
             var commentToRemove = comments.Where(c => c.PostId == postId).ToList();
+
             foreach (var comment in commentToRemove)
             {
                 comments.Remove(comment);
             }
-
-            //return "Comments were successfully deleted.";
         }
 
     }

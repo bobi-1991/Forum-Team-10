@@ -27,13 +27,9 @@ namespace ForumTemplate.Repositories.PostPersistence
         {
             return posts.Where(p => p.Id == id).FirstOrDefault();
         }
-
-        //Not Configured for any EndPoint yet
         public Post GetByTitle(string title)
         {
-            Post post = posts.Where(p => p.Title == title).FirstOrDefault();
-
-            return post ?? throw new EntityNotFoundException($"Post with title={title} doesn't exist.");
+            return posts.Where(p => p.Title == title).FirstOrDefault();
         }
 
         public List<Post> GetByUserId(Guid id)
@@ -43,9 +39,7 @@ namespace ForumTemplate.Repositories.PostPersistence
 
         public Post Create(Post post)
         {
-          
-
-            posts.Add(post);
+            this.posts.Add(post);
             return post;
         }
 

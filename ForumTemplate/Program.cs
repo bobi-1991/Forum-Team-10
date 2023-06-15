@@ -41,6 +41,7 @@ namespace ForumTemplate
             // Helpers
             builder.Services.AddScoped<UserMapper>();
             builder.Services.AddScoped<PostMapper>();
+            builder.Services.AddScoped<CommentMapper>();
 
             var app = builder.Build();
 

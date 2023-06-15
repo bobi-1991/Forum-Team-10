@@ -2,11 +2,6 @@
 
 namespace ForumTemplate.DTOs.PostDTOs
 {
-    //public record PostResponse(
-    //    string Content,
-    //     string Title,
-    //    List<CommentResponse> Comments );
-
     public record PostResponse(
         Guid Id,
         string Title,
@@ -15,6 +10,4 @@ namespace ForumTemplate.DTOs.PostDTOs
         List<CommentResponse> Comments,
         DateTime CreatedDate,
         DateTime LastEditedDate);
-
-
 }
