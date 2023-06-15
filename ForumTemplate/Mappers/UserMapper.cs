@@ -1,31 +1,51 @@
-﻿using ForumTemplate.Models;
-using ForumTemplate.Services;
+﻿using ForumTemplate.DTOs.Authentication;
+using ForumTemplate.Models;
+using ForumTemplate.Services.PostService;
 
 namespace ForumTemplate.Mappers
 {
     public class UserMapper
     {
-
-        private readonly IPostService postService;
-
-        public UserMapper(IPostService postService)
+        public User MapToUser(RegisterRequest registerUser)
         {
-            this.postService = postService;
+            return User.Create(
+                registerUser.FirstName,
+                registerUser.LastName,
+                registerUser.Username,
+                registerUser.Email,
+                registerUser.Password
+            );
         }
-
-        public User Map(UserDTO dto)
+        public UserResponse MapToUserResponse(User user)
         {
-            return new User
+            return new UserResponse(
+                user.Id,
+                user.FirstName,
+                user.LastName,
+                user.Username,
+                user.Email,
+                user.UpdatedAt
+            );
+        }
+        public List<UserResponse> MapToUserResponse(List<User> users)
+        {
+            var userResponses = new List<UserResponse>();
+
+            foreach (var user in users)
             {
-                FirstName = dto.FirstName,
-                LastName = dto.LastName,
-                Username = dto.Username,
-                Password = dto.Password,
-                Email = dto.Email,
-                Country = dto.Country,
-                //Post = this.postService.GetById(dto.PostId)
-            };
-        }
+                var result = new UserResponse(
+                         user.Id,
+                         user.FirstName,
+                         user.LastName,
+                         user.Username,
+                         user.Email,
+                         user.UpdatedAt
+                         );
 
+                userResponses.Add(result);
+            }
+
+            return userResponses;
+        }
     }
 }

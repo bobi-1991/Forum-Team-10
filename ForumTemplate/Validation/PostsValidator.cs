@@ -1,7 +1,6 @@
-﻿using ForumTemplate.Exceptions;
-using ForumTemplate.Models.Input;
-using ForumTemplate.Repositories;
-
+﻿using ForumTemplate.DTOs.PostDTOs;
+using ForumTemplate.Exceptions;
+using ForumTemplate.Repositories.PostPersistence;
 
 namespace ForumTemplate.Validation
 
@@ -15,14 +14,14 @@ namespace ForumTemplate.Validation
             this.postRepository = postRepository;
         }
 
-        public void Validate(int id)
+        public void Validate(Guid id)
         {
             var post = this.postRepository.GetById(id);
 
-            if (id <= 0)
-            {
-                throw new ValidationException($"Post ID cannot be 0 or negative number");
-            }
+            //if (id <= 0)
+            //{
+            //    throw new ValidationException($"Post ID cannot be 0 or negative number");
+            //}
 
             if (post == null)
             {
@@ -30,21 +29,21 @@ namespace ForumTemplate.Validation
             }
         }
 
-        public void Validate(PostInputModel postInput)
+        public void Validate(PostRequest postRequest)
         {
             var errors = new List<string>();
 
-            if (postInput is null)
+            if (postRequest is null)
             {
                 errors.Add("Post input cannot be null");
             }
 
-            if (string.IsNullOrWhiteSpace(postInput.Title))
+            if (string.IsNullOrWhiteSpace(postRequest.Title))
             {
                 errors.Add("Post Title cannot be null or whitespace");
             }
 
-            if (string.IsNullOrWhiteSpace(postInput.Description))
+            if (string.IsNullOrWhiteSpace(postRequest.Content))
             {
                 errors.Add("Post Description cannot be null or whitespace");
             }
@@ -56,35 +55,35 @@ namespace ForumTemplate.Validation
             }
         }
 
-        public void Validate(int id, PostInputModel postInput)
+        public void Validate(Guid id, PostRequest postRequest)
         {
             var errors = new List<string>();
 
-            if (id <= 0)
-            {
-                errors.Add("Post Id cannot be a negative number or 0");
-            }
+            //if (id <= 0)
+            //{
+            //    errors.Add("Post Id cannot be a negative number or 0");
+            //}
 
-            if (id > 0)
-            {
-                var postToUpdate = this.postRepository.GetById(id);
-                if (postToUpdate == null)
-                {
-                    errors.Add($"Post with ID: {id} not found.");
-                }
-            }
+            //if (id > 0)
+            //{
+            //    var postToUpdate = this.postRepository.GetById(id);
+            //    if (postToUpdate == null)
+            //    {
+            //        errors.Add($"Post with ID: {id} not found.");
+            //    }
+            //}
 
-            if (postInput is null)
+            if (postRequest is null)
             {
                 errors.Add("Post input cannot be null");
             }
 
-            if (string.IsNullOrWhiteSpace(postInput.Title))
+            if (string.IsNullOrWhiteSpace(postRequest.Title))
             {
                 errors.Add("Post Title cannot be null or whitespace");
             }
 
-            if (string.IsNullOrWhiteSpace(postInput.Description))
+            if (string.IsNullOrWhiteSpace(postRequest.Content))
             {
                 errors.Add("Post Description cannot be null or whitespace");
             }

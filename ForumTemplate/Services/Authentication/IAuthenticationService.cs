@@ -1,7 +1,7 @@
 ﻿using ForumTemplate.DTOs.Authentication;
 using ForumTemplate.Models;
 
-namespace ForumTemplate.Services.Interfaces;
+namespace ForumTemplate.Services.Authentication;
 
 public interface IAuthenticationService
 {

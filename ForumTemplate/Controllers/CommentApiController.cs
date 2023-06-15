@@ -1,15 +1,14 @@
-﻿using ForumTemplate.Exceptions;
+﻿using ForumTemplate.DTOs.CommentDTOs;
+using ForumTemplate.Exceptions;
 using ForumTemplate.Mappers;
 using ForumTemplate.Models;
-using ForumTemplate.Models.Input;
-using ForumTemplate.Repositories.DTO_s;
-using ForumTemplate.Services;
+using ForumTemplate.Services.CommentService;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ForumTemplate.Controllers
 {
     [ApiController]
-    [Route("api/comment")]
+    [Route("api/comments")]
     public class CommentApiController : ControllerBase
     {
         private readonly ICommentService commentService;
@@ -20,7 +19,7 @@ namespace ForumTemplate.Controllers
         }
 
         [HttpGet()]
-        [Route("GetAll")]
+        [Route("")]
         public IActionResult GetAll()
         {
             try
@@ -36,8 +35,8 @@ namespace ForumTemplate.Controllers
             }
         }
 
-        [HttpGet("Get/{id}")]
-        public IActionResult Get(int id)
+        [HttpGet("{id}")]
+        public IActionResult Get(Guid id)
         {
             try
             {
@@ -52,8 +51,8 @@ namespace ForumTemplate.Controllers
         }
 
         [HttpPost()]
-        [Route("Create")]
-        public IActionResult Create([FromBody] CommentInputModel comment)
+        [Route("")]
+        public IActionResult Create([FromBody] CommentRequest comment)
         {
             try
             {
@@ -71,8 +70,8 @@ namespace ForumTemplate.Controllers
             }
         }
 
-        [HttpPut("Update/{id}")]
-        public IActionResult Update(int id, [FromBody] CommentInputModel comment)
+        [HttpPut("{id}")]
+        public IActionResult Update(Guid id, [FromBody] CommentRequest comment)
         {
             try
             {
@@ -86,8 +85,8 @@ namespace ForumTemplate.Controllers
             }
         }
 
-        [HttpDelete("Delete/{id}")]
-        public IActionResult Delete(int id)
+        [HttpDelete("{id}")]
+        public IActionResult Delete(Guid id)
         {
             try
             {

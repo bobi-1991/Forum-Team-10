@@ -1,15 +1,15 @@
 ﻿using ForumTemplate.DTOs.Authentication;
 using ForumTemplate.Models;
-using ForumTemplate.Repositories.UserNewPersistence;
-using ForumTemplate.Services.Interfaces;
+using ForumTemplate.Repositories.UserPersistence;
+
 
 namespace ForumTemplate.Services.Authentication
 {
     public class AuthenticationService : IAuthenticationService
     {
-        private readonly IUserNewRepository userRepository;
+        private readonly IUserRepository userRepository;
 
-        public AuthenticationService(IUserNewRepository userRepository)
+        public AuthenticationService(IUserRepository userRepository)
         {
             this.userRepository = userRepository;
         }
@@ -47,6 +47,7 @@ namespace ForumTemplate.Services.Authentication
                 request.Username,
                 request.Email,
                 request.Password);
+
 
            userRepository.AddUser(user);
 

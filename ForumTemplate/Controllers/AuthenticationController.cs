@@ -1,6 +1,6 @@
 ﻿using ForumTemplate.DTOs.Authentication;
 using ForumTemplate.Models;
-using ForumTemplate.Services.Interfaces;
+using ForumTemplate.Services.Authentication;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ForumTemplate.Controllers

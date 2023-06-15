@@ -1,16 +1,15 @@
-﻿using ForumTemplate.Exceptions;
-using ForumTemplate.Models.Input;
-using ForumTemplate.Repositories;
+﻿using ForumTemplate.DTOs.PostDTOs;
+using ForumTemplate.Exceptions;
 
 namespace ForumTemplate.Validation
 {
     public interface IPostsValidator
     {
-        void Validate(int id);
+        void Validate(Guid id);
 
-        void Validate(PostInputModel postInput);
+        void Validate(PostRequest postRequest);
 
-        void Validate(int id, PostInputModel postInput);
+        void Validate(Guid id, PostRequest postRequest);
 
     }
 }

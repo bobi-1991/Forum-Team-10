@@ -1,15 +1,15 @@
-﻿using ForumTemplate.Exceptions;
+﻿using ForumTemplate.DTOs.PostDTOs;
+using ForumTemplate.Exceptions;
 using ForumTemplate.Mappers;
 using ForumTemplate.Models;
-using ForumTemplate.Models.Input;
-using ForumTemplate.Services;
+using ForumTemplate.Services.PostService;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ForumTemplate.Controllers
 {
 
     [ApiController]
-    [Route("api/post")]
+    [Route("api/posts")]
     public class PostApiController : ControllerBase
     {
         private readonly IPostService postService;
@@ -19,16 +19,15 @@ namespace ForumTemplate.Controllers
         }
 
         [HttpGet()]
-        [Route("GetAll")]
         public IActionResult GetAll()
         {
-            var result = this.postService.GetAll();
+            var response = this.postService.GetAll();
 
-            return StatusCode(StatusCodes.Status200OK, result);
+            return StatusCode(StatusCodes.Status200OK, response);
         }
 
-        [HttpGet("Get/{id}")]
-        public IActionResult Get(int id)
+        [HttpGet("{id}")]
+        public IActionResult Get(Guid id)
         {
             try
             {
@@ -43,14 +42,13 @@ namespace ForumTemplate.Controllers
         }
 
         [HttpPost()]
-        [Route("Create")]
-        public IActionResult Create([FromBody] PostInputModel post)
+        public IActionResult Create([FromBody] PostRequest postRequest)
         {
             try
             {
-                var createdPost = this.postService.Create(post);
+                var createdPost = this.postService.Create(postRequest);
 
-                return StatusCode(StatusCodes.Status201Created, post);
+                return StatusCode(StatusCodes.Status201Created, postRequest);
             }
             catch (ValidationException e)
             {
@@ -58,12 +56,12 @@ namespace ForumTemplate.Controllers
             }
         }
 
-        [HttpPut("Update/{id}")]
-        public IActionResult Update(int id, [FromBody] PostInputModel post)
+        [HttpPut("{id}")]
+        public IActionResult Update(Guid id, [FromBody] PostRequest postRequest)
         {
             try
             {
-                var updatedPost = this.postService.Update(id, post);
+                var updatedPost = this.postService.Update(id, postRequest);
 
                 return StatusCode(StatusCodes.Status200OK, updatedPost);
             }
@@ -73,8 +71,8 @@ namespace ForumTemplate.Controllers
             }
         }
 
-        [HttpDelete("Delete/{id}")]
-        public IActionResult Delete(int id)
+        [HttpDelete("{id}")]
+        public IActionResult Delete(Guid id)
         {
             try
             {

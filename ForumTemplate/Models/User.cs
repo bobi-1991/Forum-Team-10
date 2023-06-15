@@ -1,33 +1,61 @@
-﻿using ForumTemplate.Models.Result;
-using ForumTemplate.Repositories.DTO_s;
-using System.ComponentModel.DataAnnotations;
-
-namespace ForumTemplate.Models
+﻿namespace ForumTemplate.Models
 {
     public class User
     {
+        public Guid Id { get; private set; }
+        public string FirstName { get; private set; }
+        public string LastName { get; private set; }
+        public string Username { get; private set; }
+        public string Email { get; private set; }
+        public string Password { get; private set; }
+        public DateTime UpdatedAt { get; private set; }
 
-        public int Id { get; set; }
+        public ICollection<Post> Posts{ get; set; }
+        public ICollection<Like> Likes{ get; set; }
 
-        [MinLength(4, ErrorMessage = "The {0} must be at least {1} characters long.")]
-        [MaxLength(32, ErrorMessage = "The {0} must be no more than {1} characters long.")]
-        public string FirstName { get; set; }
+        //  public IReadOnlyList<Post> Posts => this.posts.AsReadOnly(); // TODO: Implement
+        //  public IReadOnlyList<Comment> Comments => this.comments.AsReadOnly(); // TODO: Implement
+        //  public IReadOnlyList<Like> Likes => this.likes.AsReadOnly(); // TODO: Implement
 
-        [MinLength(4, ErrorMessage = "The {0} must be at least {1} characters long.")]
-        [MaxLength(32, ErrorMessage = "The {0} must be no more than {1} characters long.")]
-        public string LastName { get; set; }
+        private User()
+        {
+            
+        }
 
-        public string Username { get; set; }
+        private User(
+            string firstName,
+            string lastName,
+            string username,
+            string email,
+            string password)
+        {
+            Id = Guid.NewGuid();
+            FirstName = firstName;
+            LastName = lastName;
+            Username = username;
+            Email = email;
+            Password = password;
+            
+        }
 
-        public string Password { get; set; }
+        public static User Create(
+            string firstName,
+            string lastName,
+            string username,
+            string email,
+            string password)
+        {
+            return new User(firstName, lastName, username, email, password);
+        }
+        public User Update(User user)
+        {
+            this.FirstName = user.FirstName;
+            this.LastName = user.LastName;
+            this.Password = user.Password;
+            this.Email = user.Email;
+            this.UpdatedAt = DateTime.UtcNow;
 
-        [RegularExpression(@"^([a-zA-Z0-9-.]+)@(([[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.)|(([a-zA-Z0-9-]+.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(]?)$",
-           ErrorMessage = "Please enter a valid e-mail adress")]
-        public string Email { get; set; }
-
-        public string Country { get; set; }
-
-        public List<PostResultModel> Posts { get; set; }
-
-    }
+            return this;
+        }        
+    }           
 }

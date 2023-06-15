@@ -1,13 +1,13 @@
-﻿using ForumTemplate.Models.Input;
+﻿using ForumTemplate.DTOs.CommentDTOs;
 
 namespace ForumTemplate.Validation
 {
     public interface ICommentsValidator
     {
-        void Validate(CommentInputModel commentInput);
+        void Validate(CommentRequest commentRequest);
 
-        void Validate(int id, CommentInputModel commentInput);
+        void Validate(Guid id, CommentRequest commentRequest);
 
-        void Validate(int id);
+        void Validate(Guid id);
     }
 }
