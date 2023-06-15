@@ -17,7 +17,7 @@ namespace ForumTemplate.Services.Authentication
         {
             // TODO: 
 
-            if(userRepository.GetUserByEmail(request.Email) is not UserNew user)
+            if(userRepository.GetUserByEmail(request.Email) is not User user)
             {
                 return null;
             }
@@ -41,7 +41,7 @@ namespace ForumTemplate.Services.Authentication
                 return null;
             }
 
-            var user = UserNew.Create(
+            var user = User.Create(
                 request.FirstName,
                 request.LastName,
                 request.Username,

@@ -3,6 +3,6 @@
 namespace ForumTemplate.DTOs.Authentication;
 
 public record AuthenticationResponse(
-    UserNew User,
+    User User,
     string Token);
 

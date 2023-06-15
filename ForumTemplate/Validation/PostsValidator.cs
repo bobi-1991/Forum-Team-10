@@ -32,17 +32,17 @@ namespace ForumTemplate.Validation
         public void Validate(PostRequest postRequest)
         {
             var errors = new List<string>();
-
+            // DEPRECATED - replaced by Fluid Validation
             if (postRequest is null)
             {
                 errors.Add("Post input cannot be null");
             }
-
+            // DEPRECATED - replaced by Fluid Validation
             if (string.IsNullOrWhiteSpace(postRequest.Title))
             {
                 errors.Add("Post Title cannot be null or whitespace");
             }
-
+            // DEPRECATED - replaced by Fluid Validation
             if (string.IsNullOrWhiteSpace(postRequest.Content))
             {
                 errors.Add("Post Description cannot be null or whitespace");
@@ -72,17 +72,17 @@ namespace ForumTemplate.Validation
             //        errors.Add($"Post with ID: {id} not found.");
             //    }
             //}
-
+            // DEPRECATED - replaced by Fluid Validation
             if (postRequest is null)
             {
                 errors.Add("Post input cannot be null");
             }
-
+            // DEPRECATED - replaced by Fluid Validation
             if (string.IsNullOrWhiteSpace(postRequest.Title))
             {
                 errors.Add("Post Title cannot be null or whitespace");
             }
-
+            // DEPRECATED - replaced by Fluid Validation
             if (string.IsNullOrWhiteSpace(postRequest.Content))
             {
                 errors.Add("Post Description cannot be null or whitespace");

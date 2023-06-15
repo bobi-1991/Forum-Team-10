@@ -22,11 +22,12 @@ namespace ForumTemplate.Validation
         {
             var errors = new List<string>();
 
+            // DEPRECATED - replaced by Fluid Validation
             if (commentRequest is null)
             {
                 errors.Add("Comment input cannot be null");
             }
-
+            // DEPRECATED - replaced by Fluid Validation
             if (string.IsNullOrWhiteSpace(commentRequest.Content))
             {
                 errors.Add("Comment content cannot be null or whitespace");
@@ -80,6 +81,8 @@ namespace ForumTemplate.Validation
             //        errors.Add($"Comment with ID: {id} not found.");
             //    }
             //}
+
+            // DEPRECATED - replaced by Fluid Validation
             if (commentRequest is null)
             {
                 errors.Add("Comment input cannot be null");

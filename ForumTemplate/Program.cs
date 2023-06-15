@@ -11,6 +11,13 @@ using ForumTemplate.Repositories.PostPersistence;
 using ForumTemplate.Services.CommentService;
 using ForumTemplate.Services.PostService;
 using ForumTemplate.Services.UserService;
+using FluentValidation;
+using ForumTemplate.DTOs.PostDTOs;
+using ForumTemplate.DTOs.Validations;
+using ForumTemplate.DTOs.CommentDTOs;
+using ForumTemplate.DTOs.Authentication;
+using ForumTemplate.Common;
+using FluentValidation.AspNetCore;
 
 namespace ForumTemplate
 {
@@ -37,6 +44,10 @@ namespace ForumTemplate
             //Validators
             builder.Services.AddScoped<ICommentsValidator, CommentsValidator>();
             builder.Services.AddScoped<IPostsValidator, PostsValidator>();
+
+            // Fluent Validation
+            builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
+            builder.Services.AddValidatorsFromAssemblyContaining<IAssemblyMarker>();
 
             // Helpers
             builder.Services.AddScoped<UserMapper>();
