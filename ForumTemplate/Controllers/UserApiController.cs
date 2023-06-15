@@ -1,42 +1,41 @@
+using ForumTemplate.DTOs.Authentication;
 using ForumTemplate.Exceptions;
 using ForumTemplate.Mappers;
 using ForumTemplate.Models;
-using ForumTemplate.Services;
+using ForumTemplate.Services.UserService;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ForumTemplate.Controllers
 {
     [ApiController]
-    [Route("api/user")]
+    [Route("api/users")]
     public class UserApiController : ControllerBase
     {
         private readonly IUserService userService;
-        private readonly UserMapper userMapper;
 
-        public UserApiController(IUserService userService, UserMapper userMapper)
+        public UserApiController(IUserService userService)
         {
             this.userService = userService;
-            this.userMapper = userMapper;
         }
 
         //Admin Access Only
         [HttpGet()]
-        [Route("GetAll")]
+        [Route("")]
         public IActionResult GetAll()
         {
-            List<User> result = this.userService.GetAll();
+            List<UserResponse> result = this.userService.GetAll();
 
             return StatusCode(StatusCodes.Status200OK, result);
         }
 
         //Admin - to see id
         //All - for all others
-        [HttpGet("Get/{id}")]
-        public IActionResult GetById(int id)
+        [HttpGet("{id}")]
+        public IActionResult GetById(Guid id)
         {
             try
             {
-                User user = this.userService.GetById(id);
+                UserResponse user = this.userService.GetById(id);
 
                 return StatusCode(StatusCodes.Status200OK, user);
             }
@@ -48,13 +47,12 @@ namespace ForumTemplate.Controllers
 
         //All users
         [HttpPost()]
-        [Route("Create")]
-        public IActionResult Create([FromBody] UserDTO userDTO)
+        [Route("")]
+        public IActionResult Create([FromBody] RegisterRequest user)
         {
             try
             {
-                User user = this.userMapper.Map(userDTO);
-                User createdUser = this.userService.Create(user);
+                UserResponse createdUser = this.userService.Create(user);
 
                 return StatusCode(StatusCodes.Status201Created, user);
             }
@@ -67,12 +65,12 @@ namespace ForumTemplate.Controllers
         //All users
         //If user wants to update - check is target username matches the currently logged user
         //If Admin - he will have access to all by ID or Username
-        [HttpPut("Update/{id}")]
-        public IActionResult Update(int id, [FromBody] User user)
+        [HttpPut("{id}")]
+        public IActionResult Update(Guid id, [FromBody] RegisterRequest user)
         {
             try
             {
-                User updatedUser = this.userService.Update(id, user);
+                UserResponse updatedUser = this.userService.Update(id, user);
 
                 return StatusCode(StatusCodes.Status200OK, updatedUser);
             }
@@ -88,8 +86,8 @@ namespace ForumTemplate.Controllers
         //All users
         //If user wants to update - check is target username matches the currently logged user
         //If Admin - he will have access to all by ID or Username
-        [HttpDelete("Delete/{id}")]
-        public IActionResult Delete(int id)
+        [HttpDelete("{id}")]
+        public IActionResult Delete(Guid id)
         {
             try
             {

@@ -1,13 +1,16 @@
 
 using ForumTemplate.Repositories;
-using ForumTemplate.Services;
 using ForumTemplate.Mappers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using ForumTemplate.Validation;
-using ForumTemplate.Services.Interfaces;
 using ForumTemplate.Services.Authentication;
-using ForumTemplate.Repositories.UserNewPersistence;
+using ForumTemplate.Repositories.UserPersistence;
+using ForumTemplate.Repositories.CommentPersistence;
+using ForumTemplate.Repositories.PostPersistence;
+using ForumTemplate.Services.CommentService;
+using ForumTemplate.Services.PostService;
+using ForumTemplate.Services.UserService;
 
 namespace ForumTemplate
 {
@@ -30,8 +33,6 @@ namespace ForumTemplate
             builder.Services.AddScoped<ICommentService, CommentService>();
             builder.Services.AddSingleton<IAuthenticationService, AuthenticationService>();
 
-            // New Services (just to separate the logic)
-            builder.Services.AddSingleton<IUserNewRepository, UserNewRepository>();
 
             //Validators
             builder.Services.AddScoped<ICommentsValidator, CommentsValidator>();
@@ -39,6 +40,7 @@ namespace ForumTemplate
 
             // Helpers
             builder.Services.AddScoped<UserMapper>();
+            builder.Services.AddScoped<PostMapper>();
 
             var app = builder.Build();
 

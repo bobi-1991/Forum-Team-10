@@ -1,25 +1,27 @@
 ﻿using ForumTemplate.DTOs.Authentication;
 using ForumTemplate.Models;
-using ForumTemplate.Repositories.UserNewPersistence;
-using ForumTemplate.Services.Interfaces;
+using ForumTemplate.Repositories.UserPersistence;
+
 
 namespace ForumTemplate.Services.Authentication
 {
     public class AuthenticationService : IAuthenticationService
     {
-        private readonly IUserNewRepository userRepository;
+        private readonly IUserRepository userRepository;
 
-        public AuthenticationService(IUserNewRepository userRepository)
+        public AuthenticationService(IUserRepository userRepository)
         {
             this.userRepository = userRepository;
         }
         public AuthenticationResponse Login(LoginRequest request)
         {
-            if(userRepository.GetUserByEmail(request.Email) is not UserNew user)
+            var user = userRepository.GetUserByEmail(request.Email);
+
+            if (user == null)
             {
                 return null;
             }
-            
+                   
             var response = new AuthenticationResponse(
                 user.Id.ToString(),
                 user.FirstName,
@@ -33,12 +35,13 @@ namespace ForumTemplate.Services.Authentication
 
         public AuthenticationResponse Register(RegisterRequest request)
         {
-            var user = UserNew.Create(
+            var user = User.Create(
                 request.FirstName,
                 request.LastName,
                 request.Username,
                 request.Email,
                 request.Password);
+
 
            userRepository.AddUser(user);
 

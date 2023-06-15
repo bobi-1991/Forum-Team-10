@@ -1,47 +1,65 @@
-﻿using ForumTemplate.Models.Input;
-using ForumTemplate.Models.Result;
-using ForumTemplate.Repositories.DTO_s;
+﻿using ForumTemplate.DTOs.CommentDTOs;
+using ForumTemplate.DTOs.PostDTOs;
+using ForumTemplate.Models;
+using ForumTemplate.Services;
+using ForumTemplate.Services.CommentService;
 
 namespace ForumTemplate.Mappers
 {
-    public static class PostMapper
+    public class PostMapper
     {
-        public static PostDTO MapToPostDTO(this PostInputModel postInputModel, int userId)
+        private readonly ICommentService commentService;
+
+        public PostMapper(ICommentService commentService)
         {
-            return new PostDTO()
-            {
-                Description = postInputModel.Description,
-                Title = postInputModel.Title,
-                UserId = userId
-            };
+            this.commentService = commentService;
+        }
+        public Post MapToPost(PostRequest postRequest)
+        {
+            return Post.CreatePost(
+               postRequest.Title,
+               postRequest.Content,
+               postRequest.UserId
+            );
+        }
+        public PostResponse MapToPostResponse(Post post)
+        {
+            var commentsResponses = this.commentService.GetComments(post.Id);
+
+            return new PostResponse
+            (
+                post.Id,
+                post.Title,
+                post.Content,
+                post.UserId,
+                commentsResponses,
+                post.CreatedAt,
+                post.UpdatedAt
+            ); 
         }
 
-        public static PostDTO MapToPostDTO(this PostInputModel postInputModel)
+        public List<PostResponse> MapToPostResponse(List<Post> posts)
         {
-            return new PostDTO()
-            {
-                Description = postInputModel.Description,
-                Title = postInputModel.Title
-            };
-        }
+            var postResponses = new List<PostResponse>();
 
-        public static PostResultModel MapToPostResultModel(this PostDTO postDto)
-        {
-            return new PostResultModel
+            foreach (var post in posts)
             {
-                Description= postDto.Description,
-                Title = postDto.Title
-            };
-        }
+                var commentsResponses = this.commentService.GetComments(post.Id);
 
-        public static PostResultModel MapToPostResultModel(this PostDTO postDto, List<CommentResultModel> comments)
-        {
-            return new PostResultModel
-            {
-                Description = postDto.Description,
-                Title = postDto.Title,
-                Comments = comments
-            };
+                var response = new PostResponse
+                (
+                    post.Id,
+                    post.Title,
+                    post.Content,
+                    post.UserId,
+                    commentsResponses,
+                    post.CreatedAt,
+                    post.UpdatedAt
+                );
+
+                postResponses.Add(response);
+            }
+           return postResponses;
         }
     }
 }
