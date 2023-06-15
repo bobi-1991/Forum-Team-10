@@ -15,24 +15,32 @@ namespace ForumTemplate.Services.Authentication
         }
         public AuthenticationResponse Login(LoginRequest request)
         {
+            // TODO: 
+
             if(userRepository.GetUserByEmail(request.Email) is not UserNew user)
             {
                 return null;
             }
-            
-            var response = new AuthenticationResponse(
-                user.Id.ToString(),
-                user.FirstName,
-                user.LastName,
-                user.Username,
-                user.Email,
-                "toukenche");
 
-            return response;
+            if(!user.Password.Equals(request.Password))
+            {
+                return null;
+            }
+
+            // TODO: Generate token
+
+            return new AuthenticationResponse(
+                user,
+                "toukenche");
         }
 
         public AuthenticationResponse Register(RegisterRequest request)
         {
+            if (userRepository.GetUserByEmail(request.Email) != null)
+            {
+                return null;
+            }
+
             var user = UserNew.Create(
                 request.FirstName,
                 request.LastName,
@@ -42,15 +50,11 @@ namespace ForumTemplate.Services.Authentication
 
            userRepository.AddUser(user);
 
-            var response = new AuthenticationResponse(
-                user.Id.ToString(),
-                user.FirstName,
-                user.LastName,
-                user.Username,
-                user.Email,
-                "toukenche");
+            // TODO: Generate token
 
-            return response;
+            return new AuthenticationResponse(
+                user,
+                "toukenche");
         }
     }
 }

@@ -19,7 +19,11 @@ namespace ForumTemplate.Controllers
         [HttpPost("login")]
         public IActionResult Login(LoginRequest request)
         {
-            var response = this.authenticationService.Login(request);
+            // TODO: Map LogqinRequest to LoginQuery
+
+            var response = authenticationService.Login(request);
+
+            // TODO: Handle errors
 
             return Ok(response);
         }
@@ -27,9 +31,13 @@ namespace ForumTemplate.Controllers
         [HttpPost("register")]
         public IActionResult Register(RegisterRequest request)
         {
-            var response = this.authenticationService.Register(request);
+            // TODO: Map RegisterRequest to RegisterCommand
 
-            return Ok(response);
+            var response = authenticationService.Register(request);
+
+            // TODO: Handle errors
+
+            return CreatedAtAction(nameof(Register),response);
         }
     }
 }
