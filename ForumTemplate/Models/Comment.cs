@@ -2,31 +2,27 @@
 {
     public class Comment
     {
-        public Guid Id { get; private set; }
-        public string Content { get; private set; }
-        public DateTime CreatedAt { get; private set; }
-        public DateTime UpdatedAt { get; private set; }
+        public Guid CommentId { get; set; }
+        public string Content { get; set; } = null!;
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
 
         // Foreign keys
         public Guid? UserId { get; set; }
+        public User User { get; set; } = null!;
         public Guid PostId { get; set; }
-
-        // Navigation properties
-        public User User { get; set; }
-        public Post Post { get; set; }
+        public Post Post { get; set; } = null!;
+        public bool IsDelete { get; set; }
 
         private Comment()
         {
-            // Private parameterless constructor for EF Core
-            // to enable entity creation via reflection
         }
-
-        private Comment(         
+        private Comment(
             string content,
             Guid userId,
             Guid postId)
         {
-            Id = Guid.NewGuid();
+            CommentId = Guid.NewGuid();
             Content = content;
             CreatedAt = DateTime.UtcNow;
             UserId = userId;
@@ -49,7 +45,5 @@
 
             return this;
         }
-
-
     }
 }

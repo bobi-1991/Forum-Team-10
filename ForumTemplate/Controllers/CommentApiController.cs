@@ -1,7 +1,5 @@
 ﻿using ForumTemplate.DTOs.CommentDTOs;
 using ForumTemplate.Exceptions;
-using ForumTemplate.Mappers;
-using ForumTemplate.Models;
 using ForumTemplate.Services.CommentService;
 using Microsoft.AspNetCore.Mvc;
 

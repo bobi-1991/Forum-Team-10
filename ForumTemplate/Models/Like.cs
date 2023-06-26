@@ -3,23 +3,24 @@
     public class Like
     {
         // Properties
-        public Guid Id { get; private set; }
+        public Guid LikeId { get; set; }
+        public bool Liked { get; set; }
         // Foreign keys
-        public Guid UserId { get; private set; }
-        public Guid PostId { get; private set; }
+        public Guid? UserId { get; set; }
+        public Guid PostId { get; set; }
 
         // Navigation properties
-        public User User { get; private set; }
-        public Post Post { get; private set; }
+        public User User { get; set; } = null!;
+        public Post Post { get; set; } = null!;
+        public bool IsDelete { get; set; }
 
         private Like()
         {
-
         }
 
         private Like(Guid userId, Guid postId)
         {
-            Id = Guid.NewGuid();
+            LikeId = Guid.NewGuid();
             UserId = userId;
             PostId = postId;
         }
@@ -29,6 +30,5 @@
         {
             return new Like(userId,postId);
         }
-
     }
 }

@@ -1,6 +1,5 @@
 ﻿using ForumTemplate.DTOs.UserDTOs;
 using ForumTemplate.Models;
-using ForumTemplate.Services.PostService;
 
 namespace ForumTemplate.Mappers
 {

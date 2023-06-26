@@ -2,26 +2,25 @@
 {
     public class User
     {
-        public Guid Id { get; private set; }
-        public string FirstName { get; private set; }
-        public string LastName { get; private set; }
-        public string Username { get; private set; }
-        public string Email { get; private set; }
-        public string Password { get; private set; }
+        public Guid Id { get; set; }
+        public string FirstName { get; set; } = null!;
+        public string LastName { get; set; } = null!;
+        public string Username { get; set; } = null!;        
+        public string Email { get; set; } = null!;
+        public string Password { get; set; } = null!;
+        public bool IsBlocked { get; set; }
+        public bool IsAdmin { get; set; }
         public DateTime UpdatedAt { get; private set; }
 
-        public ICollection<Post> Posts{ get; set; }
-        public ICollection<Like> Likes{ get; set; }
+        public virtual ICollection<Post> Posts { get; set; } = new List<Post>();
+        public virtual ICollection<Like> Likes { get; set; } = new List<Like>();
+        public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
+        public virtual ICollection<Tag> Tags { get; set; } = new List<Tag>();
+        public bool IsDelete { get; set; }
 
-        //  public IReadOnlyList<Post> Posts => this.posts.AsReadOnly(); // TODO: Implement
-        //  public IReadOnlyList<Comment> Comments => this.comments.AsReadOnly(); // TODO: Implement
-        //  public IReadOnlyList<Like> Likes => this.likes.AsReadOnly(); // TODO: Implement
-
-        private User()
-        {
-            
+        public User()
+        {      
         }
-
         private User(
             string firstName,
             string lastName,
@@ -34,10 +33,8 @@
             LastName = lastName;
             Username = username;
             Email = email;
-            Password = password;
-            
+            Password = password;      
         }
-
         public static User Create(
             string firstName,
             string lastName,

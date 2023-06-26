@@ -1,7 +1,5 @@
-﻿using ForumTemplate.DTOs.CommentDTOs;
-using ForumTemplate.DTOs.PostDTOs;
+﻿using ForumTemplate.DTOs.PostDTOs;
 using ForumTemplate.Models;
-using ForumTemplate.Services;
 using ForumTemplate.Services.CommentService;
 
 namespace ForumTemplate.Mappers
@@ -24,34 +22,33 @@ namespace ForumTemplate.Mappers
         }
         public PostResponse MapToPostResponse(Post post)
         {
-            var commentsResponses = this.commentService.GetComments(post.Id);
+            var commentsResponses = this.commentService.GetComments(post.PostId);
 
             return new PostResponse
             (
-                post.Id,
+                post.PostId,
                 post.Title,
                 post.Content,
-                post.UserId,
+                post.User.Username,
                 commentsResponses,
                 post.CreatedAt,
                 post.UpdatedAt
             ); 
         }
-
         public List<PostResponse> MapToPostResponse(List<Post> posts)
         {
             var postResponses = new List<PostResponse>();
 
             foreach (var post in posts)
             {
-                var commentsResponses = this.commentService.GetComments(post.Id);
+                var commentsResponses = this.commentService.GetComments(post.PostId);
 
                 var response = new PostResponse
                 (
-                    post.Id,
+                    post.PostId,
                     post.Title,
                     post.Content,
-                    post.UserId,
+                    post.User.Username,
                     commentsResponses,
                     post.CreatedAt,
                     post.UpdatedAt

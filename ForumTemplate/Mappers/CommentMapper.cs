@@ -8,14 +8,13 @@ namespace ForumTemplate.Mappers
         public CommentResponse MapToCommentResponse(Comment comment)
         {
                return new CommentResponse(
-                    comment.Id,
+                    comment.CommentId,
                     comment.Content,
                     comment.User.Username,
                     comment.Post.Title,
                     comment.CreatedAt,
                     comment.UpdatedAt);
         }
-
         public List<CommentResponse> MapToCommentResponse(List<Comment> comments)
         {
             var commentResponses = new List<CommentResponse>();
@@ -23,7 +22,7 @@ namespace ForumTemplate.Mappers
             foreach (var comment in comments)
             {
                 CommentResponse commentResponse = new CommentResponse(
-                    comment.Id,
+                    comment.CommentId,
                     comment.Content,
                     comment.User.Username,
                     comment.Post.Title,

@@ -1,7 +1,5 @@
 using ForumTemplate.DTOs.UserDTOs;
 using ForumTemplate.Exceptions;
-using ForumTemplate.Mappers;
-using ForumTemplate.Models;
 using ForumTemplate.Services.UserService;
 using Microsoft.AspNetCore.Mvc;
 

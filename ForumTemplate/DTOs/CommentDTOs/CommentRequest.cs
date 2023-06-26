@@ -4,6 +4,4 @@
        string Content,
        Guid UserId,
        Guid PostId);
-
-
 }

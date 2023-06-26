@@ -1,44 +1,33 @@
-﻿using System.Xml.Linq;
-
+﻿
 namespace ForumTemplate.Models
 {
     public class Post
     {
-        // Members
-        //private List<Comment> _comments = new();
-        //private List<Like> _likes = new();
-      //  private List<Tag> _tags = new();
-
         // Properties
-        public Guid Id { get; set; }
-        public string Title { get; set; }
-        public string Content { get; set; }
+        public Guid PostId { get; set; }
+        public string Title { get; set; } = null!;
+        public string Content { get; set; } = null!;
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
 
         // Foreign key
         public Guid UserId { get; set; }
-
-        // Navigation properties
-        public User User { get; set; }
-        public ICollection<Like> Likes { get; set; }
-
-        //public IReadOnlyList<Comment> Comments => _comments.AsReadOnly();
-        //public IReadOnlyList<Like> Likes => _likes.AsReadOnly();
-        //   public IReadOnlyList<Tag> Tags => _tags.AsReadOnly();
-
+        public User User { get; set; } = null!;
+        public virtual ICollection<Like> Likes { get; set; } = new List<Like>();
+        public virtual ICollection<Tag> Tags { get; set; } = new List<Tag>();
+        public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
+        public bool IsDelete { get; set; }
         public Post()
         {
             // Private parameterless constructor for EF Core
             // to enable entity creation via reflection
         }
-
         private Post(
             string title,
             string content,
             Guid userId)
         {
-            Id = Guid.NewGuid();
+            PostId = Guid.NewGuid();
             Title = title;
             Content = content;
             UserId = userId;
@@ -58,29 +47,5 @@ namespace ForumTemplate.Models
 
             return this;
         }
-
-
-        //public void AddComment(Comment comment)
-        //{
-        //    this._comments.Add(comment);
-        //}
-
-
-
-
-        //public void AddLike(User user)
-        //{
-        //    this._likes.Add(new Like(this.Id, user.Id));
-        //}
-
-
-        //public void RemoveLike(User user)
-        //{ 
-
-
-        //}
-
-        //public void AddTag(Tag tag);
-
     }
 }

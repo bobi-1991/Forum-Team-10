@@ -1,5 +1,4 @@
 ﻿using ForumTemplate.DTOs.UserDTOs;
-using ForumTemplate.Models;
 using ForumTemplate.Services.Authentication;
 using Microsoft.AspNetCore.Mvc;
 

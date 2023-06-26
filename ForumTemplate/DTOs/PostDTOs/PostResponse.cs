@@ -6,7 +6,7 @@ namespace ForumTemplate.DTOs.PostDTOs
         Guid Id,
         string Title,
         string Content,
-        Guid UserId,
+        string Username,
         List<CommentResponse> Comments,
         DateTime CreatedDate,
         DateTime LastEditedDate);
