@@ -4,10 +4,10 @@ using ForumTemplate.Models;
 using ForumTemplate.Repositories;
 using Microsoft.Extensions.Hosting;
 using ForumTemplate.Validation;
-using ForumTemplate.Repositories.PostPersistence;
 using ForumTemplate.Services.CommentService;
 using ForumTemplate.DTOs.PostDTOs;
 using ForumTemplate.Repositories.UserPersistence;
+using ForumTemplate.Persistence.PostRepository;
 
 namespace ForumTemplate.Services.PostService
 {

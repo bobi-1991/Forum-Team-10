@@ -1,4 +1,4 @@
-﻿using ForumTemplate.DTOs.Authentication;
+﻿using ForumTemplate.DTOs.UserDTOs;
 using ForumTemplate.Models;
 
 namespace ForumTemplate.Services.UserService

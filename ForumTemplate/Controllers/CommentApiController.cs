@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ForumTemplate.Controllers
 {
+    
     [ApiController]
     [Route("api/comments")]
     public class CommentApiController : ControllerBase
@@ -30,7 +31,6 @@ namespace ForumTemplate.Controllers
             }
             catch (EntityNotFoundException e)
             {
-
                 return StatusCode(StatusCodes.Status404NotFound, e.Message);
             }
         }

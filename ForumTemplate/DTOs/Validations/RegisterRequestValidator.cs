@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using ForumTemplate.DTOs.Authentication;
+using ForumTemplate.DTOs.UserDTOs;
 
 namespace ForumTemplate.DTOs.Validations
 {

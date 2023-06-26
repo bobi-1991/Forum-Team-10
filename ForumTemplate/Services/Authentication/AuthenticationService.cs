@@ -1,6 +1,6 @@
-﻿using ForumTemplate.DTOs.Authentication;
+﻿using ForumTemplate.DTOs.UserDTOs;
 using ForumTemplate.Models;
-using ForumTemplate.Repositories.UserPersistence;
+using ForumTemplate.Persistence.UserRepository;
 
 
 namespace ForumTemplate.Services.Authentication

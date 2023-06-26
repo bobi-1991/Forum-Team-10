@@ -52,6 +52,7 @@ namespace ForumTemplate.Models
         }
         public Post Update(Post post)
         {
+            this.Title = post.Title;
             this.Content = post.Content;
             this.UpdatedAt = DateTime.UtcNow;
 

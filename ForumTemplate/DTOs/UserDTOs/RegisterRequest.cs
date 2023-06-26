@@ -1,4 +1,4 @@
-﻿namespace ForumTemplate.DTOs.Authentication;
+﻿namespace ForumTemplate.DTOs.UserDTOs;
 
 public record RegisterRequest(
     string FirstName,

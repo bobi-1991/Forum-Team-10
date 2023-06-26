@@ -3,7 +3,7 @@
 namespace ForumTemplate.DTOs.Validations.CustomValidators
 {
     public static class TitleValidator
-    {
+    {  
         public static IRuleBuilderOptions<T, string> LengthAndPatternRules<T>(this IRuleBuilder<T, string> ruleBuilder)
         {
             int minLength = 16;

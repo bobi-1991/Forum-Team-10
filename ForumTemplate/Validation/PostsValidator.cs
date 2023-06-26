@@ -1,6 +1,6 @@
 ﻿using ForumTemplate.DTOs.PostDTOs;
 using ForumTemplate.Exceptions;
-using ForumTemplate.Repositories.PostPersistence;
+using ForumTemplate.Persistence.PostRepository;
 
 namespace ForumTemplate.Validation
 

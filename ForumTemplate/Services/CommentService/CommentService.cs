@@ -2,8 +2,8 @@
 using ForumTemplate.Exceptions;
 using ForumTemplate.Mappers;
 using ForumTemplate.Models;
+using ForumTemplate.Persistence.CommentRepository;
 using ForumTemplate.Repositories;
-using ForumTemplate.Repositories.CommentPersistence;
 using ForumTemplate.Validation;
 using System.Runtime.InteropServices;
 using System.Xml.Linq;

@@ -5,9 +5,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using ForumTemplate.Validation;
 using ForumTemplate.Services.Authentication;
-using ForumTemplate.Repositories.UserPersistence;
-using ForumTemplate.Repositories.CommentPersistence;
-using ForumTemplate.Repositories.PostPersistence;
 using ForumTemplate.Services.CommentService;
 using ForumTemplate.Services.PostService;
 using ForumTemplate.Services.UserService;
@@ -15,9 +12,12 @@ using FluentValidation;
 using ForumTemplate.DTOs.PostDTOs;
 using ForumTemplate.DTOs.Validations;
 using ForumTemplate.DTOs.CommentDTOs;
-using ForumTemplate.DTOs.Authentication;
+using ForumTemplate.DTOs.UserDTOs;
 using ForumTemplate.Common;
 using FluentValidation.AspNetCore;
+using ForumTemplate.Persistence.PostRepository;
+using ForumTemplate.Persistence.UserRepository;
+using ForumTemplate.Persistence.CommentRepository;
 
 namespace ForumTemplate
 {

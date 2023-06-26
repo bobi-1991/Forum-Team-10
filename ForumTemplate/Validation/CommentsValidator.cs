@@ -1,7 +1,7 @@
 ﻿using ForumTemplate.DTOs.CommentDTOs;
 using ForumTemplate.Exceptions;
-using ForumTemplate.Repositories.CommentPersistence;
-using ForumTemplate.Repositories.PostPersistence;
+using ForumTemplate.Persistence.CommentRepository;
+using ForumTemplate.Persistence.PostRepository;
 
 namespace ForumTemplate.Validation
 {

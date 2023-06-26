@@ -8,7 +8,7 @@
         public DateTime UpdatedAt { get; private set; }
 
         // Foreign keys
-        public Guid UserId { get; set; }
+        public Guid? UserId { get; set; }
         public Guid PostId { get; set; }
 
         // Navigation properties
