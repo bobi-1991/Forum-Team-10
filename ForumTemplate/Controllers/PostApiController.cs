@@ -1,4 +1,5 @@
-﻿using ForumTemplate.DTOs.PostDTOs;
+﻿using ForumTemplate.Common.FilterModels;
+using ForumTemplate.DTOs.PostDTOs;
 using ForumTemplate.Services.PostService;
 using Microsoft.AspNetCore.Mvc;
 using ValidationException = ForumTemplate.Exceptions.ValidationException;
@@ -22,6 +23,16 @@ public class PostApiController : ControllerBase
         var response = this.postService.GetAll();
 
         return StatusCode(StatusCodes.Status200OK, response);
+    }
+
+
+    //   Not tested yet
+    [HttpGet("")]
+    public IActionResult GetByFiler([FromQuery] PostQueryParameters filterParameters)
+    {
+        List<PostResponse> posts = this.postService.FilterBy(filterParameters);
+
+        return this.StatusCode(StatusCodes.Status200OK, posts);
     }
 
     [HttpGet("{id}")]

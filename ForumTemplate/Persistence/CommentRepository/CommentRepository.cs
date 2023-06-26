@@ -1,9 +1,7 @@
 ﻿using ForumTemplate.Exceptions;
 using ForumTemplate.Models;
-using ForumTemplate.Repositories.CommentPersistence;
-using Microsoft.Extensions.Hosting;
 
-namespace ForumTemplate.Repositories.CommentPersistence
+namespace ForumTemplate.Persistence.CommentRepository
 {
     public class CommentRepository : ICommentRepository
     {
@@ -19,7 +17,7 @@ namespace ForumTemplate.Repositories.CommentPersistence
 
         public Comment GetById(Guid id)
         {
-            return comments.Where(c => c.Id == id).FirstOrDefault(); 
+            return comments.Where(c => c.CommentId == id).FirstOrDefault(); 
         }
 
         public List<Comment> GetByPostId(Guid postId)
@@ -63,6 +61,5 @@ namespace ForumTemplate.Repositories.CommentPersistence
                 comments.Remove(comment);
             }
         }
-
     }
 }

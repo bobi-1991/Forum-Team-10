@@ -1,9 +1,8 @@
-﻿
-
+﻿using ForumTemplate.Common.FilterModels;
+using ForumTemplate.DTOs.PostDTOs;
 using ForumTemplate.Models;
 
-namespace ForumTemplate.Repositories.UserPersistence
-
+namespace ForumTemplate.Persistence.UserRepository
 {
     public interface IUserRepository
     {

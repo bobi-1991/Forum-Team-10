@@ -1,22 +1,18 @@
 ﻿using ForumTemplate.DTOs.CommentDTOs;
-using ForumTemplate.Exceptions;
 using ForumTemplate.Mappers;
-using ForumTemplate.Models;
 using ForumTemplate.Persistence.CommentRepository;
-using ForumTemplate.Repositories;
 using ForumTemplate.Validation;
-using System.Runtime.InteropServices;
-using System.Xml.Linq;
+
 
 namespace ForumTemplate.Services.CommentService
 {
     public class CommentService : ICommentService
     {
         private readonly ICommentRepository commentRepository;
-        private readonly ICommentsValidator commentsValidator;
+        private readonly CommentsValidator commentsValidator;
         private readonly CommentMapper commentMapper;
 
-        public CommentService(ICommentRepository commentRepository, ICommentsValidator commentsValidator, CommentMapper commentMapper)
+        public CommentService(ICommentRepository commentRepository, CommentsValidator commentsValidator, CommentMapper commentMapper)
         {
             this.commentRepository = commentRepository;
             this.commentsValidator = commentsValidator;

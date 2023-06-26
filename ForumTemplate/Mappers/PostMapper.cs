@@ -29,7 +29,8 @@ namespace ForumTemplate.Mappers
                 post.PostId,
                 post.Title,
                 post.Content,
-                post.User.Username,
+                post.User.Username,            
+                post.Likes.Count(),
                 commentsResponses,
                 post.CreatedAt,
                 post.UpdatedAt
@@ -49,6 +50,7 @@ namespace ForumTemplate.Mappers
                     post.Title,
                     post.Content,
                     post.User.Username,
+                    post.Likes.Count(),
                     commentsResponses,
                     post.CreatedAt,
                     post.UpdatedAt

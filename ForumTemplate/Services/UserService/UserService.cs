@@ -1,10 +1,8 @@
 ﻿using ForumTemplate.DTOs.UserDTOs;
 using ForumTemplate.Exceptions;
 using ForumTemplate.Mappers;
-using ForumTemplate.Models;
 using ForumTemplate.Persistence.PostRepository;
 using ForumTemplate.Persistence.UserRepository;
-using ForumTemplate.Repositories;
 
 namespace ForumTemplate.Services.UserService
 {

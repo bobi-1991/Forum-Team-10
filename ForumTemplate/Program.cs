@@ -1,18 +1,11 @@
 
-using ForumTemplate.Repositories;
 using ForumTemplate.Mappers;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
 using ForumTemplate.Validation;
 using ForumTemplate.Services.Authentication;
 using ForumTemplate.Services.CommentService;
 using ForumTemplate.Services.PostService;
 using ForumTemplate.Services.UserService;
 using FluentValidation;
-using ForumTemplate.DTOs.PostDTOs;
-using ForumTemplate.DTOs.Validations;
-using ForumTemplate.DTOs.CommentDTOs;
-using ForumTemplate.DTOs.UserDTOs;
 using ForumTemplate.Common;
 using FluentValidation.AspNetCore;
 using ForumTemplate.Persistence.PostRepository;
@@ -42,8 +35,8 @@ namespace ForumTemplate
 
 
             //Validators
-            builder.Services.AddScoped<ICommentsValidator, CommentsValidator>();
-            builder.Services.AddScoped<IPostsValidator, PostsValidator>();
+            builder.Services.AddScoped<CommentsValidator>();
+            builder.Services.AddScoped<PostsValidator>();
 
             // Fluent Validation
             builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();

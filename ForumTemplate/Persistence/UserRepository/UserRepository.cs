@@ -1,7 +1,7 @@
 ﻿using ForumTemplate.Exceptions;
 using ForumTemplate.Models;
 
-namespace ForumTemplate.Repositories.UserPersistence
+namespace ForumTemplate.Persistence.UserRepository
 {
     public class UserRepository : IUserRepository
     {

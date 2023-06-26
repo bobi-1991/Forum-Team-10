@@ -1,13 +1,11 @@
-﻿using ForumTemplate.Exceptions;
+﻿
 using ForumTemplate.Mappers;
-using ForumTemplate.Models;
-using ForumTemplate.Repositories;
-using Microsoft.Extensions.Hosting;
 using ForumTemplate.Validation;
 using ForumTemplate.Services.CommentService;
 using ForumTemplate.DTOs.PostDTOs;
-using ForumTemplate.Repositories.UserPersistence;
 using ForumTemplate.Persistence.PostRepository;
+using ForumTemplate.Common.FilterModels;
+using ForumTemplate.Models;
 
 namespace ForumTemplate.Services.PostService
 {
@@ -15,10 +13,10 @@ namespace ForumTemplate.Services.PostService
     {
         private readonly IPostRepository postRepository;
         private readonly ICommentService commentService;
-        private readonly IPostsValidator postsValidator;
+        private readonly PostsValidator postsValidator;
         private readonly PostMapper postMapper;
 
-        public PostService(IPostRepository repository, ICommentService commentService, IPostsValidator postsValidator, PostMapper postMapper)
+        public PostService(IPostRepository repository, ICommentService commentService, PostsValidator postsValidator, PostMapper postMapper)
         {
             this.postRepository = repository;
             this.commentService = commentService;
@@ -69,10 +67,19 @@ namespace ForumTemplate.Services.PostService
             postsValidator.Validate(id);
 
             var postToDelete = postRepository.GetById(id);
-            this.commentService.DeleteByPostId(postToDelete.Id);
+            this.commentService.DeleteByPostId(postToDelete.PostId);
 
             return postRepository.Delete(id);
         }
 
+
+
+        //   Not tested yet
+        public List<PostResponse> FilterBy(PostQueryParameters filterParameters)
+        {
+            List<Post> filteredPosts = this.postRepository.FilterBy(filterParameters);
+
+            return postMapper.MapToPostResponse(filteredPosts);
+        }
     }
 }

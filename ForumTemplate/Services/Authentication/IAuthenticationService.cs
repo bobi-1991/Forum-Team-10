@@ -1,5 +1,5 @@
-﻿using ForumTemplate.DTOs.UserDTOs;
-using ForumTemplate.Models;
+﻿using ForumTemplate.DTOs.Authentication;
+using ForumTemplate.DTOs.UserDTOs;
 
 namespace ForumTemplate.Services.Authentication;
 

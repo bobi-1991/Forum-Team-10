@@ -1,4 +1,5 @@
-﻿using ForumTemplate.DTOs.UserDTOs;
+﻿using ForumTemplate.DTOs.Authentication;
+using ForumTemplate.DTOs.UserDTOs;
 using ForumTemplate.Models;
 using ForumTemplate.Persistence.UserRepository;
 
@@ -27,11 +28,8 @@ namespace ForumTemplate.Services.Authentication
                 return null;
             }
 
-            // TODO: Generate token
-
             return new AuthenticationResponse(
-                user,
-                "toukenche");
+                user);
         }
 
         public AuthenticationResponse Register(RegisterRequest request)
@@ -51,11 +49,8 @@ namespace ForumTemplate.Services.Authentication
 
            userRepository.AddUser(user);
 
-            // TODO: Generate token
-
             return new AuthenticationResponse(
-                user,
-                "toukenche");
+                user);
         }
     }
 }

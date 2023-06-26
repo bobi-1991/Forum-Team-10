@@ -1,6 +1,7 @@
-﻿namespace ForumTemplate.DTOs.Authentication
+﻿using ForumTemplate.Models;
+
+namespace ForumTemplate.DTOs.Authentication
 {
-    public class AuthenticationResponse
-    {
-    }
+    public record AuthenticationResponse(
+     User User);
 }

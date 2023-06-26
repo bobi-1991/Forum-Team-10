@@ -7,6 +7,7 @@ namespace ForumTemplate.DTOs.PostDTOs
         string Title,
         string Content,
         string Username,
+        int Likes,
         List<CommentResponse> Comments,
         DateTime CreatedDate,
         DateTime LastEditedDate);
