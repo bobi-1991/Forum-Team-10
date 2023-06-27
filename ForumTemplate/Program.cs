@@ -1,7 +1,6 @@
 
 using ForumTemplate.Mappers;
 using ForumTemplate.Validation;
-using ForumTemplate.Services.Authentication;
 using ForumTemplate.Services.CommentService;
 using ForumTemplate.Services.PostService;
 using ForumTemplate.Services.UserService;
@@ -11,6 +10,7 @@ using FluentValidation.AspNetCore;
 using ForumTemplate.Persistence.PostRepository;
 using ForumTemplate.Persistence.UserRepository;
 using ForumTemplate.Persistence.CommentRepository;
+using ForumTemplate.Authorization;
 
 namespace ForumTemplate
 {
@@ -31,8 +31,6 @@ namespace ForumTemplate
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IPostService, PostService>();
             builder.Services.AddScoped<ICommentService, CommentService>();
-            builder.Services.AddSingleton<IAuthenticationService, AuthenticationService>();
-
 
             //Validators
             builder.Services.AddScoped<CommentsValidator>();
@@ -46,6 +44,7 @@ namespace ForumTemplate
             builder.Services.AddScoped<UserMapper>();
             builder.Services.AddScoped<PostMapper>();
             builder.Services.AddScoped<CommentMapper>();
+            builder.Services.AddSingleton<IAuthManager, AuthManager>();
 
             var app = builder.Build();
 

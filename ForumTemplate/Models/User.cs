@@ -8,8 +8,10 @@
         public string Username { get; set; } = null!;        
         public string Email { get; set; } = null!;
         public string Password { get; set; } = null!;
+        public string Country { get; set; }
         public bool IsBlocked { get; set; }
         public bool IsAdmin { get; set; }
+        public bool IsLogged { get; set; }
         public DateTime UpdatedAt { get; private set; }
 
         public virtual ICollection<Post> Posts { get; set; } = new List<Post>();
