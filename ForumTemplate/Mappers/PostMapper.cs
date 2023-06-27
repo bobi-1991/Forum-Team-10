@@ -12,12 +12,11 @@ namespace ForumTemplate.Mappers
         {
             this.commentService = commentService;
         }
-        public Post MapToPost(PostRequest postRequest)//, User author)
+        public Post MapToPost(PostRequest postRequest)
         {
             return Post.CreatePost(
                postRequest.Title,
                postRequest.Content,
-             //  author,
                postRequest.UserId
             );
         }

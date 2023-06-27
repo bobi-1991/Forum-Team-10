@@ -60,7 +60,7 @@ namespace ForumTemplate.Services.PostService
             postsValidator.Validate(id, postRequest);
 
            
-            var author = userRepository.GetById(postRequest.UserId);
+         //   var author = userRepository.GetById(postRequest.UserId);
             var post = postMapper.MapToPost(postRequest);//,author);
             var updatedPost = postRepository.Update(id, post);
 

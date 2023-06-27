@@ -25,22 +25,20 @@ namespace ForumTemplate.Models
         private Post(
             string title,
             string content,
-          //  User author,
             Guid userId
             )
         {
             PostId = Guid.NewGuid();
             Title = title;
             Content = content;
-           // User = author;
             UserId = userId;
             CreatedAt = DateTime.UtcNow;
         }
 
         // Methods
-        public static Post CreatePost(string title, string content, Guid userId)// User author,Guid userId)
+        public static Post CreatePost(string title, string content, Guid userId)
         {
-            return new Post(title, content, userId);// author, userId);
+            return new Post(title, content, userId);
         }
         public Post Update(Post post)
         {
