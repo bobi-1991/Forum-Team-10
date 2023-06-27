@@ -12,11 +12,12 @@ namespace ForumTemplate.Mappers
         {
             this.commentService = commentService;
         }
-        public Post MapToPost(PostRequest postRequest)
+        public Post MapToPost(PostRequest postRequest)//, User author)
         {
             return Post.CreatePost(
                postRequest.Title,
                postRequest.Content,
+             //  author,
                postRequest.UserId
             );
         }
@@ -29,7 +30,7 @@ namespace ForumTemplate.Mappers
                 post.PostId,
                 post.Title,
                 post.Content,
-                post.User.Username,            
+                post.UserId,            
                 post.Likes.Count(),
                 commentsResponses,
                 post.CreatedAt,
@@ -49,7 +50,7 @@ namespace ForumTemplate.Mappers
                     post.PostId,
                     post.Title,
                     post.Content,
-                    post.User.Username,
+                    post.UserId,
                     post.Likes.Count(),
                     commentsResponses,
                     post.CreatedAt,

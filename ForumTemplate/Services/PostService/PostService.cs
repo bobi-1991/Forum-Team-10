@@ -6,6 +6,7 @@ using ForumTemplate.DTOs.PostDTOs;
 using ForumTemplate.Persistence.PostRepository;
 using ForumTemplate.Common.FilterModels;
 using ForumTemplate.Models;
+using ForumTemplate.Persistence.UserRepository;
 
 namespace ForumTemplate.Services.PostService
 {
@@ -13,15 +14,17 @@ namespace ForumTemplate.Services.PostService
     {
         private readonly IPostRepository postRepository;
         private readonly ICommentService commentService;
+        private readonly IUserRepository userRepository;
         private readonly PostsValidator postsValidator;
         private readonly PostMapper postMapper;
 
-        public PostService(IPostRepository repository, ICommentService commentService, PostsValidator postsValidator, PostMapper postMapper)
+        public PostService(IPostRepository repository, ICommentService commentService, PostsValidator postsValidator, PostMapper postMapper, IUserRepository userRepository)
         {
             this.postRepository = repository;
             this.commentService = commentService;
             this.postsValidator = postsValidator;
             this.postMapper = postMapper;
+            this.userRepository = userRepository;
         }
 
         public List<PostResponse> GetAll()
@@ -44,7 +47,8 @@ namespace ForumTemplate.Services.PostService
             //Validation
             postsValidator.Validate(postRequest);
 
-            var post = postMapper.MapToPost(postRequest);
+            var author = userRepository.GetById(postRequest.UserId);
+            var post = postMapper.MapToPost(postRequest);//author);
             var createdPost = postRepository.Create(post);
 
             return postMapper.MapToPostResponse(createdPost);
@@ -55,7 +59,9 @@ namespace ForumTemplate.Services.PostService
             //Validation
             postsValidator.Validate(id, postRequest);
 
-            var post = postMapper.MapToPost(postRequest);
+           
+            var author = userRepository.GetById(postRequest.UserId);
+            var post = postMapper.MapToPost(postRequest);//,author);
             var updatedPost = postRepository.Update(id, post);
 
             return postMapper.MapToPostResponse(updatedPost);

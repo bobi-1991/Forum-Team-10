@@ -10,8 +10,8 @@ namespace ForumTemplate.Mappers
                return new CommentResponse(
                     comment.CommentId,
                     comment.Content,
-                    comment.User.Username,
-                    comment.Post.Title,
+                    comment.UserId.Value,
+                    comment.PostId,
                     comment.CreatedAt,
                     comment.UpdatedAt);
         }
@@ -24,8 +24,8 @@ namespace ForumTemplate.Mappers
                 CommentResponse commentResponse = new CommentResponse(
                     comment.CommentId,
                     comment.Content,
-                    comment.User.Username,
-                    comment.Post.Title,
+                    comment.UserId.Value,
+                    comment.PostId,
                     comment.CreatedAt,
                     comment.UpdatedAt);
 

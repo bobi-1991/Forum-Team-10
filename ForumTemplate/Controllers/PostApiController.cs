@@ -27,7 +27,7 @@ public class PostApiController : ControllerBase
 
 
     //   Not tested yet
-    [HttpGet("")]
+    [HttpGet("/query")]
     public IActionResult GetByFiler([FromQuery] PostQueryParameters filterParameters)
     {
         List<PostResponse> posts = this.postService.FilterBy(filterParameters);

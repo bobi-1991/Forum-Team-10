@@ -3,8 +3,8 @@
     public record CommentResponse(
        Guid Id,
        string Content,
-       string Username,
-       string PostTitle,
+       Guid UserId,
+       Guid PostId,
        DateTime CreatedDate,
        DateTime UpdatedDate);
 

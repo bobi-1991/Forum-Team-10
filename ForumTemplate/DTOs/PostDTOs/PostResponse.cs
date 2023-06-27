@@ -6,7 +6,7 @@ namespace ForumTemplate.DTOs.PostDTOs
         Guid Id,
         string Title,
         string Content,
-        string Username,
+        Guid UserId,
         int Likes,
         List<CommentResponse> Comments,
         DateTime CreatedDate,

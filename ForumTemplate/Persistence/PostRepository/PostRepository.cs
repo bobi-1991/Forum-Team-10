@@ -6,12 +6,12 @@ namespace ForumTemplate.Persistence.PostRepository
     public class PostRepository : IPostRepository
     {
         private readonly List<Post> posts = new();
-        public PostRepository()
-        {
-            this.posts.Add(Post.CreatePost("Post1", "First Post", Guid.NewGuid()));
-            this.posts.Add(Post.CreatePost("Post1", "First Post", Guid.NewGuid()));
-            this.posts.Add(Post.CreatePost("Post1", "First Post", Guid.NewGuid()));
-        }
+        //public PostRepository()
+        //{
+        //    this.posts.Add(Post.CreatePost("Post1", "First Post", Guid));
+        //    this.posts.Add(Post.CreatePost("Post1", "First Post", Guid.NewGuid()));
+        //    this.posts.Add(Post.CreatePost("Post1", "First Post", Guid.NewGuid()));
+        //}
         public List<Post> GetAll()
         {
             return this.posts;
