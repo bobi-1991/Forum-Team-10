@@ -98,7 +98,7 @@ namespace ForumTemplate.Persistence.PostRepository
                 return posts;
             }
         }
-
+        
         private static IQueryable<Post> FilterByMinLikes(IQueryable<Post> posts, double? minLikes)
         {
             if (minLikes.HasValue)

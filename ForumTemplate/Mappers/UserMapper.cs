@@ -1,11 +1,12 @@
-﻿using ForumTemplate.DTOs.UserDTOs;
+﻿using ForumTemplate.DTOs.Authentication;
+using ForumTemplate.DTOs.UserDTOs;
 using ForumTemplate.Models;
 
 namespace ForumTemplate.Mappers
 {
     public class UserMapper
     {
-        public User MapToUser(RegisterRequest registerUser)
+        public User MapToUser(RegisterUserRequestModel registerUser)
         {
             return User.Create(
                 registerUser.FirstName,

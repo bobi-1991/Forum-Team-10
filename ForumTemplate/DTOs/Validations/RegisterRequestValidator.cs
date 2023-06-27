@@ -1,9 +1,10 @@
 ﻿using FluentValidation;
+using ForumTemplate.DTOs.Authentication;
 using ForumTemplate.DTOs.UserDTOs;
 
 namespace ForumTemplate.DTOs.Validations
 {
-    public class RegisterRequestValidator : AbstractValidator<RegisterRequest>
+    public class RegisterRequestValidator : AbstractValidator<RegisterUserRequestModel>
     {
         private const int MinNameLength = 4;
         private const int MaxNameLength = 32;

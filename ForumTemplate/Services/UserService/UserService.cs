@@ -1,6 +1,8 @@
-﻿using ForumTemplate.DTOs.UserDTOs;
+﻿using ForumTemplate.DTOs.Authentication;
+using ForumTemplate.DTOs.UserDTOs;
 using ForumTemplate.Exceptions;
 using ForumTemplate.Mappers;
+using ForumTemplate.Models;
 using ForumTemplate.Persistence.PostRepository;
 using ForumTemplate.Persistence.UserRepository;
 
@@ -38,26 +40,62 @@ namespace ForumTemplate.Services.UserService
             return userMapper.MapToUserResponse(user);
         }
 
-        public UserResponse Create(RegisterRequest registerRequest)
+        //Authentication
+        public User Login(string username, string encodedPassword)
         {
+            return this.userRepository.Login(username, encodedPassword);
+        }
 
-            var user = userMapper.MapToUser(registerRequest);
+        public User Logout(string username)
+        {
+            return this.userRepository.Logout(username);
+        }
 
-            var doesExists = userRepository.DoesExist(user.Username);
+        public string RegisterUser(RegisterUserRequestModel user, string encodedPassword)
+        {
+            var doesExists = this.userRepository.DoesExist(user.Username);
 
             if (doesExists)
             {
-                throw new DuplicateEntityException($"User {user.Username} already exists.");
+                throw new DuplicateEntityException($"User already exists.");
             }
 
-            this.userRepository.AddUser(user);
+            //Must be done by mapper
+            var userDB = new User
+            {
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Username = user.Username,
+                Email = user.Email,
+                Password = encodedPassword,
+                Country = user.Country
+            };
 
-            return userMapper.MapToUserResponse(user);
+            userRepository.RegisterUser(userDB);
+
+            return "User successfully registered.";
         }
 
+        //public UserResponse Create(RegisterRequest registerRequest)
+        //{
+
+        //    var user = userMapper.MapToUser(registerRequest);
+
+        //    var doesExists = userRepository.DoesExist(user.Username);
+
+        //    if (doesExists)
+        //    {
+        //        throw new DuplicateEntityException($"User {user.Username} already exists.");
+        //    }
+
+        //    this.userRepository.AddUser(user);
+
+        //    return userMapper.MapToUserResponse(user);
+        //}
 
 
-        public UserResponse Update(Guid id, RegisterRequest registerRequest)
+
+        public UserResponse Update(Guid id, RegisterUserRequestModel registerRequest)
         {
             var userData = this.userMapper.MapToUser(registerRequest);
             var user = userRepository.Update(id, userData);
