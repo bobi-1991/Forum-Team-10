@@ -11,6 +11,9 @@ using ForumTemplate.Persistence.PostRepository;
 using ForumTemplate.Persistence.UserRepository;
 using ForumTemplate.Persistence.CommentRepository;
 using ForumTemplate.Authorization;
+using Newtonsoft.Json;
+using Microsoft.EntityFrameworkCore;
+using ForumTemplate.Data;
 
 namespace ForumTemplate
 {
@@ -20,7 +23,16 @@ namespace ForumTemplate
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.AddControllers();
+            builder.Services.AddControllers().AddNewtonsoftJson(options =>
+            {
+                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            });
+
+            // Database
+            builder.Services.AddDbContext<ApplicationContext>(options =>
+            {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+            });
 
             // Repositories
             builder.Services.AddSingleton<IUserRepository, UserRepository>();

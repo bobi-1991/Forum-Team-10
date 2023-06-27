@@ -19,7 +19,7 @@ namespace ForumTemplate.Mappers
         public UserResponse MapToUserResponse(User user)
         {
             return new UserResponse(
-                user.Id,
+                user.UserId,
                 user.FirstName,
                 user.LastName,
                 user.Username,
@@ -34,7 +34,7 @@ namespace ForumTemplate.Mappers
             foreach (var user in users)
             {
                 var result = new UserResponse(
-                         user.Id,
+                         user.UserId,
                          user.FirstName,
                          user.LastName,
                          user.Username,

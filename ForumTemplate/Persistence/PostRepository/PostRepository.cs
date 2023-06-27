@@ -1,20 +1,27 @@
 ﻿using ForumTemplate.Common.FilterModels;
+using ForumTemplate.Data;
 using ForumTemplate.Models;
+using ForumTemplate.Services.PostService;
+using Microsoft.EntityFrameworkCore;
 
 namespace ForumTemplate.Persistence.PostRepository
 {
     public class PostRepository : IPostRepository
     {
-        private readonly List<Post> posts = new();
-        //public PostRepository()
+        private readonly List<Post> posts = new List<Post>();
+
+        //private readonly ApplicationContext dbContext;
+        //public PostRepository(ApplicationContext dbContext)
         //{
-        //    this.posts.Add(Post.CreatePost("Post1", "First Post", Guid));
-        //    this.posts.Add(Post.CreatePost("Post1", "First Post", Guid.NewGuid()));
-        //    this.posts.Add(Post.CreatePost("Post1", "First Post", Guid.NewGuid()));
+        //    this.dbContext = dbContext;
         //}
+
         public List<Post> GetAll()
         {
-            return this.posts;
+            return this.posts.ToList();
+
+            //return this.dbContext.Posts.Where(x=>!x.User.IsDelete)
+            //    .ToList();
         }
         public List<Post> FilterBy(PostQueryParameters filterParameters)
         {
@@ -32,21 +39,31 @@ namespace ForumTemplate.Persistence.PostRepository
         public Post GetById(Guid id)
         {
             return posts.Where(p => p.PostId == id).FirstOrDefault();
+
+           // return dbContext.Posts.FirstOrDefault(p => p.PostId == id);
         }
         public Post GetByTitle(string title)
         {
             return posts.Where(p => p.Title == title).FirstOrDefault();
+
+            // return dbContext.Posts.FirstOrDefault(p => p.Title == title);
         }
 
         public List<Post> GetByUserId(Guid id)
         {
             return posts.Where(p => p.UserId == id).ToList();
+
+          //  return dbContext.Posts.Where(p => p.UserId == id).ToList();
         }
 
         public Post Create(Post post)
         {
             this.posts.Add(post);
             return post;
+
+            //this.dbContext.Posts.Add(post);
+            //dbContext.SaveChanges();
+            //return post;
         }
 
         public Post Update(Guid id, Post post)
@@ -55,6 +72,15 @@ namespace ForumTemplate.Persistence.PostRepository
             postToUpdate.Update(post);
 
             return postToUpdate;
+
+
+           // Post postToUpdate = GetById(id);
+            //var updatedPost = postToUpdate.Update(post);
+
+            //dbContext.Update(updatedPost);
+            //dbContext.SaveChanges();
+
+            //return updatedPost;
         }
         public string Delete(Guid id)
         {
@@ -62,11 +88,23 @@ namespace ForumTemplate.Persistence.PostRepository
             posts.Remove(existingPost);
 
             return "Post was successfully deleted.";
+
+            //var post = dbContext.Posts.FirstOrDefault(x => x.PostId == id);
+
+            //if (post != null)
+            //{
+            //    post.IsDelete = true;
+            //    dbContext.SaveChanges();
+            //}
+
+            //return "Post was successfully deleted.";
         }
 
         public bool Exist(Guid id)
         {
             return posts.Any(p => p.PostId == id);
+
+          //  return dbContext.Posts.Any(p => p.PostId == id);
         }
 
 
@@ -145,11 +183,13 @@ namespace ForumTemplate.Persistence.PostRepository
             }
         }
 
+
+        // Must be tested
         //private IQueryable<Post> GetPosts()
         //{
-        //    return this.context.Posts
+        //    return this.dbContext.Posts
+        //        .Include(x => x.Likes);
 
-        //        // To Do
         //}
 
 

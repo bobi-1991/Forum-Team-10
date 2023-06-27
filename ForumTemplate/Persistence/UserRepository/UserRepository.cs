@@ -1,5 +1,7 @@
-﻿using ForumTemplate.Exceptions;
+﻿using ForumTemplate.Data;
+using ForumTemplate.Exceptions;
 using ForumTemplate.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace ForumTemplate.Persistence.UserRepository
 {
@@ -7,6 +9,12 @@ namespace ForumTemplate.Persistence.UserRepository
     {
         private List<User> _users = new();
 
+        //private readonly ApplicationContext dbContext;
+
+        //public UserRepository(ApplicationContext dbContext)
+        //{
+        //    this.dbContext = dbContext; 
+        //}
         public UserRepository()
         {
             this._users.Add(User.Create("borislav", "penchev", "bobi", "bobi@email", "MTIz"));
@@ -16,25 +24,38 @@ namespace ForumTemplate.Persistence.UserRepository
         public void AddUser(User user)
         {
             _users.Add(user);
+
+            //dbContext.Users.Add(user);
+            //dbContext.SaveChanges();
         }
 
         public User GetUserByEmail(string email)
         {
             var user = _users.SingleOrDefault(u => u.Email == email);
             return user;
+
+            //var user = dbContext.Users.SingleOrDefault(x => x.Email == email);
+            //return user;
         }
         public List<User> GetAll()
         {
             return _users;
+
+          //  return dbContext.Users
+          //.ToList();
         }
         public User GetById(Guid id)
         {
-            return _users.FirstOrDefault(u => u.Id == id) ?? throw new EntityNotFoundException($"User with ID: {id} not found.");
+            return _users.FirstOrDefault(u => u.UserId == id) ?? throw new EntityNotFoundException($"User with ID: {id} not found.");
+
+            //return dbContext.Users.FirstOrDefault(x => x.UserId == id) ?? throw new EntityNotFoundException($"User with ID: {id} not found.");
         }
 
         public User GetByUsername(string username)
         {
-            return _users.FirstOrDefault(u => u.Username.Equals(username, StringComparison.OrdinalIgnoreCase)) ?? throw new EntityNotFoundException($"User with username: {username} not found.");
+            return _users.FirstOrDefault(x => x.Username.Equals(username, StringComparison.OrdinalIgnoreCase)) ?? throw new EntityNotFoundException($"User with username: {username} not found.");
+
+            //return dbContext.Users.FirstOrDefault(x => x.Username.Equals(username, StringComparison.OrdinalIgnoreCase)) ?? throw new EntityNotFoundException($"User with username: {username} not found.");
         }
         public User Update(Guid id, User user)
         {
@@ -42,6 +63,14 @@ namespace ForumTemplate.Persistence.UserRepository
             userToUpdate.Update(user);
 
             return userToUpdate;
+
+            //User userToUpdate = GetById(id);
+            //var updatedUser = userToUpdate.Update(user);
+
+            //dbContext.Update(updatedUser);
+            //dbContext.SaveChanges();
+
+            //return updatedUser;
         }
 
         public string Delete(Guid id)
@@ -50,11 +79,25 @@ namespace ForumTemplate.Persistence.UserRepository
             _users.Remove(existingUser);
 
             return "User was successfully deleted.";
+
+
+            //var user = dbContext.Users.FirstOrDefault(x => x.UserId == id);
+
+            //if (user != null)
+            //{
+            //    user.IsDelete = true;
+
+            //    dbContext.SaveChanges();
+            //}
+
+            //return "User was successfully deleted.";
         }
 
         public bool DoesExist(string usernme)
         {
             return _users.Any(x => x.Username.Equals(usernme, StringComparison.OrdinalIgnoreCase));
+
+          //  return dbContext.Users.Any(x => x.Username.Equals(usernme));
         }
 
         //Authentication
