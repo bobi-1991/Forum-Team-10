@@ -29,7 +29,8 @@
             string country,
             string username,
             string email,
-            string password)
+            string password,
+            string country)
         {
             UserId = Guid.NewGuid();
             FirstName = firstName;
@@ -37,7 +38,8 @@
             Country = country;
             Username = username;
             Email = email;
-            Password = password;          
+            Password = password;
+            Country = country;
         }
         public static User Create(
             string firstName,
@@ -45,9 +47,10 @@
             string username,
             string country,
             string email,
-            string password)
+            string password,
+            string country)
         {
-            return new User(firstName, lastName, username,country, email, password);
+            return new User(firstName, lastName, username, email, password, country);
         }
         public User Update(User user)
         {

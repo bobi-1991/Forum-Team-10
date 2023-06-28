@@ -9,9 +9,17 @@ namespace ForumTemplate.Persistence.UserRepository
     {
         private readonly ApplicationContext dbContext;
 
+        private readonly ApplicationContext dbContext;
+
         public UserRepository(ApplicationContext dbContext)
         {
             this.dbContext = dbContext;
+        }
+        public UserRepository()
+        {
+            this._users.Add(User.Create("borislav", "penchev", "bobi", "bobi@email", "MTIz", "Bulgaria"));
+            this._users.Add(User.Create("strahil", "mladenov", "strahil", "strahil@email", "MTIz", "Bulgaria"));
+            this._users.Add(User.Create("iliyan", "tsvetkov", "iliyan", "iliyan@email", "MTIz", "Bulgaria"));
         }
         public void AddUser(User user)
         {
@@ -71,30 +79,41 @@ namespace ForumTemplate.Persistence.UserRepository
         //Authentication
 
         public User Login(string username, string encodedPassword)
-        {  
+        {
+            ////For Configured DB
+            ///
             User user;
             try
             {
                 user = dbContext.Users.FirstOrDefault(u => u.Username.Equals(username) && u.Password.Equals(encodedPassword));
-
                 if (user is null)
                 {
                     throw new ValidationException("User not found");
                 }
-
                 user.IsLogged = true;
                 dbContext.SaveChanges();
-
             }
             catch (Exception ex)
             {
                 throw new ValidationException(ex.Message);
             }
             return user;
+
+            //var user = _users.FirstOrDefault(u => u.Username.Equals(username) && u.Password.Equals(encodedPassword));
+            //if (user is null)
+            //{
+            //    throw new ValidationException("User not found");
+            //}
+            //user.IsLogged = true;
+
+            //return user;
+
         }
 
         public User Logout(string username)
-        {    
+        {
+            ////For Configured DB
+            ///
             User user;
             try
             {
@@ -103,21 +122,29 @@ namespace ForumTemplate.Persistence.UserRepository
                 {
                     throw new ValidationException("User not found");
                 }
-
                 user.IsLogged = false;
                 dbContext.SaveChanges();
-
             }
             catch (Exception ex)
             {
                 throw new ValidationException(ex.Message);
             }
-
             return user;
+
+            //var user = _users.FirstOrDefault(u => u.Username.Equals(username));
+            //if (user is null)
+            //{
+            //    throw new ValidationException("User not found");
+            //}
+            //user.IsLogged = false;
+
+            //return user;
         }
 
         public void RegisterUser(User user)
         {
+            ////For Configured DB
+            ///
             try
             {
                 dbContext.Users.Add(user);
@@ -129,6 +156,14 @@ namespace ForumTemplate.Persistence.UserRepository
                 throw new ValidationException(ex.Message);
             }
 
+            //if (DoesExist(user.Username))
+            //{
+            //    throw new ValidationException("User Already Exists");
+            //}
+            //else
+            //{
+            //    _users.Add(user);
+            //}
         }
     }
 }

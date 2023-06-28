@@ -14,7 +14,8 @@ namespace ForumTemplate.Mappers
                 registerUser.Country,
                 registerUser.Username,
                 registerUser.Email,
-                registerUser.Password
+                registerUser.Password,
+                registerUser.Country
             );
         }
         public UserResponse MapToUserResponse(User user)
