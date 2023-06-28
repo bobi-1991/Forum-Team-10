@@ -1,5 +1,6 @@
 ﻿using ForumTemplate.Common.FilterModels;
 using ForumTemplate.DTOs.PostDTOs;
+using ForumTemplate.Exceptions;
 using ForumTemplate.Services.PostService;
 using Microsoft.AspNetCore.Mvc;
 using ValidationException = ForumTemplate.Exceptions.ValidationException;
@@ -17,18 +18,18 @@ public class PostApiController : ControllerBase
         this.postService = postService;
     }
 
-    [HttpGet()]
-    public IActionResult GetAll()
-    {
-        var response = this.postService.GetAll();
+    //[HttpGet()]
+    //public IActionResult GetAll()
+    //{
+    //    var response = this.postService.GetAll();
 
-        return StatusCode(StatusCodes.Status200OK, response);
-    }
+    //    return StatusCode(StatusCodes.Status200OK, response);
+    //}
 
 
     //   Not tested yet
     [HttpGet("/query")]
-    public IActionResult GetByFiler([FromQuery] PostQueryParameters filterParameters)
+    public IActionResult GetByMultipleCriteria([FromQuery] PostQueryParameters filterParameters)
     {
         List<PostResponse> posts = this.postService.FilterBy(filterParameters);
 
@@ -62,6 +63,10 @@ public class PostApiController : ControllerBase
         catch (ValidationException e)
         {
             return BadRequest(e.Message);
+        }
+        catch (EntityNotFoundException e)
+        {
+            return NotFound(e.Message);
         }
     }
 

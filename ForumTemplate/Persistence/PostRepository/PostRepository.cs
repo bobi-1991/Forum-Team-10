@@ -25,7 +25,7 @@ namespace ForumTemplate.Persistence.PostRepository
         }
         public List<Post> FilterBy(PostQueryParameters filterParameters)
         {
-            IQueryable<Post> result = (IQueryable<Post>)this.GetAll();
+            List<Post> result = this.GetAll();
             result = FilterByTitle(result, filterParameters.Title);
             result = FilterByContent(result, filterParameters.Content);
             result = FilterByMinLikes(result, filterParameters.MinLikes);
@@ -113,11 +113,18 @@ namespace ForumTemplate.Persistence.PostRepository
         //   Not tested yet
 
 
-        private static IQueryable<Post> FilterByTitle(IQueryable<Post> posts, string title)
+        private static List<Post> FilterByTitle(List<Post> posts, string title)
         {
             if (!string.IsNullOrEmpty(title))
             {
-                return posts.Where(post => post.Title.Contains(title));
+                var sortedPosts = posts.Where(post => post.Title.Equals(title)).ToList();
+
+                //if (sortedPosts.Count == 0)
+                //{
+                //    return posts;
+                //}
+
+                return sortedPosts;
             }
             else
             {
@@ -125,23 +132,31 @@ namespace ForumTemplate.Persistence.PostRepository
             }
         }
 
-        private static IQueryable<Post> FilterByContent(IQueryable<Post> posts, string content)
+        private static List<Post> FilterByContent(List<Post> posts, string content)
         {
             if (!string.IsNullOrEmpty(content))
             {
-                return posts.Where(post => post.Content.Contains(content));
+                var sortedPosts = posts.Where(post => post.Content.Equals(content)).ToList();
+
+                //if (sortedPosts.Count == 0)
+                //{
+                //    return posts;
+                //}
+
+                return sortedPosts;
             }
             else
             {
                 return posts;
             }
         }
-        
-        private static IQueryable<Post> FilterByMinLikes(IQueryable<Post> posts, double? minLikes)
+
+        //not tested yet
+        private static List<Post> FilterByMinLikes(List<Post> posts, double? minLikes)
         {
             if (minLikes.HasValue)
             {
-                return posts.Where(post => post.Likes.Count() >= minLikes);
+                return posts.Where(post => post.Likes.Count() >= minLikes).ToList();
             }
             else
             {
@@ -149,11 +164,12 @@ namespace ForumTemplate.Persistence.PostRepository
             }
         }
 
-        private static IQueryable<Post> FilterByMaxLikes(IQueryable<Post> posts, double? maxLikes)
+        //not tested yet
+        private static List<Post> FilterByMaxLikes(List<Post> posts, double? maxLikes)
         {
             if (maxLikes.HasValue)
             {
-                return posts.Where(post => post.Likes.Count() <= maxLikes);
+                return posts.Where(post => post.Likes.Count() <= maxLikes).ToList();
             }
             else
             {
@@ -161,23 +177,24 @@ namespace ForumTemplate.Persistence.PostRepository
             }
         }
 
-        private static IQueryable<Post> SortBy(IQueryable<Post> posts, string sortCriteria)
+        private static List<Post> SortBy(List<Post> posts, string sortCriteria)
         {
             switch (sortCriteria)
             {
                 case "title":
-                    return posts.OrderBy(post => post.Title);
+                    return posts.OrderBy(post => post.Title).ToList();
                 default:
                     return posts;
             }
         }
 
-        private static IQueryable<Post> Order(IQueryable<Post> posts, string sortOrder)
+        private static List<Post> Order(List<Post> posts, string sortOrder)
         {
+
             switch (sortOrder)
             {
                 case "desc":
-                    return posts.Reverse();
+                    return posts.OrderByDescending(x=>x.Title).ToList();
                 default:
                     return posts;
             }
@@ -185,7 +202,7 @@ namespace ForumTemplate.Persistence.PostRepository
 
 
         // Must be tested
-        //private IQueryable<Post> GetPosts()
+        //private List<Post> GetPosts()
         //{
         //    return this.dbContext.Posts
         //        .Include(x => x.Likes);
