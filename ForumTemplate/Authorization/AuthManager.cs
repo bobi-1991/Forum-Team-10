@@ -9,7 +9,6 @@ namespace ForumTemplate.Authorization
     {
         private readonly IUserService userService;
         //To Add Current Logged User
-        private User CurrentLoggedUser;
         public AuthManager(IUserService userService)
         {
             this.userService = userService;
@@ -32,9 +31,10 @@ namespace ForumTemplate.Authorization
 
         public string LogoutUser(string username)
         {
-            if (CurrentLoggedUser != null && CurrentLoggedUser.Username.Equals(username))
+            if (CurrentLoggedUser.LoggedUser != null && CurrentLoggedUser.LoggedUser.Username.Equals(username))
             {
                 this.userService.Logout(username);
+                CurrentLoggedUser.LoggedUser = null;
                 return "User successfully logged out";
             }
             else
@@ -53,12 +53,12 @@ namespace ForumTemplate.Authorization
 
         private void SetCurrentLoggedUser(User user)
         {
-            CurrentLoggedUser = user;
+            CurrentLoggedUser.LoggedUser = user;
         }
 
         public User GetCurrentLoggedUser()
         {
-            return CurrentLoggedUser;
+            return CurrentLoggedUser.LoggedUser;
         }
     }
 }

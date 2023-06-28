@@ -56,7 +56,7 @@ namespace ForumTemplate
             builder.Services.AddScoped<UserMapper>();
             builder.Services.AddScoped<PostMapper>();
             builder.Services.AddScoped<CommentMapper>();
-            builder.Services.AddSingleton<IAuthManager, AuthManager>();
+            builder.Services.AddScoped<IAuthManager, AuthManager>();
 
             var app = builder.Build();
 

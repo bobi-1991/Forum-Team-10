@@ -28,23 +28,26 @@
             string lastName,
             string username,
             string email,
-            string password)
+            string password,
+            string country)
         {
             UserId = Guid.NewGuid();
             FirstName = firstName;
             LastName = lastName;
             Username = username;
             Email = email;
-            Password = password;      
+            Password = password;
+            Country = country;
         }
         public static User Create(
             string firstName,
             string lastName,
             string username,
             string email,
-            string password)
+            string password,
+            string country)
         {
-            return new User(firstName, lastName, username, email, password);
+            return new User(firstName, lastName, username, email, password, country);
         }
         public User Update(User user)
         {

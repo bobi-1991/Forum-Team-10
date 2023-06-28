@@ -22,16 +22,18 @@ namespace ForumTemplate.Data
             {
                  new User()
                  {
+                    UserId = Guid.NewGuid(),
                     FirstName = "Admin",
                     LastName = "Adminov",
                     Username = "admin",
                     Email = "admin@forum.com",
                     Password = "strongPass",
+                    Country = "Bulgaria",
                     IsAdmin = true,
                  },
-                 User.Create("borislav", "penchev", "bobi", "bobi@email", "MTIz"),
-                 User.Create("strahil", "mladenov", "strahil", "strahil@email", "MTIz"),
-                 User.Create("iliyan", "tsvetkov", "iliyan", "iliyan@email", "MTIz")
+                 User.Create("borislav", "penchev", "bobi", "bobi@email", "MTIz", "Bulgaria"),
+                 User.Create("strahil", "mladenov", "strahil", "strahil@email", "MTIz", "Bulgaria"),
+                 User.Create("iliyan", "tsvetkov", "iliyan", "iliyan@email", "MTIz", "Bulgaria")
             };
 
             modelBuilder.Entity<User>().HasData(users);

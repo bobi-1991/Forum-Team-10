@@ -9,17 +9,17 @@ namespace ForumTemplate.Persistence.UserRepository
     {
         private List<User> _users = new();
 
-        //private readonly ApplicationContext dbContext;
+        private readonly ApplicationContext dbContext;
 
-        //public UserRepository(ApplicationContext dbContext)
-        //{
-        //    this.dbContext = dbContext; 
-        //}
+        public UserRepository(ApplicationContext dbContext)
+        {
+            this.dbContext = dbContext;
+        }
         public UserRepository()
         {
-            this._users.Add(User.Create("borislav", "penchev", "bobi", "bobi@email", "MTIz"));
-            this._users.Add(User.Create("strahil", "mladenov", "strahil", "strahil@email", "MTIz"));
-            this._users.Add(User.Create("iliyan", "tsvetkov", "iliyan", "iliyan@email", "MTIz"));
+            this._users.Add(User.Create("borislav", "penchev", "bobi", "bobi@email", "MTIz", "Bulgaria"));
+            this._users.Add(User.Create("strahil", "mladenov", "strahil", "strahil@email", "MTIz", "Bulgaria"));
+            this._users.Add(User.Create("iliyan", "tsvetkov", "iliyan", "iliyan@email", "MTIz", "Bulgaria"));
         }
         public void AddUser(User user)
         {
@@ -106,31 +106,31 @@ namespace ForumTemplate.Persistence.UserRepository
         {
             ////For Configured DB
             ///
-            //User user;
-            //try
-            //{
-            //    user = context.User.FirstOrDefault(u => u.Username.Equals(username) && u.Password.Equals(encodedPassword));
-            //    if (user is null)
-            //    {
-            //        throw new ValidationException("User not found");
-            //    }
-            //    user.IsLogged = true;
-            //    context.SaveChanges();
-            //}
-            //catch (Exception ex)
-            //{
-            //    throw new ValidationException(ex.Message);
-            //}
-            //return user;
-
-            var user = _users.FirstOrDefault(u => u.Username.Equals(username) && u.Password.Equals(encodedPassword));
-            if (user is null)
+            User user;
+            try
             {
-                throw new ValidationException("User not found");
+                user = dbContext.Users.FirstOrDefault(u => u.Username.Equals(username) && u.Password.Equals(encodedPassword));
+                if (user is null)
+                {
+                    throw new ValidationException("User not found");
+                }
+                user.IsLogged = true;
+                dbContext.SaveChanges();
             }
-            user.IsLogged = true;
-
+            catch (Exception ex)
+            {
+                throw new ValidationException(ex.Message);
+            }
             return user;
+
+            //var user = _users.FirstOrDefault(u => u.Username.Equals(username) && u.Password.Equals(encodedPassword));
+            //if (user is null)
+            //{
+            //    throw new ValidationException("User not found");
+            //}
+            //user.IsLogged = true;
+
+            //return user;
 
         }
 
@@ -138,56 +138,56 @@ namespace ForumTemplate.Persistence.UserRepository
         {
             ////For Configured DB
             ///
-            //User user;
-            //try
-            //{
-            //    user = context.User.FirstOrDefault(u => u.Username.Equals(username));
-            //    if (user is null)
-            //    {
-            //        throw new ValidationException("User not found");
-            //    }
-            //    user.IsLogged = false;
-            //    context.SaveChanges();
-            //}
-            //catch (Exception ex)
-            //{
-            //    throw new ValidationException(ex.Message);
-            //}
-            //return user;
-
-            var user = _users.FirstOrDefault(u => u.Username.Equals(username));
-            if (user is null)
+            User user;
+            try
             {
-                throw new ValidationException("User not found");
+                user = dbContext.Users.FirstOrDefault(u => u.Username.Equals(username));
+                if (user is null)
+                {
+                    throw new ValidationException("User not found");
+                }
+                user.IsLogged = false;
+                dbContext.SaveChanges();
             }
-            user.IsLogged = false;
-
+            catch (Exception ex)
+            {
+                throw new ValidationException(ex.Message);
+            }
             return user;
+
+            //var user = _users.FirstOrDefault(u => u.Username.Equals(username));
+            //if (user is null)
+            //{
+            //    throw new ValidationException("User not found");
+            //}
+            //user.IsLogged = false;
+
+            //return user;
         }
 
         public void RegisterUser(User user)
         {
             ////For Configured DB
             ///
-            //try
-            //{
-            //    context.User.Add(user);
-            //    context.SaveChanges();
-            //}
-            //catch (Exception ex)
-            //{
-            //    //Must be made another custom exception
-            //    throw new ValidationException(ex.Message);
-            //}
+            try
+            {
+                dbContext.Users.Add(user);
+                dbContext.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                //Must be made another custom exception
+                throw new ValidationException(ex.Message);
+            }
 
-            if (DoesExist(user.Username))
-            {
-                throw new ValidationException("User Already Exists");
-            }
-            else
-            {
-                _users.Add(user);
-            }
+            //if (DoesExist(user.Username))
+            //{
+            //    throw new ValidationException("User Already Exists");
+            //}
+            //else
+            //{
+            //    _users.Add(user);
+            //}
         }
     }
 }
