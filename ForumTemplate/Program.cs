@@ -35,9 +35,9 @@ namespace ForumTemplate
             });
 
             // Repositories
-            builder.Services.AddSingleton<IUserRepository, UserRepository>();
-            builder.Services.AddSingleton<IPostRepository, PostRepository>();
-            builder.Services.AddSingleton<ICommentRepository, CommentRepository>();
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<IPostRepository, PostRepository>();
+            builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 
             // Services
             builder.Services.AddScoped<IUserService, UserService>();
@@ -56,7 +56,7 @@ namespace ForumTemplate
             builder.Services.AddScoped<UserMapper>();
             builder.Services.AddScoped<PostMapper>();
             builder.Services.AddScoped<CommentMapper>();
-            builder.Services.AddSingleton<IAuthManager, AuthManager>();
+            builder.Services.AddScoped<IAuthManager, AuthManager>();
 
             var app = builder.Build();
 

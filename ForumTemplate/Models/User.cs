@@ -26,6 +26,7 @@
         private User(
             string firstName,
             string lastName,
+            string country,
             string username,
             string email,
             string password)
@@ -33,23 +34,26 @@
             UserId = Guid.NewGuid();
             FirstName = firstName;
             LastName = lastName;
+            Country = country;
             Username = username;
             Email = email;
-            Password = password;      
+            Password = password;          
         }
         public static User Create(
             string firstName,
             string lastName,
             string username,
+            string country,
             string email,
             string password)
         {
-            return new User(firstName, lastName, username, email, password);
+            return new User(firstName, lastName, username,country, email, password);
         }
         public User Update(User user)
         {
             this.FirstName = user.FirstName;
             this.LastName = user.LastName;
+            this.Country = user.Country;
             this.Password = user.Password;
             this.Email = user.Email;
             this.UpdatedAt = DateTime.UtcNow;

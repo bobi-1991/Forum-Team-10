@@ -11,6 +11,7 @@ namespace ForumTemplate.Mappers
             return User.Create(
                 registerUser.FirstName,
                 registerUser.LastName,
+                registerUser.Country,
                 registerUser.Username,
                 registerUser.Email,
                 registerUser.Password
@@ -22,6 +23,7 @@ namespace ForumTemplate.Mappers
                 user.UserId,
                 user.FirstName,
                 user.LastName,
+                user.Country,
                 user.Username,
                 user.Email,
                 user.UpdatedAt
@@ -37,6 +39,7 @@ namespace ForumTemplate.Mappers
                          user.UserId,
                          user.FirstName,
                          user.LastName,
+                         user.Country,
                          user.Username,
                          user.Email,
                          user.UpdatedAt

@@ -18,23 +18,23 @@ public class PostApiController : ControllerBase
         this.postService = postService;
     }
 
-    //[HttpGet()]
-    //public IActionResult GetAll()
-    //{
-    //    var response = this.postService.GetAll();
-
-    //    return StatusCode(StatusCodes.Status200OK, response);
-    //}
-
-
-    //   Not tested yet
-    [HttpGet("/query")]
-    public IActionResult GetByMultipleCriteria([FromQuery] PostQueryParameters filterParameters)
+    [HttpGet()]
+    public IActionResult GetAll()
     {
-        List<PostResponse> posts = this.postService.FilterBy(filterParameters);
+        var response = this.postService.GetAll();
 
-        return this.StatusCode(StatusCodes.Status200OK, posts);
+        return StatusCode(StatusCodes.Status200OK, response);
     }
+
+
+ //  // Not tested yet
+ //[HttpGet("/query")]
+ //   public IActionResult GetByMultipleCriteria([FromQuery] PostQueryParameters filterParameters)
+ //   {
+ //       List<PostResponse> posts = this.postService.FilterBy(filterParameters);
+
+ //       return this.StatusCode(StatusCodes.Status200OK, posts);
+ //   }
 
     [HttpGet("{id}")]
     public IActionResult Get(Guid id)

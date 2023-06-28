@@ -1,5 +1,6 @@
 ﻿using ForumTemplate.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 
 namespace ForumTemplate.Data
 {
@@ -22,19 +23,58 @@ namespace ForumTemplate.Data
             {
                  new User()
                  {
+                    UserId = Guid.NewGuid(),
                     FirstName = "Admin",
                     LastName = "Adminov",
                     Username = "admin",
                     Email = "admin@forum.com",
                     Password = "strongPass",
+                    Country = "Bulgaria",
                     IsAdmin = true,
                  },
-                 User.Create("borislav", "penchev", "bobi", "bobi@email", "MTIz"),
-                 User.Create("strahil", "mladenov", "strahil", "strahil@email", "MTIz"),
-                 User.Create("iliyan", "tsvetkov", "iliyan", "iliyan@email", "MTIz")
+                 User.Create("borislav", "penchev","Bulgaria", "bobi", "bobi@email", "MTIz"),
+                 User.Create("strahil", "mladenov","Bulgaria", "strahil", "strahil@email", "MTIz"),
+                 User.Create("iliyan", "tsvetkov", "Bulgaria", "iliyan", "iliyan@email", "MTIz")
             };
 
             modelBuilder.Entity<User>().HasData(users);
+
+            modelBuilder.Entity<User>().HasQueryFilter(x => !x.IsDelete);
+            modelBuilder.Entity<Post>().HasQueryFilter(x => !x.IsDelete);
+            modelBuilder.Entity<Comment>().HasQueryFilter(x => !x.IsDelete);
+            modelBuilder.Entity<Like>().HasQueryFilter(x => !x.IsDelete);
+            modelBuilder.Entity<Tag>().HasQueryFilter(x => !x.IsDelete);
+
+            base.OnModelCreating(modelBuilder);
+        }
+
+        public override int SaveChanges()
+        {
+            UpdateSoftDeleteStatuses();
+            return base.SaveChanges();
+        }
+
+        public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            UpdateSoftDeleteStatuses();
+            return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+        }
+
+        private void UpdateSoftDeleteStatuses()
+        {
+            foreach (var entry in ChangeTracker.Entries())
+            {
+                switch (entry.State)
+                {
+                    case EntityState.Added:
+                        entry.CurrentValues["IsDelete"] = false;
+                        break;
+                    case EntityState.Deleted:
+                        entry.State = EntityState.Modified;
+                        entry.CurrentValues["IsDelete"] = true;
+                        break;
+                }
+            }
         }
     }
 }
