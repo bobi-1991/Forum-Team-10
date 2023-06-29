@@ -45,17 +45,31 @@ namespace ForumTemplate.Authorization
 
         public string TryRegisterUser(RegisterUserRequestModel user)
         {
-            //To Validate for existing username
+            
             string encodedPassword = Convert.ToBase64String(Encoding.UTF8.GetBytes(user.Password));
 
             return userService.RegisterUser(user, encodedPassword);
         }
 
-        public string TryPromoteUser(string username, PromoteUserRequestModel user)
+        public string TryPromoteUser(string username, UpdateUserRequestModel user)
         {
             return this.userService.PromoteUser(username, user);
         }
 
+        public string TryDemoteUser(string username, UpdateUserRequestModel user)
+        {
+            return this.userService.DemoteUser(username, user);
+        }
+
+        public string TryBanUser(string username, UpdateUserRequestModel user)
+        {
+            return this.userService.BanUser(username, user);
+        }
+
+        public string TryUnBanUser(string username, UpdateUserRequestModel user)
+        {
+            return this.userService.UnBanUser(username, user);
+        }
         private void SetCurrentLoggedUser(User user)
         {
             CurrentLoggedUser.LoggedUser = user;

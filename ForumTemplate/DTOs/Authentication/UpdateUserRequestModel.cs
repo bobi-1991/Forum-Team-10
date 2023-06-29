@@ -1,6 +1,6 @@
 ﻿namespace ForumTemplate.DTOs.Authentication
 {
-    public class PromoteUserRequestModel
+    public class UpdateUserRequestModel
     {
         public string UserName { get; set; }
     }

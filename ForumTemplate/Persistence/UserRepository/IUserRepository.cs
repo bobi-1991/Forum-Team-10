@@ -24,5 +24,11 @@ namespace ForumTemplate.Persistence.UserRepository
         void RegisterUser(User user);
 
         void PromoteUser(User user);
+
+        void DemoteUser(User user);
+
+        void BanUser(User user);
+
+        void UnBanUser(User user);
     }
 }

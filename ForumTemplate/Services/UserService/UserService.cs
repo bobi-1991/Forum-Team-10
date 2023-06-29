@@ -76,24 +76,7 @@ namespace ForumTemplate.Services.UserService
             return "User successfully registered.";
         }
 
-        //public UserResponse Create(RegisterRequest registerRequest)
-        //{
-
-        //    var user = userMapper.MapToUser(registerRequest);
-
-        //    var doesExists = userRepository.DoesExist(user.Username);
-
-        //    if (doesExists)
-        //    {
-        //        throw new DuplicateEntityException($"User {user.Username} already exists.");
-        //    }
-
-        //    this.userRepository.AddUser(user);
-
-        //    return userMapper.MapToUserResponse(user);
-        //}
-
-        public string PromoteUser(string username, PromoteUserRequestModel userToPromote)
+        public string PromoteUser(string username, UpdateUserRequestModel userToPromote)
         {
             var userRequestor = userRepository.GetByUsername(username);
 
@@ -116,6 +99,81 @@ namespace ForumTemplate.Services.UserService
             userRepository.PromoteUser(userToBePromoted);
 
             return "User successfully promoted";
+        }
+
+        public string DemoteUser(string username, UpdateUserRequestModel userToDemote)
+        {
+            var userRequestor = userRepository.GetByUsername(username);
+
+            if (!userRequestor.IsLogged)
+            {
+                throw new ArgumentException("User who is requesting is found, but is not logged in, please log in");
+            }
+            if (userRequestor.IsLogged && !userRequestor.IsAdmin)
+            {
+                throw new ArgumentException("I am sorry, you are not an admin to perform this operation");
+            }
+
+            var userToBeDemoted = userRepository.GetByUsername(userToDemote.UserName);
+
+            if (!userToBeDemoted.IsAdmin)
+            {
+                throw new ArgumentException("The user you are trying to demote is already a regular user");
+            }
+
+            userRepository.DemoteUser(userToBeDemoted);
+
+            return "User successfully demoted";
+        }
+
+        public string BanUser(string username, UpdateUserRequestModel userToBeBanned)
+        {
+            var userRequestor = userRepository.GetByUsername(username);
+
+            if (!userRequestor.IsLogged)
+            {
+                throw new ArgumentException("User who is requesting is found, but is not logged in, please log in");
+            }
+            if (userRequestor.IsLogged && !userRequestor.IsAdmin)
+            {
+                throw new ArgumentException("I am sorry, you are not an admin to perform this operation");
+            }
+
+            var userToBeBannedActual = userRepository.GetByUsername(userToBeBanned.UserName);
+
+            if (userToBeBannedActual.IsBlocked)
+            {
+                throw new ArgumentException("The user you are trying to ban is already banned");
+            }
+
+            userRepository.BanUser(userToBeBannedActual);
+
+            return "User successfully banned";
+        }
+
+        public string UnBanUser(string username, UpdateUserRequestModel userToUnBan)
+        {
+            var userRequestor = userRepository.GetByUsername(username);
+
+            if (!userRequestor.IsLogged)
+            {
+                throw new ArgumentException("User who is requesting is found, but is not logged in, please log in");
+            }
+            if (userRequestor.IsLogged && !userRequestor.IsAdmin)
+            {
+                throw new ArgumentException("I am sorry, you are not an admin to perform this operation");
+            }
+
+            var userToBeUnBanned = userRepository.GetByUsername(userToUnBan.UserName);
+
+            if (!userToBeUnBanned.IsBlocked)
+            {
+                throw new ArgumentException("The user you are trying to UnBan is not banned");
+            }
+
+            userRepository.UnBanUser(userToBeUnBanned);
+
+            return "User successfully UnBanned";
         }
 
         public UserResponse Update(Guid id, RegisterUserRequestModel registerRequest)

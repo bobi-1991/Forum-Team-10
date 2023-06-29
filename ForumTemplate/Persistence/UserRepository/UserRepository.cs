@@ -89,6 +89,10 @@ namespace ForumTemplate.Persistence.UserRepository
                 {
                     throw new ValidationException("User not found");
                 }
+                if (user.IsBlocked)
+                {
+                    throw new ValidationException("User is banned and cannot login, please contact support");
+                }
                 user.IsLogged = true;
                 dbContext.SaveChanges();
             }
@@ -144,6 +148,47 @@ namespace ForumTemplate.Persistence.UserRepository
             try
             {
                 user.IsAdmin = true;
+                dbContext.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw new ValidationException(ex.Message);
+            }
+        }
+
+        public void DemoteUser(User user)
+        {
+
+            try
+            {
+                user.IsAdmin = false;
+                dbContext.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw new ValidationException(ex.Message);
+            }
+        }
+
+        public void BanUser(User user)
+        {
+
+            try
+            {
+                user.IsBlocked = true;
+                dbContext.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw new ValidationException(ex.Message);
+            }
+        }
+
+        public void UnBanUser(User user)
+        {
+            try
+            {
+                user.IsBlocked = false;
                 dbContext.SaveChanges();
             }
             catch (Exception ex)

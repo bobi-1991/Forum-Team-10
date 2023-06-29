@@ -23,6 +23,12 @@ namespace ForumTemplate.Services.UserService
 
         string RegisterUser(RegisterUserRequestModel user, string encodedPassword);
 
-        string PromoteUser(string username, PromoteUserRequestModel userToPromote);
+        string PromoteUser(string username, UpdateUserRequestModel userToPromote);
+
+        string DemoteUser(string username, UpdateUserRequestModel userToPromote);
+
+        string BanUser(string username, UpdateUserRequestModel userToDemote);
+
+        string UnBanUser(string username, UpdateUserRequestModel userToUnBan);
     }
 }

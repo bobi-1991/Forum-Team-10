@@ -11,7 +11,13 @@ namespace ForumTemplate.Authorization
 
         string TryRegisterUser(RegisterUserRequestModel user);
 
-        string TryPromoteUser(string username, PromoteUserRequestModel user);
+        string TryPromoteUser(string username, UpdateUserRequestModel user);
+
+        string TryDemoteUser(string username, UpdateUserRequestModel user);
+
+        string TryBanUser(string username, UpdateUserRequestModel user);
+
+        string TryUnBanUser(string username, UpdateUserRequestModel user);
 
         User GetCurrentLoggedUser();
 

@@ -68,12 +68,78 @@ namespace ForumTemplate.Controllers
         }
 
         [HttpPut("promote")]
-        public IActionResult Promote([FromHeader] string username, [FromBody] PromoteUserRequestModel userToPromote)
+        public IActionResult Promote([FromHeader] string username, [FromBody] UpdateUserRequestModel userToPromote)
         {
             try
             {
                 var message = this.authManager.TryPromoteUser(username, userToPromote);
 
+                return StatusCode(StatusCodes.Status200OK, message);
+            }
+            catch (ArgumentException e)
+            {
+                return StatusCode(StatusCodes.Status409Conflict, e.Message);
+            }
+            catch (EntityNotFoundException e)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, e.Message);
+            }
+            catch (ValidationException e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpPut("demote")]
+        public IActionResult Demote([FromHeader] string username, [FromBody] UpdateUserRequestModel userToDemote)
+        {
+            try
+            {
+                var message = this.authManager.TryDemoteUser(username, userToDemote);
+                return StatusCode(StatusCodes.Status200OK, message);
+            }
+            catch (ArgumentException e)
+            {
+                return StatusCode(StatusCodes.Status409Conflict, e.Message);
+            }
+            catch (EntityNotFoundException e)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, e.Message);
+            }
+            catch (ValidationException e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpPut("ban")]
+        public IActionResult Ban([FromHeader] string username, [FromBody] UpdateUserRequestModel userToBeBanned)
+        {
+            try
+            {
+                var message = this.authManager.TryBanUser(username, userToBeBanned);
+                return StatusCode(StatusCodes.Status200OK, message);
+            }
+            catch (ArgumentException e)
+            {
+                return StatusCode(StatusCodes.Status409Conflict, e.Message);
+            }
+            catch (EntityNotFoundException e)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, e.Message);
+            }
+            catch (ValidationException e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpPut("unban")]
+        public IActionResult UnBan([FromHeader] string username, [FromBody] UpdateUserRequestModel userToBeUnBanned)
+        {
+            try
+            {
+                var message = this.authManager.TryUnBanUser(username, userToBeUnBanned);
                 return StatusCode(StatusCodes.Status200OK, message);
             }
             catch (ArgumentException e)
