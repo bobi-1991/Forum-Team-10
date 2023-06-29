@@ -22,5 +22,7 @@ namespace ForumTemplate.Services.UserService
         User Logout(string username);
 
         string RegisterUser(RegisterUserRequestModel user, string encodedPassword);
+
+        string PromoteUser(string username, PromoteUserRequestModel userToPromote);
     }
 }

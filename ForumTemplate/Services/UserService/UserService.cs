@@ -93,7 +93,30 @@ namespace ForumTemplate.Services.UserService
         //    return userMapper.MapToUserResponse(user);
         //}
 
+        public string PromoteUser(string username, PromoteUserRequestModel userToPromote)
+        {
+            var userRequestor = userRepository.GetByUsername(username);
 
+            if (!userRequestor.IsLogged)
+            {
+                throw new ArgumentException("User who is requesting is found, but is not logged in, please log in");
+            }
+            if (userRequestor.IsLogged && !userRequestor.IsAdmin)
+            {
+                throw new ArgumentException("I am sorry, you are not an admin to perform this operation");
+            }
+
+            var userToBePromoted = userRepository.GetByUsername(userToPromote.UserName);
+
+            if(userToBePromoted.IsAdmin) 
+            {
+                throw new ArgumentException("The user you are trying to promote is already an admin");
+            }
+
+            userRepository.PromoteUser(userToBePromoted);
+
+            return "User successfully promoted";
+        }
 
         public UserResponse Update(Guid id, RegisterUserRequestModel registerRequest)
         {

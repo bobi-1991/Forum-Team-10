@@ -28,7 +28,7 @@ namespace ForumTemplate.Data
                     LastName = "Adminov",
                     Username = "admin",
                     Email = "admin@forum.com",
-                    Password = "strongPass",
+                    Password = "MTIz", //Password is "123" but encoded
                     Country = "Bulgaria",
                     IsAdmin = true,
                  },

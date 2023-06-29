@@ -11,7 +11,6 @@ namespace ForumTemplate.Mappers
             return User.Create(
                 registerUser.FirstName,
                 registerUser.LastName,
-                registerUser.Country,
                 registerUser.Username,
                 registerUser.Email,
                 registerUser.Password,

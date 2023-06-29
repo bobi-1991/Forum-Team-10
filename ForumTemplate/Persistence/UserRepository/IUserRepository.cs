@@ -22,5 +22,7 @@ namespace ForumTemplate.Persistence.UserRepository
         User Logout(string username);
 
         void RegisterUser(User user);
+
+        void PromoteUser(User user);
     }
 }

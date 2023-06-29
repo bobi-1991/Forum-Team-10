@@ -66,5 +66,28 @@ namespace ForumTemplate.Controllers
                 return BadRequest(e.Message);
             }
         }
+
+        [HttpPut("promote")]
+        public IActionResult Promote([FromHeader] string username, [FromBody] PromoteUserRequestModel userToPromote)
+        {
+            try
+            {
+                var message = this.authManager.TryPromoteUser(username, userToPromote);
+
+                return StatusCode(StatusCodes.Status200OK, message);
+            }
+            catch (ArgumentException e)
+            {
+                return StatusCode(StatusCodes.Status409Conflict, e.Message);
+            }
+            catch (EntityNotFoundException e)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, e.Message);
+            }
+            catch (ValidationException e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
     }
 }

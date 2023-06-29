@@ -51,6 +51,11 @@ namespace ForumTemplate.Authorization
             return userService.RegisterUser(user, encodedPassword);
         }
 
+        public string TryPromoteUser(string username, PromoteUserRequestModel user)
+        {
+            return this.userService.PromoteUser(username, user);
+        }
+
         private void SetCurrentLoggedUser(User user)
         {
             CurrentLoggedUser.LoggedUser = user;

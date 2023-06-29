@@ -26,7 +26,6 @@
         private User(
             string firstName,
             string lastName,
-            string country,
             string username,
             string email,
             string password,
@@ -35,7 +34,6 @@
             UserId = Guid.NewGuid();
             FirstName = firstName;
             LastName = lastName;
-            Country = country;
             Username = username;
             Email = email;
             Password = password;
@@ -45,7 +43,6 @@
             string firstName,
             string lastName,
             string username,
-            string country,
             string email,
             string password,
             string country)
