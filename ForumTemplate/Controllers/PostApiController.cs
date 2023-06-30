@@ -1,4 +1,5 @@
-﻿using ForumTemplate.Common.FilterModels;
+﻿using ForumTemplate.Authorization;
+using ForumTemplate.Common.FilterModels;
 using ForumTemplate.DTOs.PostDTOs;
 using ForumTemplate.Exceptions;
 using ForumTemplate.Services.PostService;
@@ -64,9 +65,13 @@ public class PostApiController : ControllerBase
         {
             return BadRequest(e.Message);
         }
-        catch (EntityNotFoundException e)
+        catch (EntityBannedException e)
         {
-            return NotFound(e.Message);
+            return Conflict(e.Message);
+        }
+        catch (EntityLoginException e)
+        {
+            return BadRequest(e.Message);
         }
     }
 
@@ -83,6 +88,10 @@ public class PostApiController : ControllerBase
         {
             return BadRequest(e.Message);
         }
+        catch (EntityLoginException e)
+        {
+            return BadRequest(e.Message);
+        }
     }
 
     [HttpDelete("{id}")]
@@ -95,6 +104,10 @@ public class PostApiController : ControllerBase
             return StatusCode(StatusCodes.Status200OK, result);
         }
         catch (ValidationException e)
+        {
+            return BadRequest(e.Message);
+        }
+        catch (EntityLoginException e)
         {
             return BadRequest(e.Message);
         }

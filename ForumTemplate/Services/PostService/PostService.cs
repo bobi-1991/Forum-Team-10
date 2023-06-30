@@ -7,6 +7,8 @@ using ForumTemplate.Persistence.PostRepository;
 using ForumTemplate.Common.FilterModels;
 using ForumTemplate.Models;
 using ForumTemplate.Persistence.UserRepository;
+using ForumTemplate.Authorization;
+using ForumTemplate.Exceptions;
 
 namespace ForumTemplate.Services.PostService
 {
@@ -47,8 +49,20 @@ namespace ForumTemplate.Services.PostService
             //Validation
             postsValidator.Validate(postRequest);
 
-            var author = userRepository.GetById(postRequest.UserId);
-            var post = postMapper.MapToPost(postRequest);//author);
+            if (CurrentLoggedUser.LoggedUser is null || !CurrentLoggedUser.LoggedUser.IsLogged)
+            {
+                throw new EntityLoginException("Please log in first.");
+            }
+            if (!CurrentLoggedUser.LoggedUser.UserId.Equals(postRequest.UserId))
+            {
+                throw new ValidationException("The id you entered does not match your id");
+            }
+            if (CurrentLoggedUser.LoggedUser.IsBlocked)
+            {
+                throw new EntityBannedException("I'm sorry, but you cannot create a new post. You are permanently banned.");
+            }
+
+            var post = postMapper.MapToPost(postRequest);
             var createdPost = postRepository.Create(post);
 
             return postMapper.MapToPostResponse(createdPost);
@@ -59,9 +73,17 @@ namespace ForumTemplate.Services.PostService
             //Validation
             postsValidator.Validate(id, postRequest);
 
-           
-         //   var author = userRepository.GetById(postRequest.UserId);
-            var post = postMapper.MapToPost(postRequest);//,author);
+
+            if (CurrentLoggedUser.LoggedUser is null || !CurrentLoggedUser.LoggedUser.IsLogged)
+            {
+                throw new EntityLoginException("Please log in first.");
+            }
+            if (!CurrentLoggedUser.LoggedUser.Posts.Any(x => x.PostId.Equals(id)) && !CurrentLoggedUser.LoggedUser.IsAdmin)
+            {
+                throw new ValidationException("The id you entered does not match yours post(s) id");
+            }
+
+            var post = postMapper.MapToPost(postRequest);
             var updatedPost = postRepository.Update(id, post);
 
             return postMapper.MapToPostResponse(updatedPost);
@@ -71,6 +93,15 @@ namespace ForumTemplate.Services.PostService
         {
             //Validation
             postsValidator.Validate(id);
+
+            if (CurrentLoggedUser.LoggedUser is null || !CurrentLoggedUser.LoggedUser.IsLogged)
+            {
+                throw new EntityLoginException("Please log in first.");
+            }
+            if (!CurrentLoggedUser.LoggedUser.Posts.Any(x=>x.PostId.Equals(id)) && !CurrentLoggedUser.LoggedUser.IsAdmin)
+            {
+                throw new ValidationException("The id you entered does not match yours post(s) id");
+            }
 
             var postToDelete = postRepository.GetById(id);
             this.commentService.DeleteByPostId(postToDelete.PostId);

@@ -3,6 +3,7 @@ using ForumTemplate.DTOs.UserDTOs;
 using ForumTemplate.Exceptions;
 using ForumTemplate.Services.UserService;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace ForumTemplate.Controllers
 {
@@ -21,10 +22,21 @@ namespace ForumTemplate.Controllers
         [HttpGet()]
         [Route("")]
         public IActionResult GetAll()
-        {
-            List<UserResponse> result = this.userService.GetAll();
+        { 
+            try
+            {
+                List<UserResponse> result = this.userService.GetAll();
 
-            return StatusCode(StatusCodes.Status200OK, result);
+                return StatusCode(StatusCodes.Status200OK, result);
+            }
+            catch (EntityLoginException e)
+            {
+                return BadRequest(e.Message);
+            }
+            catch (EntityUnauthorizatedException e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         //Admin - to see id
@@ -42,6 +54,15 @@ namespace ForumTemplate.Controllers
             {
                 return StatusCode(StatusCodes.Status404NotFound, e.Message);
             }
+            catch (EntityUnauthorizatedException e)
+            {
+                return BadRequest(e.Message);
+            }
+            catch (EntityLoginException e)
+            {
+                return BadRequest(e.Message);
+            }
+
         }
 
         //All users
@@ -58,7 +79,7 @@ namespace ForumTemplate.Controllers
             }
             catch (EntityLoginException e)
             {
-                return StatusCode(StatusCodes.Status409Conflict, e.Message);
+                return BadRequest(e.Message);
             }
             catch (ValidationException e)
             {
@@ -80,7 +101,7 @@ namespace ForumTemplate.Controllers
             }
             catch (EntityLoginException e)
             {
-                return StatusCode(StatusCodes.Status404NotFound, e.Message);
+                return BadRequest(e.Message);
             }
             catch (ValidationException e)
             {

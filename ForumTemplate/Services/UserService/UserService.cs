@@ -25,6 +25,15 @@ namespace ForumTemplate.Services.UserService
 
         public List<UserResponse> GetAll()
         {
+            if (CurrentLoggedUser.LoggedUser is null || !CurrentLoggedUser.LoggedUser.IsLogged)
+            {
+                throw new EntityLoginException("Please log in first.");
+            }
+            if (!CurrentLoggedUser.LoggedUser.IsAdmin)
+            { 
+                throw new EntityUnauthorizatedException("You are not authorized for this functionality");
+            }
+
             var users = userRepository.GetAll();
             return this.userMapper.MapToUserResponse(users);
         }
@@ -33,9 +42,17 @@ namespace ForumTemplate.Services.UserService
         {
             var user = userRepository.GetById(id);
 
+            if (CurrentLoggedUser.LoggedUser is null || !CurrentLoggedUser.LoggedUser.IsLogged)
+            {
+                throw new EntityLoginException("Please log in first.");
+            }
             if (user == null)
             {
                 throw new EntityNotFoundException($"User with ID: {id} not found.");
+            }
+            if (!CurrentLoggedUser.LoggedUser.IsAdmin)
+            {
+                throw new EntityUnauthorizatedException("You are not authorized for this functionality");
             }
 
             return userMapper.MapToUserResponse(user);
@@ -81,7 +98,7 @@ namespace ForumTemplate.Services.UserService
         {
             var userRequestor = userRepository.GetByUsername(username);
 
-            if (!userRequestor.IsLogged)
+            if (CurrentLoggedUser.LoggedUser is null || !userRequestor.IsLogged)
             {
                 throw new ArgumentException("User who is requesting is found, but is not logged in, please log in");
             }
@@ -106,7 +123,7 @@ namespace ForumTemplate.Services.UserService
         {
             var userRequestor = userRepository.GetByUsername(username);
 
-            if (!userRequestor.IsLogged)
+            if (CurrentLoggedUser.LoggedUser is null || !userRequestor.IsLogged)
             {
                 throw new ArgumentException("User who is requesting is found, but is not logged in, please log in");
             }
@@ -131,7 +148,7 @@ namespace ForumTemplate.Services.UserService
         {
             var userRequestor = userRepository.GetByUsername(username);
 
-            if (!userRequestor.IsLogged)
+            if (CurrentLoggedUser.LoggedUser is null || !userRequestor.IsLogged)
             {
                 throw new ArgumentException("User who is requesting is found, but is not logged in, please log in");
             }
@@ -156,7 +173,7 @@ namespace ForumTemplate.Services.UserService
         {
             var userRequestor = userRepository.GetByUsername(username);
 
-            if (!userRequestor.IsLogged)
+            if (CurrentLoggedUser.LoggedUser is null || !userRequestor.IsLogged)
             {
                 throw new ArgumentException("User who is requesting is found, but is not logged in, please log in");
             }
@@ -179,7 +196,7 @@ namespace ForumTemplate.Services.UserService
 
         public UserResponse Update(Guid id, UpdateUserRequest updateUserRequest)
         {
-            if(!CurrentLoggedUser.LoggedUser.IsLogged)
+            if(CurrentLoggedUser.LoggedUser is null || !CurrentLoggedUser.LoggedUser.IsLogged)
             {
                 throw new EntityLoginException("Please log in first.");
             }
@@ -196,7 +213,7 @@ namespace ForumTemplate.Services.UserService
 
         public string Delete(Guid id)
         {
-            if (!CurrentLoggedUser.LoggedUser.IsLogged)
+            if (CurrentLoggedUser.LoggedUser is null || !CurrentLoggedUser.LoggedUser.IsLogged)
             {
                 throw new EntityLoginException("Please log in first.");
             }
