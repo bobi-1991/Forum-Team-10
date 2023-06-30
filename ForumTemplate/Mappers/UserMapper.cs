@@ -17,6 +17,17 @@ namespace ForumTemplate.Mappers
                 registerUser.Country
             );
         }
+        public User MapToUser(UpdateUserRequest updateUserRequest)
+        {
+            return new User
+            {
+                FirstName = updateUserRequest.FirstName,
+                LastName = updateUserRequest.LastName,
+                Email = updateUserRequest.Email,
+                Password = updateUserRequest.Password,
+                Country = updateUserRequest.Country
+            };
+        }
         public UserResponse MapToUserResponse(User user)
         {
             return new UserResponse(

@@ -45,27 +45,10 @@ namespace ForumTemplate.Controllers
         }
 
         //All users
-        //[HttpPost()]
-        //[Route("")]
-        //public IActionResult Create([FromBody] RegisterRequest user)
-        //{
-        //    try
-        //    {
-        //        UserResponse createdUser = this.userService.Create(user);
-
-        //        return StatusCode(StatusCodes.Status201Created, user);
-        //    }
-        //    catch (DuplicateEntityException e)
-        //    {
-        //        return StatusCode(StatusCodes.Status409Conflict, e.Message);
-        //    }
-        //}
-
-        //All users
         //If user wants to update - check is target username matches the currently logged user
         //If Admin - he will have access to all by ID or Username
         [HttpPut("{id}")]
-        public IActionResult Update(Guid id, [FromBody] RegisterUserRequestModel user)
+        public IActionResult Update(Guid id, [FromBody] UpdateUserRequest user)
         {
             try
             {
@@ -73,14 +56,15 @@ namespace ForumTemplate.Controllers
 
                 return StatusCode(StatusCodes.Status200OK, updatedUser);
             }
-            catch (EntityNotFoundException e)
+            catch (EntityLoginException e)
+            {
+                return StatusCode(StatusCodes.Status409Conflict, e.Message);
+            }
+            catch (ValidationException e)
             {
                 return StatusCode(StatusCodes.Status404NotFound, e.Message);
             }
         }
-
-        //To Create Ban User Endpoint
-
 
         //All users
         //If user wants to update - check is target username matches the currently logged user
@@ -94,7 +78,11 @@ namespace ForumTemplate.Controllers
 
                 return StatusCode(StatusCodes.Status200OK, result);
             }
-            catch (EntityNotFoundException e)
+            catch (EntityLoginException e)
+            {
+                return StatusCode(StatusCodes.Status404NotFound, e.Message);
+            }
+            catch (ValidationException e)
             {
                 return StatusCode(StatusCodes.Status404NotFound, e.Message);
             }

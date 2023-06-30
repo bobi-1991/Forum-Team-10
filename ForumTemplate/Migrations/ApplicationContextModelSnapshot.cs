@@ -186,7 +186,7 @@ namespace ForumTemplate.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = new Guid("a884ff1b-d002-4634-b4a9-a67f8bb08599"),
+                            UserId = new Guid("54e065cb-5e95-45dc-9b60-f4c780323b75"),
                             Country = "Bulgaria",
                             Email = "admin@forum.com",
                             FirstName = "Admin",
@@ -201,7 +201,7 @@ namespace ForumTemplate.Migrations
                         },
                         new
                         {
-                            UserId = new Guid("9f345439-a6b8-400c-991e-45ee5a413b4e"),
+                            UserId = new Guid("bd2265e6-2161-4203-a130-949c69f65266"),
                             Country = "Bulgaria",
                             Email = "bobi@email",
                             FirstName = "borislav",
@@ -216,7 +216,7 @@ namespace ForumTemplate.Migrations
                         },
                         new
                         {
-                            UserId = new Guid("1d356b82-fee8-4057-954a-7ae06589d12a"),
+                            UserId = new Guid("b818230d-e7e9-4c13-a216-daadd9765c3f"),
                             Country = "Bulgaria",
                             Email = "strahil@email",
                             FirstName = "strahil",
@@ -231,7 +231,7 @@ namespace ForumTemplate.Migrations
                         },
                         new
                         {
-                            UserId = new Guid("3b990b81-547a-4877-b091-fb50c0433bd7"),
+                            UserId = new Guid("f035164e-cfab-4132-9b7a-09a791827391"),
                             Country = "Bulgaria",
                             Email = "iliyan@email",
                             FirstName = "iliyan",

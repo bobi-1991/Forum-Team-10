@@ -1,4 +1,5 @@
-﻿using ForumTemplate.DTOs.Authentication;
+﻿using ForumTemplate.Authorization;
+using ForumTemplate.DTOs.Authentication;
 using ForumTemplate.DTOs.UserDTOs;
 using ForumTemplate.Exceptions;
 using ForumTemplate.Mappers;
@@ -176,9 +177,18 @@ namespace ForumTemplate.Services.UserService
             return "User successfully UnBanned";
         }
 
-        public UserResponse Update(Guid id, RegisterUserRequestModel registerRequest)
+        public UserResponse Update(Guid id, UpdateUserRequest updateUserRequest)
         {
-            var userData = this.userMapper.MapToUser(registerRequest);
+            if(!CurrentLoggedUser.LoggedUser.IsLogged)
+            {
+                throw new EntityLoginException("Please log in first.");
+            }
+            if (!CurrentLoggedUser.LoggedUser.UserId.Equals(id) && !CurrentLoggedUser.LoggedUser.IsAdmin)
+            {
+                throw new ValidationException("I'm sorry, but you cannot change other user's personal data.");
+            }
+
+            var userData = this.userMapper.MapToUser(updateUserRequest);
             var user = userRepository.Update(id, userData);
 
             return userMapper.MapToUserResponse(user);
@@ -186,6 +196,15 @@ namespace ForumTemplate.Services.UserService
 
         public string Delete(Guid id)
         {
+            if (!CurrentLoggedUser.LoggedUser.IsLogged)
+            {
+                throw new EntityLoginException("Please log in first.");
+            }
+            if (!CurrentLoggedUser.LoggedUser.UserId.Equals(id) && !CurrentLoggedUser.LoggedUser.IsAdmin)
+            {
+                throw new ValidationException("Sorry, but you are not authorized to delete other users ");
+            }
+
             return userRepository.Delete(id);
         }
     }

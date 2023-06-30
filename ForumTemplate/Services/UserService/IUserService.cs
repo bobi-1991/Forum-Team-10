@@ -12,7 +12,7 @@ namespace ForumTemplate.Services.UserService
 
         //UserResponse Create(RegisterRequest registerRequest);
 
-        UserResponse Update(Guid id, RegisterUserRequestModel registerRequest);
+        UserResponse Update(Guid id, UpdateUserRequest registerRequest);
 
         string Delete(Guid id);
 

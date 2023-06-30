@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ForumTemplate.Migrations
 {
-    public partial class Initial : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -174,10 +174,10 @@ namespace ForumTemplate.Migrations
                 columns: new[] { "UserId", "Country", "Email", "FirstName", "IsAdmin", "IsBlocked", "IsDelete", "IsLogged", "LastName", "Password", "UpdatedAt", "Username" },
                 values: new object[,]
                 {
-                    { new Guid("1d356b82-fee8-4057-954a-7ae06589d12a"), "Bulgaria", "strahil@email", "strahil", false, false, false, false, "mladenov", "MTIz", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "strahil" },
-                    { new Guid("3b990b81-547a-4877-b091-fb50c0433bd7"), "Bulgaria", "iliyan@email", "iliyan", false, false, false, false, "tsvetkov", "MTIz", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "iliyan" },
-                    { new Guid("9f345439-a6b8-400c-991e-45ee5a413b4e"), "Bulgaria", "bobi@email", "borislav", false, false, false, false, "penchev", "MTIz", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "bobi" },
-                    { new Guid("a884ff1b-d002-4634-b4a9-a67f8bb08599"), "Bulgaria", "admin@forum.com", "Admin", true, false, false, false, "Adminov", "MTIz", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "admin" }
+                    { new Guid("54e065cb-5e95-45dc-9b60-f4c780323b75"), "Bulgaria", "admin@forum.com", "Admin", true, false, false, false, "Adminov", "MTIz", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "admin" },
+                    { new Guid("b818230d-e7e9-4c13-a216-daadd9765c3f"), "Bulgaria", "strahil@email", "strahil", false, false, false, false, "mladenov", "MTIz", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "strahil" },
+                    { new Guid("bd2265e6-2161-4203-a130-949c69f65266"), "Bulgaria", "bobi@email", "borislav", false, false, false, false, "penchev", "MTIz", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "bobi" },
+                    { new Guid("f035164e-cfab-4132-9b7a-09a791827391"), "Bulgaria", "iliyan@email", "iliyan", false, false, false, false, "tsvetkov", "MTIz", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "iliyan" }
                 });
 
             migrationBuilder.CreateIndex(
