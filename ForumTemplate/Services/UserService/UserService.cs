@@ -12,14 +12,12 @@ namespace ForumTemplate.Services.UserService
     public class UserService : IUserService
     {
         private readonly IUserRepository userRepository;
-        private readonly IPostRepository postRepository;
         private readonly UserMapper userMapper;
 
 
-        public UserService(IUserRepository userRepository, IPostRepository postRepository, UserMapper userMapper)
+        public UserService(IUserRepository userRepository, UserMapper userMapper)
         {
             this.userRepository = userRepository;
-            this.postRepository = postRepository;
             this.userMapper = userMapper;
         }
 

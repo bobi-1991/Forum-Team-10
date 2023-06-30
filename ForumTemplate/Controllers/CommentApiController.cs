@@ -27,24 +27,32 @@ namespace ForumTemplate.Controllers
 
                 return StatusCode(StatusCodes.Status200OK, result);
             }
-            catch (EntityNotFoundException e)
+            catch (EntityLoginException e)
             {
-                return StatusCode(StatusCodes.Status404NotFound, e.Message);
+                return BadRequest(e.Message);
             }
         }
 
         [HttpGet("{id}")]
-        public IActionResult Get(Guid id)
+        public IActionResult Get(Guid postId)
         {
             try
             {
-                var comment = this.commentService.GetById(id);
+                var comment = this.commentService.GetById(postId);
 
                 return StatusCode(StatusCodes.Status200OK, comment);
             }
             catch (ValidationException e)
             {
                 return BadRequest(e.Message);
+            }
+            catch (EntityLoginException e)
+            {
+                return BadRequest(e.Message);
+            }
+            catch (EntityNotFoundException e)
+            {
+                return NotFound(e.Message);
             }
         }
 
@@ -58,13 +66,25 @@ namespace ForumTemplate.Controllers
 
                 return StatusCode(StatusCodes.Status201Created, comment);
             }
-            catch (DuplicateEntityException e)
+            catch (EntityNotFoundException e)
             {
-                return StatusCode(StatusCodes.Status409Conflict, e.Message);
+                return NotFound(e.Message);
             }
             catch (ValidationException e)
             {
                 return BadRequest(e.Message);
+            }
+            catch (EntityLoginException e)
+            {
+                return BadRequest(e.Message);
+            }
+            catch (EntityUnauthorizatedException e)
+            {
+                return Unauthorized(e.Message);
+            }
+            catch (EntityBannedException e)
+            {
+                return Unauthorized(e.Message);
             }
         }
 
@@ -74,12 +94,19 @@ namespace ForumTemplate.Controllers
             try
             {
                 var updatedComment = this.commentService.Update(id, comment);
-
                 return StatusCode(StatusCodes.Status200OK, updatedComment);
             }
             catch (ValidationException e)
             {
                 return BadRequest(e.Message);
+            }
+            catch (EntityLoginException e)
+            {
+                return BadRequest(e.Message);
+            }
+            catch (EntityNotFoundException e)
+            {
+                return NotFound(e.Message);
             }
         }
 
@@ -89,10 +116,13 @@ namespace ForumTemplate.Controllers
             try
             {
                 var result = this.commentService.Delete(id);
-
                 return StatusCode(StatusCodes.Status200OK, result);
             }
             catch (ValidationException e)
+            {
+                return BadRequest(e.Message);
+            }
+            catch (EntityLoginException e)
             {
                 return BadRequest(e.Message);
             }

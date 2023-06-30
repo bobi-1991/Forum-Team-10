@@ -56,7 +56,8 @@ namespace ForumTemplate.Persistence.CommentRepository
 
         public string Delete(Guid id)
         {
-            var comment = dbContext.Users.FirstOrDefault(x => x.UserId == id);
+            //  var comment = dbContext.Users.FirstOrDefault(x => x.UserId == id);
+            var comment = dbContext.Comments.FirstOrDefault(x => x.CommentId == id);
 
             if (comment != null)
             {

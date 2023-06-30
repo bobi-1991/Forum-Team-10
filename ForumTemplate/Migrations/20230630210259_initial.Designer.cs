@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ForumTemplate.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20230630143532_initial")]
+    [Migration("20230630210259_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -188,7 +188,7 @@ namespace ForumTemplate.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = new Guid("5d802844-19d3-40e7-a624-be6fb0795ce6"),
+                            UserId = new Guid("01b6b630-d9c4-47a4-9856-6d63023b6cd3"),
                             Country = "Bulgaria",
                             Email = "admin@forum.com",
                             FirstName = "Admin",
@@ -203,7 +203,7 @@ namespace ForumTemplate.Migrations
                         },
                         new
                         {
-                            UserId = new Guid("13f0a5ec-2f06-48bd-a7e1-d94cb4afec90"),
+                            UserId = new Guid("b70fa7ba-e375-4463-b7cf-617a3f5f47b2"),
                             Country = "Bulgaria",
                             Email = "bobi@email",
                             FirstName = "borislav",
@@ -218,7 +218,7 @@ namespace ForumTemplate.Migrations
                         },
                         new
                         {
-                            UserId = new Guid("d429ac3f-d8cf-4aee-a23a-b1b36e76e8fa"),
+                            UserId = new Guid("524074a8-224c-4fd4-a476-a7e02544cf37"),
                             Country = "Bulgaria",
                             Email = "strahil@email",
                             FirstName = "strahil",
@@ -233,7 +233,7 @@ namespace ForumTemplate.Migrations
                         },
                         new
                         {
-                            UserId = new Guid("b3206bab-3c2f-4413-b134-0d5a7d3f6d71"),
+                            UserId = new Guid("695cd23c-f8d4-4332-b378-d1d19341c7cf"),
                             Country = "Bulgaria",
                             Email = "iliyan@email",
                             FirstName = "iliyan",

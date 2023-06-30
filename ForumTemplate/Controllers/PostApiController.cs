@@ -22,20 +22,26 @@ public class PostApiController : ControllerBase
     [HttpGet()]
     public IActionResult GetAll()
     {
-        var response = this.postService.GetAll();
-
-        return StatusCode(StatusCodes.Status200OK, response);
+        try
+        {
+            var response = this.postService.GetAll();
+            return StatusCode(StatusCodes.Status200OK, response);
+        }
+        catch (EntityLoginException e)
+        {
+            return BadRequest(e.Message);
+        }
     }
 
 
- //  // Not tested yet
- //[HttpGet("/query")]
- //   public IActionResult GetByMultipleCriteria([FromQuery] PostQueryParameters filterParameters)
- //   {
- //       List<PostResponse> posts = this.postService.FilterBy(filterParameters);
+    //  // Not tested yet
+    //[HttpGet("/query")]
+    //   public IActionResult GetByMultipleCriteria([FromQuery] PostQueryParameters filterParameters)
+    //   {
+    //       List<PostResponse> posts = this.postService.FilterBy(filterParameters);
 
- //       return this.StatusCode(StatusCodes.Status200OK, posts);
- //   }
+    //       return this.StatusCode(StatusCodes.Status200OK, posts);
+    //   }
 
     [HttpGet("{id}")]
     public IActionResult Get(Guid id)
@@ -49,6 +55,14 @@ public class PostApiController : ControllerBase
         catch (ValidationException e)
         {
             return BadRequest(e.Message);
+        }
+        catch (EntityLoginException e)
+        {
+            return BadRequest(e.Message);
+        }
+        catch (EntityNotFoundException e)
+        {
+            return NotFound(e.Message);
         }
     }
 
@@ -67,11 +81,11 @@ public class PostApiController : ControllerBase
         }
         catch (EntityBannedException e)
         {
-            return Conflict(e.Message);
+            return Unauthorized(e.Message);
         }
         catch (EntityLoginException e)
         {
-            return BadRequest(e.Message);
+            return Unauthorized(e.Message);
         }
     }
 

@@ -41,6 +41,8 @@
         public Comment Update(Comment comment)
         {
             this.Content = comment.Content;
+            this.UserId = comment.UserId;
+            this.PostId = comment.PostId;
             this.UpdatedAt = DateTime.UtcNow;
 
             return this;

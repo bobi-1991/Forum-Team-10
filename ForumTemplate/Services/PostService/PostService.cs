@@ -16,21 +16,26 @@ namespace ForumTemplate.Services.PostService
     {
         private readonly IPostRepository postRepository;
         private readonly ICommentService commentService;
-        private readonly IUserRepository userRepository;
+      //  private readonly IUserRepository userRepository;
         private readonly PostsValidator postsValidator;
         private readonly PostMapper postMapper;
 
-        public PostService(IPostRepository repository, ICommentService commentService, PostsValidator postsValidator, PostMapper postMapper, IUserRepository userRepository)
+        public PostService(IPostRepository repository, ICommentService commentService, PostsValidator postsValidator, PostMapper postMapper)
         {
             this.postRepository = repository;
             this.commentService = commentService;
             this.postsValidator = postsValidator;
             this.postMapper = postMapper;
-            this.userRepository = userRepository;
+           // this.userRepository = userRepository;
         }
 
         public List<PostResponse> GetAll()
         {
+            if (CurrentLoggedUser.LoggedUser is null || !CurrentLoggedUser.LoggedUser.IsLogged)
+            {
+                throw new EntityLoginException("Please log in first.");
+            }
+
             var posts = postRepository.GetAll();
             return postMapper.MapToPostResponse(posts);
         }
@@ -40,7 +45,20 @@ namespace ForumTemplate.Services.PostService
         {
             //Validation
             postsValidator.Validate(id);
+
+            if (CurrentLoggedUser.LoggedUser is null || !CurrentLoggedUser.LoggedUser.IsLogged)
+            {
+                throw new EntityLoginException("Please log in first.");
+            }
+
             var post = postRepository.GetById(id);
+
+            if (post == null)
+            {
+                throw new EntityNotFoundException($"Post with ID: {id} not found.");
+            }
+
+          
             return postMapper.MapToPostResponse(post);
         }
 
