@@ -29,7 +29,7 @@ namespace ForumTemplate.Controllers
             }
             catch (EntityLoginException e)
             {
-                return BadRequest(e.Message);
+                return Unauthorized(e.Message);
             }
         }
 
@@ -48,7 +48,7 @@ namespace ForumTemplate.Controllers
             }
             catch (EntityLoginException e)
             {
-                return BadRequest(e.Message);
+                return Unauthorized(e.Message);
             }
             catch (EntityNotFoundException e)
             {
@@ -76,7 +76,7 @@ namespace ForumTemplate.Controllers
             }
             catch (EntityLoginException e)
             {
-                return BadRequest(e.Message);
+                return Unauthorized(e.Message);
             }
             catch (EntityUnauthorizatedException e)
             {
@@ -102,7 +102,7 @@ namespace ForumTemplate.Controllers
             }
             catch (EntityLoginException e)
             {
-                return BadRequest(e.Message);
+                return Unauthorized(e.Message);
             }
             catch (EntityNotFoundException e)
             {

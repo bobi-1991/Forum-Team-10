@@ -14,10 +14,10 @@ namespace ForumTemplate.Persistence.CommentRepository
         }
         public List<Comment> GetAll()
         {
-            if (dbContext.Comments.Count() == 0)
-            {
-                throw new EntityNotFoundException("Currently, there are no comments created.");
-            }
+            //if (dbContext.Comments.Count() == 0)
+            //{
+            //    throw new EntityNotFoundException("Currently, there are no comments created.");
+            //}
             return dbContext.Comments.Where(x => !x.User.IsDelete).ToList();
         }
 

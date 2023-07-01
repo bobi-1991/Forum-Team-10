@@ -96,13 +96,17 @@ namespace ForumTemplate.Services.PostService
             {
                 throw new EntityLoginException("Please log in first.");
             }
-            if (!CurrentLoggedUser.LoggedUser.Posts.Any(x => x.PostId.Equals(id)) && !CurrentLoggedUser.LoggedUser.IsAdmin)
+
+            var postToUpdate = postRepository.GetById(id);
+            var authorId = postToUpdate.UserId;
+
+            if (!CurrentLoggedUser.LoggedUser.UserId.Equals(authorId) && !CurrentLoggedUser.LoggedUser.IsAdmin)
             {
                 throw new ValidationException("The id you entered does not match yours post(s) id");
             }
 
-            var post = postMapper.MapToPost(postRequest);
-            var updatedPost = postRepository.Update(id, post);
+            var currentPost = postMapper.MapToPost(postRequest);
+            var updatedPost = postRepository.Update(id, currentPost);
 
             return postMapper.MapToPostResponse(updatedPost);
         }
@@ -116,12 +120,15 @@ namespace ForumTemplate.Services.PostService
             {
                 throw new EntityLoginException("Please log in first.");
             }
-            if (!CurrentLoggedUser.LoggedUser.Posts.Any(x=>x.PostId.Equals(id)) && !CurrentLoggedUser.LoggedUser.IsAdmin)
+
+            var postToDelete = postRepository.GetById(id);
+            var authorId = postToDelete.UserId;
+
+            if (!CurrentLoggedUser.LoggedUser.UserId.Equals(authorId) && !CurrentLoggedUser.LoggedUser.IsAdmin)
             {
                 throw new ValidationException("The id you entered does not match yours post(s) id");
             }
 
-            var postToDelete = postRepository.GetById(id);
             this.commentService.DeleteByPostId(postToDelete.PostId);
 
             return postRepository.Delete(id);

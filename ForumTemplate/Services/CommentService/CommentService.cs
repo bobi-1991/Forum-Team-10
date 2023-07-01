@@ -101,13 +101,15 @@ namespace ForumTemplate.Services.CommentService
             //Validation
             commentsValidator.Validate(id, commentRequest);
 
-            if (!CurrentLoggedUser.LoggedUser.Comments.Any(x => x.CommentId.Equals(id)) && !CurrentLoggedUser.LoggedUser.IsAdmin)
+            var commentToUpdate = commentRepository.GetById(id);
+            var authorId = commentToUpdate.UserId;
+
+            if (!CurrentLoggedUser.LoggedUser.UserId.Equals(authorId) && !CurrentLoggedUser.LoggedUser.IsAdmin)
             {
                 throw new ValidationException("The id you entered does not match yours comment(s) id");
             }
 
             _ = userRepositoty.GetById(commentRequest.UserId);
-
             var postOfComment = postRepository.GetById(commentRequest.PostId);
 
             if (postOfComment == null)
@@ -116,7 +118,6 @@ namespace ForumTemplate.Services.CommentService
             }
 
             var comment = this.commentMapper.MapToComment(commentRequest);
-
             var updatedComment = commentRepository.Update(id, comment);
 
             return this.commentMapper.MapToCommentResponse(updatedComment);
@@ -128,7 +129,11 @@ namespace ForumTemplate.Services.CommentService
             {
                 throw new EntityLoginException("Please log in first.");
             }
-            if (!CurrentLoggedUser.LoggedUser.Comments.Any(x => x.CommentId.Equals(id)) && !CurrentLoggedUser.LoggedUser.IsAdmin)
+
+            var commentToDelete = commentRepository.GetById(id);
+            var authorId = commentToDelete.UserId;
+
+            if (!CurrentLoggedUser.LoggedUser.UserId.Equals(authorId) && !CurrentLoggedUser.LoggedUser.IsAdmin)
             {
                 throw new ValidationException("The id you entered does not match yours comment(s) id");
             }

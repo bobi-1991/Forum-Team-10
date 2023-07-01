@@ -104,7 +104,7 @@ public class PostApiController : ControllerBase
         }
         catch (EntityLoginException e)
         {
-            return BadRequest(e.Message);
+            return Unauthorized(e.Message);
         }
     }
 
@@ -123,7 +123,7 @@ public class PostApiController : ControllerBase
         }
         catch (EntityLoginException e)
         {
-            return BadRequest(e.Message);
+            return Unauthorized(e.Message);
         }
     }
 
