@@ -1,5 +1,6 @@
 ﻿using ForumTemplate.Common.FilterModels;
 using ForumTemplate.Data;
+using ForumTemplate.Exceptions;
 using ForumTemplate.Models;
 using ForumTemplate.Services.PostService;
 using Microsoft.EntityFrameworkCore;

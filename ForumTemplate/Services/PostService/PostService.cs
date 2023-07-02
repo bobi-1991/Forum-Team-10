@@ -19,22 +19,21 @@ namespace ForumTemplate.Services.PostService
       //  private readonly IUserRepository userRepository;
         private readonly PostsValidator postsValidator;
         private readonly PostMapper postMapper;
+        private readonly UserAuthenticationValidator userValidator;
 
-        public PostService(IPostRepository repository, ICommentService commentService, PostsValidator postsValidator, PostMapper postMapper)
+        public PostService(IPostRepository repository, ICommentService commentService, PostsValidator postsValidator, PostMapper postMapper, UserAuthenticationValidator userValidator)
         {
             this.postRepository = repository;
             this.commentService = commentService;
             this.postsValidator = postsValidator;
             this.postMapper = postMapper;
+            this.userValidator = userValidator;
            // this.userRepository = userRepository;
         }
 
         public List<PostResponse> GetAll()
         {
-            if (CurrentLoggedUser.LoggedUser is null || !CurrentLoggedUser.LoggedUser.IsLogged)
-            {
-                throw new EntityLoginException("Please log in first.");
-            }
+            userValidator.ValidateUserIsLogged();
 
             var posts = postRepository.GetAll();
             return postMapper.MapToPostResponse(posts);
@@ -46,18 +45,9 @@ namespace ForumTemplate.Services.PostService
             //Validation
             postsValidator.Validate(id);
 
-            if (CurrentLoggedUser.LoggedUser is null || !CurrentLoggedUser.LoggedUser.IsLogged)
-            {
-                throw new EntityLoginException("Please log in first.");
-            }
+            userValidator.ValidateUserIsLogged();
 
             var post = postRepository.GetById(id);
-
-            if (post == null)
-            {
-                throw new EntityNotFoundException($"Post with ID: {id} not found.");
-            }
-
           
             return postMapper.MapToPostResponse(post);
         }
@@ -67,18 +57,9 @@ namespace ForumTemplate.Services.PostService
             //Validation
             postsValidator.Validate(postRequest);
 
-            if (CurrentLoggedUser.LoggedUser is null || !CurrentLoggedUser.LoggedUser.IsLogged)
-            {
-                throw new EntityLoginException("Please log in first.");
-            }
-            if (!CurrentLoggedUser.LoggedUser.UserId.Equals(postRequest.UserId))
-            {
-                throw new ValidationException("The id you entered does not match your id");
-            }
-            if (CurrentLoggedUser.LoggedUser.IsBlocked)
-            {
-                throw new EntityBannedException("I'm sorry, but you cannot create a new post. You are permanently banned.");
-            }
+            userValidator.ValidateUserIsLogged();
+
+            userValidator.ValidatePostCreateIDMatchAndNotBlocked(postRequest);
 
             var post = postMapper.MapToPost(postRequest);
             var createdPost = postRepository.Create(post);
@@ -91,19 +72,13 @@ namespace ForumTemplate.Services.PostService
             //Validation
             postsValidator.Validate(id, postRequest);
 
-
-            if (CurrentLoggedUser.LoggedUser is null || !CurrentLoggedUser.LoggedUser.IsLogged)
-            {
-                throw new EntityLoginException("Please log in first.");
-            }
+            userValidator.ValidateUserIsLogged();
 
             var postToUpdate = postRepository.GetById(id);
+
             var authorId = postToUpdate.UserId;
 
-            if (!CurrentLoggedUser.LoggedUser.UserId.Equals(authorId) && !CurrentLoggedUser.LoggedUser.IsAdmin)
-            {
-                throw new ValidationException("The id you entered does not match yours post(s) id");
-            }
+            userValidator.ValidateUserIdMatchAuthorIdPost(authorId);
 
             var currentPost = postMapper.MapToPost(postRequest);
             var updatedPost = postRepository.Update(id, currentPost);
@@ -116,18 +91,12 @@ namespace ForumTemplate.Services.PostService
             //Validation
             postsValidator.Validate(id);
 
-            if (CurrentLoggedUser.LoggedUser is null || !CurrentLoggedUser.LoggedUser.IsLogged)
-            {
-                throw new EntityLoginException("Please log in first.");
-            }
+            userValidator.ValidateUserIsLogged();
 
             var postToDelete = postRepository.GetById(id);
             var authorId = postToDelete.UserId;
 
-            if (!CurrentLoggedUser.LoggedUser.UserId.Equals(authorId) && !CurrentLoggedUser.LoggedUser.IsAdmin)
-            {
-                throw new ValidationException("The id you entered does not match yours post(s) id");
-            }
+            userValidator.ValidateUserIdMatchAuthorIdPost(authorId);
 
             this.commentService.DeleteByPostId(postToDelete.PostId);
 

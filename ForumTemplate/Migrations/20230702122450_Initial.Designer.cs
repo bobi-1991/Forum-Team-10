@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ForumTemplate.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20230701061248_initial")]
-    partial class initial
+    [Migration("20230702122450_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -188,7 +188,7 @@ namespace ForumTemplate.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = new Guid("b1f23eea-f98d-4614-8ae8-51922d942795"),
+                            UserId = new Guid("6ee161a3-3158-4a38-a9d2-72c18669a60a"),
                             Country = "Bulgaria",
                             Email = "admin@forum.com",
                             FirstName = "Admin",
@@ -203,7 +203,7 @@ namespace ForumTemplate.Migrations
                         },
                         new
                         {
-                            UserId = new Guid("c3819d93-79e1-4986-a8bb-e9db4d6a47ba"),
+                            UserId = new Guid("abefa040-7ab0-4e80-a652-cc18151a117c"),
                             Country = "Bulgaria",
                             Email = "bobi@email",
                             FirstName = "borislav",
@@ -218,7 +218,7 @@ namespace ForumTemplate.Migrations
                         },
                         new
                         {
-                            UserId = new Guid("07e7aad2-c6ae-4e90-9c1e-b085071f3b8c"),
+                            UserId = new Guid("370b8500-71f1-4aa4-b99f-496126c73281"),
                             Country = "Bulgaria",
                             Email = "strahil@email",
                             FirstName = "strahil",
@@ -233,7 +233,7 @@ namespace ForumTemplate.Migrations
                         },
                         new
                         {
-                            UserId = new Guid("d501c310-afa2-4c2d-998b-ab7ee4192a0c"),
+                            UserId = new Guid("a7dece6f-ae8d-47ba-b760-a27e56efa750"),
                             Country = "Bulgaria",
                             Email = "iliyan@email",
                             FirstName = "iliyan",

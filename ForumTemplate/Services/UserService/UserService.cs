@@ -6,6 +6,7 @@ using ForumTemplate.Mappers;
 using ForumTemplate.Models;
 using ForumTemplate.Persistence.PostRepository;
 using ForumTemplate.Persistence.UserRepository;
+using ForumTemplate.Validation;
 
 namespace ForumTemplate.Services.UserService
 {
@@ -13,45 +14,30 @@ namespace ForumTemplate.Services.UserService
     {
         private readonly IUserRepository userRepository;
         private readonly UserMapper userMapper;
+        private readonly UserAuthenticationValidator userValidator;
 
 
-        public UserService(IUserRepository userRepository, UserMapper userMapper)
+        public UserService(IUserRepository userRepository, UserMapper userMapper, UserAuthenticationValidator userValidator)
         {
             this.userRepository = userRepository;
             this.userMapper = userMapper;
+            this.userValidator = userValidator;
         }
 
         public List<UserResponse> GetAll()
         {
-            if (CurrentLoggedUser.LoggedUser is null || !CurrentLoggedUser.LoggedUser.IsLogged)
-            {
-                throw new EntityLoginException("Please log in first.");
-            }
-            if (!CurrentLoggedUser.LoggedUser.IsAdmin)
-            { 
-                throw new EntityUnauthorizatedException("You are not authorized for this functionality");
-            }
+            userValidator.ValidateUserIsLoggedAndAdmin();
 
             var users = userRepository.GetAll();
+
             return this.userMapper.MapToUserResponse(users);
         }
 
         public UserResponse GetById(Guid id)
         {
-            var user = userRepository.GetById(id);
+            userValidator.ValidateUserIsLoggedAndAdmin();
 
-            if (CurrentLoggedUser.LoggedUser is null || !CurrentLoggedUser.LoggedUser.IsLogged)
-            {
-                throw new EntityLoginException("Please log in first.");
-            }
-            if (user == null)
-            {
-                throw new EntityNotFoundException($"User with ID: {id} not found.");
-            }
-            if (!CurrentLoggedUser.LoggedUser.IsAdmin)
-            {
-                throw new EntityUnauthorizatedException("You are not authorized for this functionality");
-            }
+            var user = userRepository.GetById(id);
 
             return userMapper.MapToUserResponse(user);
         }
@@ -69,12 +55,7 @@ namespace ForumTemplate.Services.UserService
 
         public string RegisterUser(RegisterUserRequestModel user, string encodedPassword)
         {
-            var doesExists = this.userRepository.DoesExist(user.Username);
-
-            if (doesExists)
-            {
-                throw new DuplicateEntityException($"User already exists.");
-            }
+            userValidator.ValidateDoesExist(user.Username);
 
             //Must be done by mapper
             var userDB = new User
@@ -94,23 +75,11 @@ namespace ForumTemplate.Services.UserService
 
         public string PromoteUser(string username, UpdateUserRequestModel userToPromote)
         {
-            var userRequestor = userRepository.GetByUsername(username);
-
-            if (CurrentLoggedUser.LoggedUser is null || !userRequestor.IsLogged)
-            {
-                throw new ArgumentException("User who is requesting is found, but is not logged in, please log in");
-            }
-            if (userRequestor.IsLogged && !userRequestor.IsAdmin)
-            {
-                throw new ArgumentException("I am sorry, you are not an admin to perform this operation");
-            }
+            userValidator.ValidateUserExistAndIsLoggedAndIsAdmin(username);
 
             var userToBePromoted = userRepository.GetByUsername(userToPromote.UserName);
 
-            if(userToBePromoted.IsAdmin) 
-            {
-                throw new ArgumentException("The user you are trying to promote is already an admin");
-            }
+            userValidator.ValidateUserAlreadyAdmin(userToBePromoted);
 
             userRepository.PromoteUser(userToBePromoted);
 
@@ -119,23 +88,11 @@ namespace ForumTemplate.Services.UserService
 
         public string DemoteUser(string username, UpdateUserRequestModel userToDemote)
         {
-            var userRequestor = userRepository.GetByUsername(username);
-
-            if (CurrentLoggedUser.LoggedUser is null || !userRequestor.IsLogged)
-            {
-                throw new ArgumentException("User who is requesting is found, but is not logged in, please log in");
-            }
-            if (userRequestor.IsLogged && !userRequestor.IsAdmin)
-            {
-                throw new ArgumentException("I am sorry, you are not an admin to perform this operation");
-            }
+            userValidator.ValidateUserExistAndIsLoggedAndIsAdmin(username);
 
             var userToBeDemoted = userRepository.GetByUsername(userToDemote.UserName);
 
-            if (!userToBeDemoted.IsAdmin)
-            {
-                throw new ArgumentException("The user you are trying to demote is already a regular user");
-            }
+            userValidator.ValidateUserAlreadyRegular(userToBeDemoted);
 
             userRepository.DemoteUser(userToBeDemoted);
 
@@ -144,23 +101,11 @@ namespace ForumTemplate.Services.UserService
 
         public string BanUser(string username, UpdateUserRequestModel userToBeBanned)
         {
-            var userRequestor = userRepository.GetByUsername(username);
-
-            if (CurrentLoggedUser.LoggedUser is null || !userRequestor.IsLogged)
-            {
-                throw new ArgumentException("User who is requesting is found, but is not logged in, please log in");
-            }
-            if (userRequestor.IsLogged && !userRequestor.IsAdmin)
-            {
-                throw new ArgumentException("I am sorry, you are not an admin to perform this operation");
-            }
+            userValidator.ValidateUserExistAndIsLoggedAndIsAdmin(username);
 
             var userToBeBannedActual = userRepository.GetByUsername(userToBeBanned.UserName);
 
-            if (userToBeBannedActual.IsBlocked)
-            {
-                throw new ArgumentException("The user you are trying to ban is already banned");
-            }
+            userValidator.ValidateUserAlreadyBanned(userToBeBannedActual);
 
             userRepository.BanUser(userToBeBannedActual);
 
@@ -169,23 +114,11 @@ namespace ForumTemplate.Services.UserService
 
         public string UnBanUser(string username, UpdateUserRequestModel userToUnBan)
         {
-            var userRequestor = userRepository.GetByUsername(username);
-
-            if (CurrentLoggedUser.LoggedUser is null || !userRequestor.IsLogged)
-            {
-                throw new ArgumentException("User who is requesting is found, but is not logged in, please log in");
-            }
-            if (userRequestor.IsLogged && !userRequestor.IsAdmin)
-            {
-                throw new ArgumentException("I am sorry, you are not an admin to perform this operation");
-            }
+            userValidator.ValidateUserExistAndIsLoggedAndIsAdmin(username);
 
             var userToBeUnBanned = userRepository.GetByUsername(userToUnBan.UserName);
 
-            if (!userToBeUnBanned.IsBlocked)
-            {
-                throw new ArgumentException("The user you are trying to UnBan is not banned");
-            }
+            userValidator.ValidateUserNotBanned(userToBeUnBanned);
 
             userRepository.UnBanUser(userToBeUnBanned);
 
@@ -194,14 +127,7 @@ namespace ForumTemplate.Services.UserService
 
         public UserResponse Update(Guid id, UpdateUserRequest updateUserRequest)
         {
-            if(CurrentLoggedUser.LoggedUser is null || !CurrentLoggedUser.LoggedUser.IsLogged)
-            {
-                throw new EntityLoginException("Please log in first.");
-            }
-            if (!CurrentLoggedUser.LoggedUser.UserId.Equals(id) && !CurrentLoggedUser.LoggedUser.IsAdmin)
-            {
-                throw new ValidationException("I'm sorry, but you cannot change other user's personal data.");
-            }
+            userValidator.ValidateByGUIDUserLoggedAndAdmin(id);     
 
             var userData = this.userMapper.MapToUser(updateUserRequest);
             var user = userRepository.Update(id, userData);
@@ -211,14 +137,7 @@ namespace ForumTemplate.Services.UserService
 
         public string Delete(Guid id)
         {
-            if (CurrentLoggedUser.LoggedUser is null || !CurrentLoggedUser.LoggedUser.IsLogged)
-            {
-                throw new EntityLoginException("Please log in first.");
-            }
-            if (!CurrentLoggedUser.LoggedUser.UserId.Equals(id) && !CurrentLoggedUser.LoggedUser.IsAdmin)
-            {
-                throw new ValidationException("Sorry, but you are not authorized to delete other users ");
-            }
+            userValidator.ValidateByGUIDUserLoggedAndAdmin(id);
 
             return userRepository.Delete(id);
         }

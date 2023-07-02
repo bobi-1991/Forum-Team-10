@@ -1,5 +1,6 @@
 ﻿using ForumTemplate.DTOs.CommentDTOs;
 using ForumTemplate.Exceptions;
+using ForumTemplate.Models;
 using ForumTemplate.Persistence.CommentRepository;
 using ForumTemplate.Persistence.PostRepository;
 
@@ -75,6 +76,16 @@ namespace ForumTemplate.Validation
             {
                 throw new ValidationException($"Following Validation Errors Occured: {string.Join(", ", errors)}");
 
+            }
+        }
+
+        public void GetCommentsByPostID(Guid postId)
+        {
+            var commentsById = this.commentRepository.GetByPostId(postId);
+
+            if (commentsById == null)
+            {
+                throw new EntityNotFoundException($"Comment with ID: {postId} not found.");
             }
         }
     }

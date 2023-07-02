@@ -32,7 +32,14 @@ namespace ForumTemplate.Persistence.UserRepository
         }
         public User GetById(Guid id)
         {
-            return dbContext.Users.FirstOrDefault(x => x.UserId == id) ?? throw new EntityNotFoundException($"User with ID: {id} not found.");
+            var user = dbContext.Users.FirstOrDefault(u => u.UserId == id);
+
+            if (user is null)
+            {
+                throw new EntityNotFoundException($"User with ID: {id} not found.");
+            }
+
+            return user;
         }
 
         public User GetByUsername(string username)

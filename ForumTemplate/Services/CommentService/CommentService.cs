@@ -17,15 +17,19 @@ namespace ForumTemplate.Services.CommentService
         private readonly CommentMapper commentMapper;
         private readonly IUserRepository userRepositoty;
         private readonly IPostRepository postRepository;
+        private readonly UserAuthenticationValidator userValidator;
 
 
-        public CommentService(ICommentRepository commentRepository, CommentsValidator commentsValidator, CommentMapper commentMapper, IUserRepository userRepositoty, IPostRepository postRepository)
+        public CommentService(ICommentRepository commentRepository, CommentsValidator commentsValidator, 
+            CommentMapper commentMapper, IUserRepository userRepositoty, IPostRepository postRepository,
+            UserAuthenticationValidator userValidator)
         {
             this.commentRepository = commentRepository;
             this.commentsValidator = commentsValidator;
             this.commentMapper = commentMapper;
             this.userRepositoty = userRepositoty;
             this.postRepository = postRepository;
+            this.userValidator = userValidator;
         }
 
         public List<CommentResponse> GetAll()
@@ -37,17 +41,11 @@ namespace ForumTemplate.Services.CommentService
 
         public List<CommentResponse> GetComments(Guid postId)
         {
-            if (CurrentLoggedUser.LoggedUser is null || !CurrentLoggedUser.LoggedUser.IsLogged)
-            {
-                throw new EntityLoginException("Please log in first.");
-            }
+            userValidator.ValidateUserIsLogged();
+
+            commentsValidator.GetCommentsByPostID(postId);
 
             var commentsById = this.commentRepository.GetByPostId(postId);
-
-            if (commentsById == null)
-            {
-                throw new EntityNotFoundException($"Comment with ID: {postId} not found.");
-            }
 
             return this.commentMapper.MapToCommentResponse(commentsById);
         }
@@ -64,14 +62,7 @@ namespace ForumTemplate.Services.CommentService
 
         public CommentResponse Create(CommentRequest commentRequest)
         {
-            if (CurrentLoggedUser.LoggedUser is null || !CurrentLoggedUser.LoggedUser.IsLogged)
-            {
-                throw new EntityLoginException("Please log in first.");
-            }
-            if (CurrentLoggedUser.LoggedUser.IsBlocked)
-            {
-                throw new EntityBannedException("I'm sorry, but you cannot write a comment. You are permanently banned.");
-            }
+            userValidator.ValidateUserIsLoggedAndNotBannedCommentCreate();
 
             //Validation
             this.commentsValidator.Validate(commentRequest);
@@ -93,10 +84,7 @@ namespace ForumTemplate.Services.CommentService
 
         public CommentResponse Update(Guid id, CommentRequest commentRequest)
         {
-            if (CurrentLoggedUser.LoggedUser is null || !CurrentLoggedUser.LoggedUser.IsLogged)
-            {
-                throw new EntityLoginException("Please log in first.");
-            }
+            userValidator.ValidateUserIsLogged();
 
             //Validation
             commentsValidator.Validate(id, commentRequest);
@@ -125,10 +113,7 @@ namespace ForumTemplate.Services.CommentService
 
         public string Delete(Guid id)
         {
-            if (CurrentLoggedUser.LoggedUser is null || !CurrentLoggedUser.LoggedUser.IsLogged)
-            {
-                throw new EntityLoginException("Please log in first.");
-            }
+            userValidator.ValidateUserIsLogged();
 
             var commentToDelete = commentRepository.GetById(id);
             var authorId = commentToDelete.UserId;

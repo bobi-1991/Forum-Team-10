@@ -47,6 +47,7 @@ namespace ForumTemplate
             //Validators
             builder.Services.AddScoped<CommentsValidator>();
             builder.Services.AddScoped<PostsValidator>();
+            builder.Services.AddScoped<UserAuthenticationValidator>();
 
             // Fluent Validation
             builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
