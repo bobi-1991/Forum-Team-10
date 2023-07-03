@@ -4,7 +4,7 @@ using ForumTemplate.Services.CommentService;
 
 namespace ForumTemplate.Mappers
 {
-    public class PostMapper
+    public class PostMapper : IPostMapper
     {
         private readonly ICommentService commentService;
 

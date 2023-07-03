@@ -17,11 +17,12 @@ namespace ForumTemplate.Services.PostService
         private readonly IPostRepository postRepository;
         private readonly ICommentService commentService;
       //  private readonly IUserRepository userRepository;
-        private readonly PostsValidator postsValidator;
-        private readonly PostMapper postMapper;
+        private readonly IPostsValidator postsValidator;
+        private readonly IPostMapper postMapper;
         private readonly IUserAuthenticationValidator userValidator;
 
-        public PostService(IPostRepository repository, ICommentService commentService, PostsValidator postsValidator, PostMapper postMapper, IUserAuthenticationValidator userValidator)
+        public PostService(IPostRepository repository, ICommentService commentService, 
+            IPostsValidator postsValidator, IPostMapper postMapper, IUserAuthenticationValidator userValidator)
         {
             this.postRepository = repository;
             this.commentService = commentService;

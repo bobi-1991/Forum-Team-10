@@ -5,7 +5,7 @@ using ForumTemplate.Persistence.PostRepository;
 namespace ForumTemplate.Validation
 
 {
-    public class PostsValidator
+    public class PostsValidator : IPostsValidator
     {
         private readonly IPostRepository postRepository;
         public PostsValidator(IPostRepository postRepository)

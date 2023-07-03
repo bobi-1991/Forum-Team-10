@@ -128,9 +128,9 @@ namespace ForumTemplate.Tests
         public void UpdateUser_ShouldInvokeCorrectMethods()
         {
             //Arrange
-            userMapperMock
-                .Setup(x => x.MapToUserResponse(It.IsAny<User>()))
-                .Returns(It.IsAny<UserResponse>());
+            //userMapperMock
+            //    .Setup(x => x.MapToUserResponse(It.IsAny<User>()))
+            //    .Returns(It.IsAny<UserResponse>());
 
             //Act
             var result = sut.Update(id, GetUpdateUserRequest());
