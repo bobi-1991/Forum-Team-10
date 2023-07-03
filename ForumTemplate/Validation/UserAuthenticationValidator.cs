@@ -7,7 +7,7 @@ using ForumTemplate.Persistence.UserRepository;
 
 namespace ForumTemplate.Validation
 {
-    public class UserAuthenticationValidator
+    public class UserAuthenticationValidator : IUserAuthenticationValidator
     {
 
         private readonly IUserRepository userRepository;

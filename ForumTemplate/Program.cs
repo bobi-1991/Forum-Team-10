@@ -47,14 +47,14 @@ namespace ForumTemplate
             //Validators
             builder.Services.AddScoped<CommentsValidator>();
             builder.Services.AddScoped<PostsValidator>();
-            builder.Services.AddScoped<UserAuthenticationValidator>();
+            builder.Services.AddScoped<IUserAuthenticationValidator, UserAuthenticationValidator>();
 
             // Fluent Validation
             builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
             builder.Services.AddValidatorsFromAssemblyContaining<IAssemblyMarker>();
 
             // Helpers
-            builder.Services.AddScoped<UserMapper>();
+            builder.Services.AddScoped<IUserMapper, UserMapper>();
             builder.Services.AddScoped<PostMapper>();
             builder.Services.AddScoped<CommentMapper>();
             builder.Services.AddScoped<IAuthManager, AuthManager>();

@@ -21,14 +21,14 @@ namespace ForumTemplate.Persistence.UserRepository
 
         User Logout(string username);
 
-        void RegisterUser(User user);
+        string RegisterUser(User user);
 
-        void PromoteUser(User user);
+        string PromoteUser(User user);
 
-        void DemoteUser(User user);
+        string DemoteUser(User user);
 
-        void BanUser(User user);
+        string BanUser(User user);
 
-        void UnBanUser(User user);
+        string UnBanUser(User user);
     }
 }

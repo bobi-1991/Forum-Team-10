@@ -133,13 +133,14 @@ namespace ForumTemplate.Persistence.UserRepository
             
         }
 
-        public void RegisterUser(User user)
+        public string RegisterUser(User user)
         {
             
             try
             {
                 dbContext.Users.Add(user);
                 dbContext.SaveChanges();
+                return "User successfully registered.";
             }
             catch (Exception ex)
             {
@@ -149,13 +150,14 @@ namespace ForumTemplate.Persistence.UserRepository
 
         }
         
-        public void PromoteUser(User user)
+        public string PromoteUser(User user)
         {
 
             try
             {
                 user.IsAdmin = true;
                 dbContext.SaveChanges();
+                return "User successfully promoted";
             }
             catch (Exception ex)
             {
@@ -163,13 +165,14 @@ namespace ForumTemplate.Persistence.UserRepository
             }
         }
 
-        public void DemoteUser(User user)
+        public string DemoteUser(User user)
         {
 
             try
             {
                 user.IsAdmin = false;
                 dbContext.SaveChanges();
+                return "User successfully demoted";
             }
             catch (Exception ex)
             {
@@ -177,13 +180,14 @@ namespace ForumTemplate.Persistence.UserRepository
             }
         }
 
-        public void BanUser(User user)
+        public string BanUser(User user)
         {
 
             try
             {
                 user.IsBlocked = true;
                 dbContext.SaveChanges();
+                return "User successfully banned";
             }
             catch (Exception ex)
             {
@@ -191,12 +195,13 @@ namespace ForumTemplate.Persistence.UserRepository
             }
         }
 
-        public void UnBanUser(User user)
+        public string UnBanUser(User user)
         {
             try
             {
                 user.IsBlocked = false;
                 dbContext.SaveChanges();
+                return "User successfully UnBanned";
             }
             catch (Exception ex)
             {

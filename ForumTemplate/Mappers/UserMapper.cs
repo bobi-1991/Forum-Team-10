@@ -4,7 +4,7 @@ using ForumTemplate.Models;
 
 namespace ForumTemplate.Mappers
 {
-    public class UserMapper
+    public class UserMapper : IUserMapper
     {
         public User MapToUser(RegisterUserRequestModel registerUser)
         {

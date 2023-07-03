@@ -13,11 +13,11 @@ namespace ForumTemplate.Services.UserService
     public class UserService : IUserService
     {
         private readonly IUserRepository userRepository;
-        private readonly UserMapper userMapper;
-        private readonly UserAuthenticationValidator userValidator;
+        private readonly IUserMapper userMapper;
+        private readonly IUserAuthenticationValidator userValidator;
 
 
-        public UserService(IUserRepository userRepository, UserMapper userMapper, UserAuthenticationValidator userValidator)
+        public UserService(IUserRepository userRepository, IUserMapper userMapper, IUserAuthenticationValidator userValidator)
         {
             this.userRepository = userRepository;
             this.userMapper = userMapper;
@@ -68,9 +68,7 @@ namespace ForumTemplate.Services.UserService
                 Country = user.Country
             };
 
-            userRepository.RegisterUser(userDB);
-
-            return "User successfully registered.";
+            return userRepository.RegisterUser(userDB);
         }
 
         public string PromoteUser(string username, UpdateUserRequestModel userToPromote)
@@ -81,9 +79,7 @@ namespace ForumTemplate.Services.UserService
 
             userValidator.ValidateUserAlreadyAdmin(userToBePromoted);
 
-            userRepository.PromoteUser(userToBePromoted);
-
-            return "User successfully promoted";
+            return userRepository.PromoteUser(userToBePromoted);
         }
 
         public string DemoteUser(string username, UpdateUserRequestModel userToDemote)
@@ -94,9 +90,7 @@ namespace ForumTemplate.Services.UserService
 
             userValidator.ValidateUserAlreadyRegular(userToBeDemoted);
 
-            userRepository.DemoteUser(userToBeDemoted);
-
-            return "User successfully demoted";
+            return userRepository.DemoteUser(userToBeDemoted);
         }
 
         public string BanUser(string username, UpdateUserRequestModel userToBeBanned)
@@ -107,9 +101,7 @@ namespace ForumTemplate.Services.UserService
 
             userValidator.ValidateUserAlreadyBanned(userToBeBannedActual);
 
-            userRepository.BanUser(userToBeBannedActual);
-
-            return "User successfully banned";
+            return userRepository.BanUser(userToBeBannedActual);
         }
 
         public string UnBanUser(string username, UpdateUserRequestModel userToUnBan)
@@ -120,9 +112,7 @@ namespace ForumTemplate.Services.UserService
 
             userValidator.ValidateUserNotBanned(userToBeUnBanned);
 
-            userRepository.UnBanUser(userToBeUnBanned);
-
-            return "User successfully UnBanned";
+            return userRepository.UnBanUser(userToBeUnBanned);
         }
 
         public UserResponse Update(Guid id, UpdateUserRequest updateUserRequest)

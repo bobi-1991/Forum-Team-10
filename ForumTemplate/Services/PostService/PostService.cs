@@ -19,9 +19,9 @@ namespace ForumTemplate.Services.PostService
       //  private readonly IUserRepository userRepository;
         private readonly PostsValidator postsValidator;
         private readonly PostMapper postMapper;
-        private readonly UserAuthenticationValidator userValidator;
+        private readonly IUserAuthenticationValidator userValidator;
 
-        public PostService(IPostRepository repository, ICommentService commentService, PostsValidator postsValidator, PostMapper postMapper, UserAuthenticationValidator userValidator)
+        public PostService(IPostRepository repository, ICommentService commentService, PostsValidator postsValidator, PostMapper postMapper, IUserAuthenticationValidator userValidator)
         {
             this.postRepository = repository;
             this.commentService = commentService;
