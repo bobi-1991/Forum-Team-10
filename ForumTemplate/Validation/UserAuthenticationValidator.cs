@@ -136,5 +136,13 @@ namespace ForumTemplate.Validation
             }
         }
 
+        public void ValidateUserIdMatchAuthorIdComment(Guid? authorId)
+        {
+            if (!CurrentLoggedUser.LoggedUser.UserId.Equals(authorId) && !CurrentLoggedUser.LoggedUser.IsAdmin)
+            {
+                throw new ValidationException("The id you entered does not match yours comment(s) id");
+            }
+        }
+
     }
 }

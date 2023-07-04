@@ -6,7 +6,7 @@ using ForumTemplate.Persistence.PostRepository;
 
 namespace ForumTemplate.Validation
 {
-    public class CommentsValidator
+    public class CommentsValidator : ICommentsValidator
     {
         private readonly IPostRepository postRepository;
         private readonly ICommentRepository commentRepository;

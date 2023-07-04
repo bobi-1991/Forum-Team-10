@@ -13,15 +13,15 @@ namespace ForumTemplate.Services.CommentService
     public class CommentService : ICommentService
     {
         private readonly ICommentRepository commentRepository;
-        private readonly CommentsValidator commentsValidator;
-        private readonly CommentMapper commentMapper;
+        private readonly ICommentsValidator commentsValidator;
+        private readonly ICommentMapper commentMapper;
         private readonly IUserRepository userRepositoty;
         private readonly IPostRepository postRepository;
         private readonly IUserAuthenticationValidator userValidator;
 
 
-        public CommentService(ICommentRepository commentRepository, CommentsValidator commentsValidator, 
-            CommentMapper commentMapper, IUserRepository userRepositoty, IPostRepository postRepository,
+        public CommentService(ICommentRepository commentRepository, ICommentsValidator commentsValidator, 
+            ICommentMapper commentMapper, IUserRepository userRepositoty, IPostRepository postRepository,
             IUserAuthenticationValidator userValidator)
         {
             this.commentRepository = commentRepository;
@@ -92,10 +92,7 @@ namespace ForumTemplate.Services.CommentService
             var commentToUpdate = commentRepository.GetById(id);
             var authorId = commentToUpdate.UserId;
 
-            if (!CurrentLoggedUser.LoggedUser.UserId.Equals(authorId) && !CurrentLoggedUser.LoggedUser.IsAdmin)
-            {
-                throw new ValidationException("The id you entered does not match yours comment(s) id");
-            }
+            userValidator.ValidateUserIdMatchAuthorIdComment(authorId);
 
             _ = userRepositoty.GetById(commentRequest.UserId);
             var postOfComment = postRepository.GetById(commentRequest.PostId);
@@ -118,10 +115,7 @@ namespace ForumTemplate.Services.CommentService
             var commentToDelete = commentRepository.GetById(id);
             var authorId = commentToDelete.UserId;
 
-            if (!CurrentLoggedUser.LoggedUser.UserId.Equals(authorId) && !CurrentLoggedUser.LoggedUser.IsAdmin)
-            {
-                throw new ValidationException("The id you entered does not match yours comment(s) id");
-            }
+            userValidator.ValidateUserIdMatchAuthorIdComment(authorId);
             //Validation
             commentsValidator.Validate(id);
 

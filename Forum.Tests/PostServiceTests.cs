@@ -1,20 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ForumTemplate.DTOs.Authentication;
-using ForumTemplate.DTOs.PostDTOs;
-using ForumTemplate.DTOs.UserDTOs;
+﻿using ForumTemplate.DTOs.PostDTOs;
 using ForumTemplate.Mappers;
 using ForumTemplate.Models;
 using ForumTemplate.Persistence.PostRepository;
-using ForumTemplate.Persistence.UserRepository;
 using ForumTemplate.Services.CommentService;
 using ForumTemplate.Services.PostService;
-using ForumTemplate.Services.UserService;
 using ForumTemplate.Validation;
-using Microsoft.AspNetCore.Identity;
 using Moq;
 
 namespace ForumTemplate.Tests
@@ -31,6 +21,7 @@ namespace ForumTemplate.Tests
         private Mock<IPostMapper> postMapperMock;
 
         private Guid id;
+        private Guid postId;
 
         [TestInitialize]
 
@@ -43,6 +34,7 @@ namespace ForumTemplate.Tests
             postMapperMock = new Mock<IPostMapper>();
 
             id = Guid.NewGuid();
+            postId = Guid.NewGuid();
 
             SetupUserValidatorMock();
             
@@ -62,7 +54,7 @@ namespace ForumTemplate.Tests
 
             postRepositoryMock
                 .Setup(x => x.GetById(id))
-                .Returns(new Post { UserId = id});
+                .Returns(new Post { UserId = id, PostId = postId});
 
             postRepositoryMock
                 .Setup(x => x.Create(It.IsAny<Post>()))
@@ -71,6 +63,10 @@ namespace ForumTemplate.Tests
             postRepositoryMock
                 .Setup(x => x.Update(It.IsAny<Guid>(), It.IsAny<Post>()))
                 .Returns(new Post());
+
+            postRepositoryMock
+                .Setup(x => x.Delete(It.IsAny<Guid>()))
+                .Returns("Post was successfully deleted.");
 
             postMapperMock
                 .Setup(x => x.MapToPostResponse(It.IsAny<List<Post>>()))
@@ -87,25 +83,6 @@ namespace ForumTemplate.Tests
             sut = new PostService(postRepositoryMock.Object, commentServiceMock.Object, 
                 postValidatorMock.Object, postMapperMock.Object, userValidatorMock.Object);
         }
-
-        //public PostResponse Update(Guid id, PostRequest postRequest)
-        //{
-        //    //Validation
-        //    postsValidator.Validate(id, postRequest);
-
-        //    userValidator.ValidateUserIsLogged();
-
-        //    var postToUpdate = postRepository.GetById(id);
-
-        //    var authorId = postToUpdate.UserId;
-
-        //    userValidator.ValidateUserIdMatchAuthorIdPost(authorId);
-
-        //    var currentPost = postMapper.MapToPost(postRequest);
-        //    var updatedPost = postRepository.Update(id, currentPost);
-
-        //    return postMapper.MapToPostResponse(updatedPost);
-        //}
 
         [TestMethod]
         public void GetAll_ShouldInvokeCorrectMethods()
@@ -180,6 +157,38 @@ namespace ForumTemplate.Tests
             postRepositoryMock.Verify(x => x.Update(id, It.IsAny<Post>()), Times.Once);
 
             postMapperMock.Verify(x => x.MapToPostResponse(It.IsAny<Post>()), Times.Once);
+        }
+
+        [TestMethod]
+
+        public void Delete_ShouldInvokeCorrectMethods()
+        {
+            //Act
+            var result = sut.Delete(id);
+
+            //Verify
+            postValidatorMock.Verify(x => x.Validate(id), Times.Once);
+
+            userValidatorMock.Verify(x => x.ValidateUserIsLogged(), Times.Once);
+
+            postRepositoryMock.Verify(x => x.GetById(id), Times.Once);
+
+            userValidatorMock.Verify(x => x.ValidateUserIdMatchAuthorIdPost(id), Times.Once);
+
+            commentServiceMock.Verify(x => x.DeleteByPostId(postId), Times.Once);
+
+            postRepositoryMock.Verify(x => x.Delete(id), Times.Once);
+        }
+
+        [TestMethod]
+
+        public void Delete_ShouldReturn()
+        {
+            //act
+            var message = sut.Delete(id);
+
+            //Assert
+            StringAssert.Contains(message, "Post was successfully deleted.");
         }
 
         private PostRequest GetPostRequest()

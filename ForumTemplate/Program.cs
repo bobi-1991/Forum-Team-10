@@ -45,8 +45,8 @@ namespace ForumTemplate
             builder.Services.AddScoped<ICommentService, CommentService>();
 
             //Validators
-            builder.Services.AddScoped<CommentsValidator>();
-            builder.Services.AddScoped<PostsValidator>();
+            builder.Services.AddScoped<ICommentsValidator, CommentsValidator>();
+            builder.Services.AddScoped<IPostsValidator, PostsValidator>();
             builder.Services.AddScoped<IUserAuthenticationValidator, UserAuthenticationValidator>();
 
             // Fluent Validation
@@ -55,8 +55,8 @@ namespace ForumTemplate
 
             // Helpers
             builder.Services.AddScoped<IUserMapper, UserMapper>();
-            builder.Services.AddScoped<PostMapper>();
-            builder.Services.AddScoped<CommentMapper>();
+            builder.Services.AddScoped<IPostMapper, PostMapper>();
+            builder.Services.AddScoped<ICommentMapper, CommentMapper>();
             builder.Services.AddScoped<IAuthManager, AuthManager>();
 
             var app = builder.Build();

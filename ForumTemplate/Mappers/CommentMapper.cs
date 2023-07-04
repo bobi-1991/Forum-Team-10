@@ -3,7 +3,7 @@ using ForumTemplate.Models;
 
 namespace ForumTemplate.Mappers
 {
-    public class CommentMapper
+    public class CommentMapper : ICommentMapper
     {
         public CommentResponse MapToCommentResponse(Comment comment)
         {

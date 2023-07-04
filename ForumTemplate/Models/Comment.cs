@@ -14,10 +14,10 @@
         public Post Post { get; set; } = null!;
         public bool IsDelete { get; set; }
 
-        private Comment()
+        public Comment()
         {
         }
-        private Comment(
+        public Comment(
             string content,
             Guid userId,
             Guid postId)

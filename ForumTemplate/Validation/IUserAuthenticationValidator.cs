@@ -28,5 +28,7 @@ namespace ForumTemplate.Validation
         void ValidateUserIdMatchAuthorIdPost(Guid authorId);
 
         void ValidateUserIsLoggedAndNotBannedCommentCreate();
+
+        void ValidateUserIdMatchAuthorIdComment(Guid? authorId);
     }
 }

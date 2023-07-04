@@ -5,7 +5,6 @@ using ForumTemplate.Models;
 using ForumTemplate.Persistence.UserRepository;
 using ForumTemplate.Services.UserService;
 using ForumTemplate.Validation;
-using Microsoft.AspNetCore.Identity;
 using Moq;
 
 namespace ForumTemplate.Tests
