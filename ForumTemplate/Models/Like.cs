@@ -1,4 +1,6 @@
-﻿namespace ForumTemplate.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace ForumTemplate.Models
 {
     public class Like
     {
@@ -8,6 +10,7 @@
         // Foreign keys
         public Guid? UserId { get; set; }
         public Guid PostId { get; set; }
+
 
         // Navigation properties
         public User User { get; set; } = null!;
@@ -26,7 +29,7 @@
         }
 
         // Methods
-        public Like Create(Guid userId, Guid postId)
+        public static Like Create(Guid userId, Guid postId)
         {
             return new Like(userId,postId);
         }

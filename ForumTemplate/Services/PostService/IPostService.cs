@@ -12,6 +12,7 @@ namespace ForumTemplate.Services.PostService
         PostResponse GetById(Guid id);
         PostResponse Create(PostRequest postRequest);
         PostResponse Update(Guid id, PostRequest postRequest);
-        string Delete(Guid id);
+        string Delete(Guid userId);
+        void DeleteByUserId(Guid UserId);
     }
 }

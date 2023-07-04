@@ -18,12 +18,15 @@ namespace ForumTemplate.Persistence.CommentRepository
             //{
             //    throw new EntityNotFoundException("Currently, there are no comments created.");
             //}
-            return dbContext.Comments.Where(x => !x.User.IsDelete).ToList();
+            return dbContext.Comments.Where(x => !x.User.IsDelete)
+                .Where(x=>!x.Post.IsDelete)
+                .ToList();
         }
 
         public Comment GetById(Guid id)
         {
-            return dbContext.Comments.FirstOrDefault(c => c.CommentId == id);
+            return dbContext.Comments
+                .FirstOrDefault(c => c.CommentId == id);
         }
 
         public List<Comment> GetByPostId(Guid postId)
@@ -33,7 +36,9 @@ namespace ForumTemplate.Persistence.CommentRepository
 
         public List<Comment> GetByUserId(Guid id)
         {
-           return dbContext.Comments.Where(p => p.UserId == id).ToList();
+           return dbContext.Comments
+                .Where(x=>!x.User.IsDelete)
+                .Where(p => p.UserId == id).ToList();
         }
 
         public Comment Create(Comment comment)
@@ -74,7 +79,9 @@ namespace ForumTemplate.Persistence.CommentRepository
 
             foreach (var comment in commentToRemove)
             {
-                dbContext.Remove(comment);
+                comment.IsDelete = true;
+                dbContext.Update(comment);
+               // dbContext.Remove(comment);
             }
 
             dbContext.SaveChanges();

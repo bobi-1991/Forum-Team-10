@@ -110,7 +110,7 @@ namespace ForumTemplate.Tests
                 .Setup(x => x.MapToUser(It.IsAny<UpdateUserRequest>()))
                 .Returns(new User());
 
-            sut = new UserService(userRepositoryMock.Object, userMapperMock.Object, userValidatorMock.Object);
+            //sut = new UserService(userRepositoryMock.Object, userMapperMock.Object, userValidatorMock.Object);
         }
 
         //public UserResponse Update(Guid id, UpdateUserRequest updateUserRequest)

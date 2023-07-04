@@ -15,7 +15,7 @@ namespace ForumTemplate.Data
         public DbSet<Post> Posts { get; set; } = null!;
         public DbSet<Comment> Comments { get; set; } = null!;
         public DbSet<Like> Likes { get; set; } = null!;
-        public DbSet<Tag> Tags { get; set; } = null!;
+     //   public DbSet<Tag> Tags { get; set; } = null!;
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //seed users
@@ -43,7 +43,7 @@ namespace ForumTemplate.Data
             modelBuilder.Entity<Post>().HasQueryFilter(x => !x.IsDelete);
             modelBuilder.Entity<Comment>().HasQueryFilter(x => !x.IsDelete);
             modelBuilder.Entity<Like>().HasQueryFilter(x => !x.IsDelete);
-            modelBuilder.Entity<Tag>().HasQueryFilter(x => !x.IsDelete);
+            // modelBuilder.Entity<Tag>().HasQueryFilter(x => !x.IsDelete);
 
             base.OnModelCreating(modelBuilder);
         }

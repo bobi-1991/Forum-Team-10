@@ -1,11 +1,11 @@
 ﻿using ForumTemplate.Authorization;
 using ForumTemplate.DTOs.Authentication;
 using ForumTemplate.DTOs.UserDTOs;
-using ForumTemplate.Exceptions;
 using ForumTemplate.Mappers;
 using ForumTemplate.Models;
-using ForumTemplate.Persistence.PostRepository;
 using ForumTemplate.Persistence.UserRepository;
+using ForumTemplate.Services.LikeService;
+using ForumTemplate.Services.PostService;
 using ForumTemplate.Validation;
 
 namespace ForumTemplate.Services.UserService
@@ -15,13 +15,17 @@ namespace ForumTemplate.Services.UserService
         private readonly IUserRepository userRepository;
         private readonly IUserMapper userMapper;
         private readonly IUserAuthenticationValidator userValidator;
+        private readonly ILikeService likeService;
+        private readonly IPostService postService;
 
 
-        public UserService(IUserRepository userRepository, IUserMapper userMapper, IUserAuthenticationValidator userValidator)
+        public UserService(IUserRepository userRepository, IUserMapper userMapper, IUserAuthenticationValidator userValidator, ILikeService likeService, IPostService postService)
         {
             this.userRepository = userRepository;
             this.userMapper = userMapper;
             this.userValidator = userValidator;
+            this.likeService = likeService;
+            this.postService = postService;
         }
 
         public List<UserResponse> GetAll()
@@ -129,6 +133,8 @@ namespace ForumTemplate.Services.UserService
         {
             userValidator.ValidateByGUIDUserLoggedAndAdmin(id);
 
+            this.likeService.DeleteByUserId(id);
+            this.postService.DeleteByUserId(id);
             return userRepository.Delete(id);
         }
     }

@@ -14,6 +14,8 @@ using ForumTemplate.Authorization;
 using Newtonsoft.Json;
 using Microsoft.EntityFrameworkCore;
 using ForumTemplate.Data;
+using ForumTemplate.Persistence.LikeRepository;
+using ForumTemplate.Services.LikeService;
 
 namespace ForumTemplate
 {
@@ -38,11 +40,15 @@ namespace ForumTemplate
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IPostRepository, PostRepository>();
             builder.Services.AddScoped<ICommentRepository, CommentRepository>();
+            builder.Services.AddScoped<ILikeRepository, LikeRepository>();
+
 
             // Services
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IPostService, PostService>();
             builder.Services.AddScoped<ICommentService, CommentService>();
+            builder.Services.AddScoped<ILikeService, LikeService>();
+
 
             //Validators
             builder.Services.AddScoped<ICommentsValidator, CommentsValidator>();

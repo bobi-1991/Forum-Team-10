@@ -1,4 +1,6 @@
 ﻿
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace ForumTemplate.Models
 {
     public class Post
@@ -7,6 +9,7 @@ namespace ForumTemplate.Models
         public Guid PostId { get; set; }
         public string Title { get; set; } = null!;
         public string Content { get; set; } = null!;
+    //    public int LikePost { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
 

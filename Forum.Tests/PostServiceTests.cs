@@ -80,8 +80,8 @@ namespace ForumTemplate.Tests
                 .Setup(x => x.MapToPost(GetPostRequest()))
                 .Returns(new Post());
 
-            sut = new PostService(postRepositoryMock.Object, commentServiceMock.Object, 
-                postValidatorMock.Object, postMapperMock.Object, userValidatorMock.Object);
+            //sut = new PostService(postRepositoryMock.Object, commentServiceMock.Object, 
+            //    postValidatorMock.Object, postMapperMock.Object, userValidatorMock.Object);
         }
 
         [TestMethod]
@@ -138,8 +138,8 @@ namespace ForumTemplate.Tests
 
         [TestMethod]
 
-        public void Update_ShouldInvokeCorrectMethods() 
-        { 
+        public void Update_ShouldInvokeCorrectMethods()
+        {
             //Act
             var result = sut.Update(id, GetPostRequest());
 

@@ -7,7 +7,7 @@ namespace ForumTemplate.Controllers
 {
 
     [ApiController]
-    [Route("api")]
+    [Route("api/authentications")]
     public class AuthenticationApiController : ControllerBase
     {
 

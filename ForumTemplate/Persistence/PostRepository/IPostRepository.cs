@@ -12,7 +12,9 @@ namespace ForumTemplate.Persistence.PostRepository
         Post Create(Post post);
         Post Update(Guid id, Post post);
         string Delete(Guid id);
+       void DeletePosts(List<Post> postsToDelete);
         List<Post> GetByUserId(Guid id);
+
         bool Exist(Guid id);
     }
 }

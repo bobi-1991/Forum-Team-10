@@ -6,9 +6,7 @@ using ForumTemplate.DTOs.PostDTOs;
 using ForumTemplate.Persistence.PostRepository;
 using ForumTemplate.Common.FilterModels;
 using ForumTemplate.Models;
-using ForumTemplate.Persistence.UserRepository;
-using ForumTemplate.Authorization;
-using ForumTemplate.Exceptions;
+using ForumTemplate.Services.LikeService;
 
 namespace ForumTemplate.Services.PostService
 {
@@ -16,20 +14,21 @@ namespace ForumTemplate.Services.PostService
     {
         private readonly IPostRepository postRepository;
         private readonly ICommentService commentService;
-      //  private readonly IUserRepository userRepository;
         private readonly IPostsValidator postsValidator;
         private readonly IPostMapper postMapper;
         private readonly IUserAuthenticationValidator userValidator;
+        private readonly ILikeService likeService;
 
-        public PostService(IPostRepository repository, ICommentService commentService, 
-            IPostsValidator postsValidator, IPostMapper postMapper, IUserAuthenticationValidator userValidator)
+
+        public PostService(IPostRepository postRepository, ICommentService commentService,
+            IPostsValidator postsValidator, IPostMapper postMapper, IUserAuthenticationValidator userValidator, ILikeService likeService)
         {
-            this.postRepository = repository;
+            this.postRepository = postRepository;
             this.commentService = commentService;
             this.postsValidator = postsValidator;
             this.postMapper = postMapper;
             this.userValidator = userValidator;
-           // this.userRepository = userRepository;
+            this.likeService = likeService;
         }
 
         public List<PostResponse> GetAll()
@@ -100,8 +99,15 @@ namespace ForumTemplate.Services.PostService
             userValidator.ValidateUserIdMatchAuthorIdPost(authorId);
 
             this.commentService.DeleteByPostId(postToDelete.PostId);
+            this.likeService.DeleteByPostId(postToDelete.PostId);
 
             return postRepository.Delete(id);
+        }
+        public void DeleteByUserId(Guid UserId)
+        {
+            var postsToDelete = postRepository.GetByUserId(UserId);
+
+            this.postRepository.DeletePosts(postsToDelete);
         }
 
 
@@ -113,5 +119,7 @@ namespace ForumTemplate.Services.PostService
 
             return postMapper.MapToPostResponse(filteredPosts);
         }
+
+    
     }
 }

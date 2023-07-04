@@ -17,7 +17,10 @@ namespace ForumTemplate.Persistence.PostRepository
 
         public List<Post> GetAll()
         {
-            return this.dbContext.Posts.Where(x => !x.User.IsDelete)
+            return this.dbContext.Posts
+                .Where(x => !x.User.IsDelete)
+                .Include(x=>x.Likes)
+                .Include(x=>x.Comments)
                 .ToList();
         }
         public List<Post> FilterBy(PostQueryParameters filterParameters)
@@ -75,6 +78,16 @@ namespace ForumTemplate.Persistence.PostRepository
             }
 
             return "Post was successfully deleted.";
+        }
+
+        public void DeletePosts(List<Post> postsToDelete)
+        {
+            foreach (var post in postsToDelete)
+            {
+                post.IsDelete = true;
+                dbContext.Update(post);
+            }
+            dbContext.SaveChanges();
         }
 
         public bool Exist(Guid id)

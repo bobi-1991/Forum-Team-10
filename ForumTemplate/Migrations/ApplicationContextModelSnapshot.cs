@@ -131,7 +131,7 @@ namespace ForumTemplate.Migrations
 
                     b.HasKey("TagId");
 
-                    b.ToTable("Tags");
+                    b.ToTable("Tag");
                 });
 
             modelBuilder.Entity("ForumTemplate.Models.User", b =>
@@ -186,7 +186,7 @@ namespace ForumTemplate.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = new Guid("14b443fe-b5e4-4373-8d2f-b768564badf9"),
+                            UserId = new Guid("7006c0df-74fe-406e-b0d7-f1be880aca69"),
                             Country = "Bulgaria",
                             Email = "admin@forum.com",
                             FirstName = "Admin",
@@ -201,7 +201,7 @@ namespace ForumTemplate.Migrations
                         },
                         new
                         {
-                            UserId = new Guid("c6139da7-af77-4f21-b25b-a84920d406f7"),
+                            UserId = new Guid("b2c6989a-cb03-4f66-89c9-8a89a8d6f78c"),
                             Country = "Bulgaria",
                             Email = "bobi@email",
                             FirstName = "borislav",
@@ -216,7 +216,7 @@ namespace ForumTemplate.Migrations
                         },
                         new
                         {
-                            UserId = new Guid("7a1915ee-0247-47be-990e-669c28a319a8"),
+                            UserId = new Guid("4627aaf2-432d-421f-b13b-9567e8a518ec"),
                             Country = "Bulgaria",
                             Email = "strahil@email",
                             FirstName = "strahil",
@@ -231,7 +231,7 @@ namespace ForumTemplate.Migrations
                         },
                         new
                         {
-                            UserId = new Guid("29edaa18-a254-4379-8151-7776ef5859b4"),
+                            UserId = new Guid("c764f579-ceb8-48f2-a1b0-5234460fa0d0"),
                             Country = "Bulgaria",
                             Email = "iliyan@email",
                             FirstName = "iliyan",

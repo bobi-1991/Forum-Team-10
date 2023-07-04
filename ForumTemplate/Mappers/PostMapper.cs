@@ -20,6 +20,7 @@ namespace ForumTemplate.Mappers
                postRequest.UserId
             );
         }
+
         public PostResponse MapToPostResponse(Post post)
         {
             var commentsResponses = this.commentService.GetComments(post.PostId);

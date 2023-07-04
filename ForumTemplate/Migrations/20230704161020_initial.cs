@@ -5,12 +5,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ForumTemplate.Migrations
 {
-    public partial class Initial : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Tags",
+                name: "Tag",
                 columns: table => new
                 {
                     TagId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -19,7 +19,7 @@ namespace ForumTemplate.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Tags", x => x.TagId);
+                    table.PrimaryKey("PK_Tag", x => x.TagId);
                 });
 
             migrationBuilder.CreateTable(
@@ -78,9 +78,9 @@ namespace ForumTemplate.Migrations
                 {
                     table.PrimaryKey("PK_TagUser", x => new { x.TagsTagId, x.UsersUserId });
                     table.ForeignKey(
-                        name: "FK_TagUser_Tags_TagsTagId",
+                        name: "FK_TagUser_Tag_TagsTagId",
                         column: x => x.TagsTagId,
-                        principalTable: "Tags",
+                        principalTable: "Tag",
                         principalColumn: "TagId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -162,9 +162,9 @@ namespace ForumTemplate.Migrations
                         principalColumn: "PostId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_PostTag_Tags_TagsTagId",
+                        name: "FK_PostTag_Tag_TagsTagId",
                         column: x => x.TagsTagId,
-                        principalTable: "Tags",
+                        principalTable: "Tag",
                         principalColumn: "TagId",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -174,10 +174,10 @@ namespace ForumTemplate.Migrations
                 columns: new[] { "UserId", "Country", "Email", "FirstName", "IsAdmin", "IsBlocked", "IsDelete", "IsLogged", "LastName", "Password", "UpdatedAt", "Username" },
                 values: new object[,]
                 {
-                    { new Guid("14b443fe-b5e4-4373-8d2f-b768564badf9"), "Bulgaria", "admin@forum.com", "Admin", true, false, false, false, "Adminov", "MTIz", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "admin" },
-                    { new Guid("29edaa18-a254-4379-8151-7776ef5859b4"), "Bulgaria", "iliyan@email", "iliyan", false, false, false, false, "tsvetkov", "MTIz", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "iliyan" },
-                    { new Guid("7a1915ee-0247-47be-990e-669c28a319a8"), "Bulgaria", "strahil@email", "strahil", false, false, false, false, "mladenov", "MTIz", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "strahil" },
-                    { new Guid("c6139da7-af77-4f21-b25b-a84920d406f7"), "Bulgaria", "bobi@email", "borislav", false, false, false, false, "penchev", "MTIz", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "bobi" }
+                    { new Guid("4627aaf2-432d-421f-b13b-9567e8a518ec"), "Bulgaria", "strahil@email", "strahil", false, false, false, false, "mladenov", "MTIz", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "strahil" },
+                    { new Guid("7006c0df-74fe-406e-b0d7-f1be880aca69"), "Bulgaria", "admin@forum.com", "Admin", true, false, false, false, "Adminov", "MTIz", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "admin" },
+                    { new Guid("b2c6989a-cb03-4f66-89c9-8a89a8d6f78c"), "Bulgaria", "bobi@email", "borislav", false, false, false, false, "penchev", "MTIz", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "bobi" },
+                    { new Guid("c764f579-ceb8-48f2-a1b0-5234460fa0d0"), "Bulgaria", "iliyan@email", "iliyan", false, false, false, false, "tsvetkov", "MTIz", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "iliyan" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -234,7 +234,7 @@ namespace ForumTemplate.Migrations
                 name: "Posts");
 
             migrationBuilder.DropTable(
-                name: "Tags");
+                name: "Tag");
 
             migrationBuilder.DropTable(
                 name: "Users");
