@@ -1,6 +1,4 @@
-﻿using ForumTemplate.Common.FilterModels;
-using ForumTemplate.DTOs.PostDTOs;
-using ForumTemplate.Models;
+﻿using ForumTemplate.Models;
 
 namespace ForumTemplate.Persistence.UserRepository
 {

@@ -1,5 +1,4 @@
-﻿using ForumTemplate.Common.FilterModels;
-using ForumTemplate.Data;
+﻿using ForumTemplate.Data;
 using ForumTemplate.Exceptions;
 using ForumTemplate.Models;
 using ForumTemplate.Services.PostService;
@@ -27,7 +26,6 @@ namespace ForumTemplate.Persistence.PostRepository
         {
             List<Post> result = this.GetAll();
             result = FilterByTitle(result, filterParameters.Title);
-            result = FilterByContent(result, filterParameters.Content);
             result = FilterByMinLikes(result, filterParameters.MinLikes);
             result = FilterByMaxLikes(result, filterParameters.MaxLikes);
             result = SortBy(result, filterParameters.SortBy);

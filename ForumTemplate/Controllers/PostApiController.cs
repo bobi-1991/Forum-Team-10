@@ -1,5 +1,4 @@
 ﻿using ForumTemplate.Authorization;
-using ForumTemplate.Common.FilterModels;
 using ForumTemplate.DTOs.PostDTOs;
 using ForumTemplate.Exceptions;
 using ForumTemplate.Services.PostService;

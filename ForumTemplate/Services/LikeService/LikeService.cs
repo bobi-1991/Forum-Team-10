@@ -3,6 +3,8 @@ using ForumTemplate.Exceptions;
 using ForumTemplate.Models;
 using ForumTemplate.Persistence.LikeRepository;
 using ForumTemplate.Persistence.PostRepository;
+using ForumTemplate.Validation;
+using Microsoft.AspNetCore.Identity;
 
 namespace ForumTemplate.Services.LikeService
 {
@@ -10,26 +12,24 @@ namespace ForumTemplate.Services.LikeService
     {
         private readonly IPostRepository postRepository;
         private readonly ILikeRepository likeRepository;
-        public LikeService(IPostRepository postRepository, ILikeRepository likeRepository)
+        private readonly IUserAuthenticationValidator userValidator;
+        private readonly IPostsValidator postValidator;
+        public LikeService(IPostRepository postRepository, ILikeRepository likeRepository, IUserAuthenticationValidator userValidator, IPostsValidator postValidator)
         {
             this.postRepository = postRepository;
             this.likeRepository = likeRepository;
+            this.userValidator = userValidator;
+            this.postValidator = postValidator;
         }
 
         public string LikeUnlike(Guid postId)
         {
-            if (CurrentLoggedUser.LoggedUser is null || !CurrentLoggedUser.LoggedUser.IsLogged)
-            {
-                throw new EntityLoginException("Please log in first.");
-            }
+            userValidator.ValidateUserIsLogged();
+            postValidator.Validate(postId);
 
             var userId = CurrentLoggedUser.LoggedUser.UserId;
             var post = postRepository.GetById(postId);
 
-            if (post is null)
-            {
-                throw new EntityNotFoundException("The current post not found.");
-            }
 
             var like = likeRepository.GetLikeByPostAndUserId(post, userId);
 

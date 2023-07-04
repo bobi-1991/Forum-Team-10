@@ -28,7 +28,7 @@ namespace ForumTemplate.Controllers
             {
                 return Unauthorized(e.Message);
             }
-            catch (EntityNotFoundException e)
+            catch (ValidationException e)
             {
                 return NotFound(e.Message);
             }

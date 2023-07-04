@@ -7,13 +7,13 @@ namespace ForumTemplate.Controllers
 {
 
     [ApiController]
-    [Route("api/authentications")]
-    public class AuthenticationApiController : ControllerBase
+    [Route("api/auth")]
+    public class AuthApiController : ControllerBase
     {
 
         private readonly IAuthManager authManager;
 
-        public AuthenticationApiController(IAuthManager authManager)
+        public AuthApiController(IAuthManager authManager)
         {
             this.authManager = authManager;
         }

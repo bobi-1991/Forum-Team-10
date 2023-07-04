@@ -1,4 +1,4 @@
-﻿using ForumTemplate.Common.FilterModels;
+﻿
 using ForumTemplate.Models;
 
 namespace ForumTemplate.Persistence.PostRepository

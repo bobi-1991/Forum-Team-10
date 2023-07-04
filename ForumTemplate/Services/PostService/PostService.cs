@@ -4,7 +4,6 @@ using ForumTemplate.Validation;
 using ForumTemplate.Services.CommentService;
 using ForumTemplate.DTOs.PostDTOs;
 using ForumTemplate.Persistence.PostRepository;
-using ForumTemplate.Common.FilterModels;
 using ForumTemplate.Models;
 using ForumTemplate.Services.LikeService;
 
