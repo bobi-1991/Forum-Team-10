@@ -1,6 +1,7 @@
 ﻿using ForumTemplate.Authorization;
 using ForumTemplate.DTOs.PostDTOs;
 using ForumTemplate.Exceptions;
+using ForumTemplate.Models;
 using ForumTemplate.Services.PostService;
 using Microsoft.AspNetCore.Mvc;
 using ValidationException = ForumTemplate.Exceptions.ValidationException;
@@ -33,14 +34,14 @@ public class PostApiController : ControllerBase
     }
 
 
-    //  // Not tested yet
-    //[HttpGet("/query")]
-    //   public IActionResult GetByMultipleCriteria([FromQuery] PostQueryParameters filterParameters)
-    //   {
-    //       List<PostResponse> posts = this.postService.FilterBy(filterParameters);
+    // Not tested yet
+    //[HttpGet("query")]
+    //public IActionResult GetByMultipleCriteria([FromQuery] PostQueryParameters filterParameters)
+    //{
+    //    List<PostResponse> posts = this.postService.FilterBy(filterParameters);
 
-    //       return this.StatusCode(StatusCodes.Status200OK, posts);
-    //   }
+    //    return this.StatusCode(StatusCodes.Status200OK, posts);
+    //}
 
     [HttpGet("{id}")]
     public IActionResult Get(Guid id)

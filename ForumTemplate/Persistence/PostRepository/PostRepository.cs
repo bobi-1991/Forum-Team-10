@@ -18,9 +18,16 @@ namespace ForumTemplate.Persistence.PostRepository
         {
             return this.dbContext.Posts
                 .Where(x => !x.User.IsDelete)
-                .Include(x=>x.Likes)
-                .Include(x=>x.Comments)
+                .Include(x => x.Likes)
+                .Include(x => x.Comments)
                 .ToList();
+        }
+        public IQueryable<Post> GetAllToQueriable()
+        {
+            return this.dbContext.Posts
+                .Where(x => !x.User.IsDelete)
+                .Include(x => x.Likes);
+
         }
         public List<Post> FilterBy(PostQueryParameters filterParameters)
         {
@@ -40,7 +47,7 @@ namespace ForumTemplate.Persistence.PostRepository
         }
         public Post GetByTitle(string title)
         {
-             return dbContext.Posts.FirstOrDefault(p => p.Title == title);
+            return dbContext.Posts.FirstOrDefault(p => p.Title == title);
         }
 
         public List<Post> GetByUserId(Guid id)
@@ -103,52 +110,34 @@ namespace ForumTemplate.Persistence.PostRepository
         {
             if (!string.IsNullOrEmpty(title))
             {
-                var sortedPosts = posts.Where(post => post.Title.Equals(title)).ToList();
-                return sortedPosts;
+                return posts.FindAll(post => post.Title.Equals(title)).ToList();
             }
-            else
-            {
-                return posts;
-            }
-        }
 
-        private static List<Post> FilterByContent(List<Post> posts, string content)
-        {
-            if (!string.IsNullOrEmpty(content))
-            {
-                var sortedPosts = posts.Where(post => post.Content.Equals(content)).ToList();
-                return sortedPosts;
-            }
-            else
-            {
-                return posts;
-            }
+            return posts;
         }
 
         //not tested yet
-        private static List<Post> FilterByMinLikes(List<Post> posts, double? minLikes)
+        private static List<Post> FilterByMinLikes(List<Post> posts, string minLikes)
         {
-            if (minLikes.HasValue)
+            if (minLikes is not null)
             {
-                return posts.Where(post => post.Likes.Count() >= minLikes).ToList();
+                var likes = Convert.ToInt32(minLikes);
+                return posts.FindAll(post => post.Likes.Count() >= likes);
             }
-            else
-            {
-                return posts;
-            }
+
+            return posts;
         }
 
         //not tested yet
-        private static List<Post> FilterByMaxLikes(List<Post> posts, double? maxLikes)
+        private static List<Post> FilterByMaxLikes(List<Post> posts, string maxLikes)
         {
-            if (maxLikes.HasValue)
+            if (maxLikes is not null)
             {
-                return posts.Where(post => post.Likes.Count() <= maxLikes).ToList();
+                var likes = Convert.ToInt32(maxLikes);
+                return posts.FindAll(post => post.Likes.Count() <= likes);
             }
-            else
-            {
+
                 return posts;
-            }
         }
 
         private static List<Post> SortBy(List<Post> posts, string sortCriteria)
@@ -157,6 +146,8 @@ namespace ForumTemplate.Persistence.PostRepository
             {
                 case "title":
                     return posts.OrderBy(post => post.Title).ToList();
+                case "likes":
+                    return posts.OrderBy(post => post.Likes.Count()).ToList();
                 default:
                     return posts;
             }
@@ -164,14 +155,14 @@ namespace ForumTemplate.Persistence.PostRepository
 
         private static List<Post> Order(List<Post> posts, string sortOrder)
         {
-
-            switch (sortOrder)
-            {
+                switch (sortOrder)
+                {
                 case "desc":
-                    return posts.OrderByDescending(x=>x.Title).ToList();
-                default:
-                    return posts;
-            }
+                        return posts.OrderByDescending(x => x.Title).ToList();
+                    default:
+                        return posts;
+                }
+            
         }
 
         // Must be tested

@@ -24,13 +24,12 @@ namespace ForumTemplate.Services.LikeService
 
         public string LikeUnlike(Guid postId)
         {
+            //Validation
             userValidator.ValidateUserIsLogged();
             postValidator.Validate(postId);
 
             var userId = CurrentLoggedUser.LoggedUser.UserId;
             var post = postRepository.GetById(postId);
-
-
             var like = likeRepository.GetLikeByPostAndUserId(post, userId);
 
             if (like is null)

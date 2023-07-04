@@ -6,6 +6,7 @@ namespace ForumTemplate.Persistence.PostRepository
     public interface IPostRepository
     {
         List<Post> GetAll();
+        IQueryable<Post> GetAllToQueriable();
         List<Post> FilterBy(PostQueryParameters filterParameters);
         Post GetById(Guid id);
         Post GetByTitle(string title);
