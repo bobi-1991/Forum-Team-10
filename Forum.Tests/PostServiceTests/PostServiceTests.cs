@@ -3,11 +3,12 @@ using ForumTemplate.Mappers;
 using ForumTemplate.Models;
 using ForumTemplate.Persistence.PostRepository;
 using ForumTemplate.Services.CommentService;
+using ForumTemplate.Services.LikeService;
 using ForumTemplate.Services.PostService;
 using ForumTemplate.Validation;
 using Moq;
 
-namespace ForumTemplate.Tests
+namespace ForumTemplate.Tests.PostServiceTests
 {
     [TestClass]
     public class PostServiceTests
@@ -19,6 +20,7 @@ namespace ForumTemplate.Tests
         private Mock<IUserAuthenticationValidator> userValidatorMock;
         private Mock<IPostsValidator> postValidatorMock;
         private Mock<IPostMapper> postMapperMock;
+        private Mock<ILikeService> likeServiceMock;
 
         private Guid id;
         private Guid postId;
@@ -32,12 +34,13 @@ namespace ForumTemplate.Tests
             userValidatorMock = new Mock<IUserAuthenticationValidator>();
             postValidatorMock = new Mock<IPostsValidator>();
             postMapperMock = new Mock<IPostMapper>();
+            likeServiceMock = new Mock<ILikeService>();
 
             id = Guid.NewGuid();
             postId = Guid.NewGuid();
 
             SetupUserValidatorMock();
-            
+
 
             postValidatorMock
                 .Setup(x => x.Validate(id));
@@ -54,7 +57,7 @@ namespace ForumTemplate.Tests
 
             postRepositoryMock
                 .Setup(x => x.GetById(id))
-                .Returns(new Post { UserId = id, PostId = postId});
+                .Returns(new Post { UserId = id, PostId = postId });
 
             postRepositoryMock
                 .Setup(x => x.Create(It.IsAny<Post>()))
@@ -80,8 +83,8 @@ namespace ForumTemplate.Tests
                 .Setup(x => x.MapToPost(GetPostRequest()))
                 .Returns(new Post());
 
-            //sut = new PostService(postRepositoryMock.Object, commentServiceMock.Object, 
-            //    postValidatorMock.Object, postMapperMock.Object, userValidatorMock.Object);
+            sut = new PostService(postRepositoryMock.Object, commentServiceMock.Object,
+               postValidatorMock.Object, postMapperMock.Object, userValidatorMock.Object, likeServiceMock.Object);
         }
 
         [TestMethod]

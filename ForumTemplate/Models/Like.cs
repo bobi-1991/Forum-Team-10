@@ -17,11 +17,11 @@ namespace ForumTemplate.Models
         public Post Post { get; set; } = null!;
         public bool IsDelete { get; set; }
 
-        private Like()
+        public Like()
         {
         }
 
-        private Like(Guid userId, Guid postId)
+        public Like(Guid userId, Guid postId)
         {
             LikeId = Guid.NewGuid();
             UserId = userId;

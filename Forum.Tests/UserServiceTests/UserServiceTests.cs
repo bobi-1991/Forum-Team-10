@@ -3,11 +3,13 @@ using ForumTemplate.DTOs.UserDTOs;
 using ForumTemplate.Mappers;
 using ForumTemplate.Models;
 using ForumTemplate.Persistence.UserRepository;
+using ForumTemplate.Services.LikeService;
+using ForumTemplate.Services.PostService;
 using ForumTemplate.Services.UserService;
 using ForumTemplate.Validation;
 using Moq;
 
-namespace ForumTemplate.Tests
+namespace ForumTemplate.Tests.UserServiceTests
 {
     [TestClass]
     public class UserServiceTests
@@ -17,6 +19,8 @@ namespace ForumTemplate.Tests
         private Mock<IUserRepository> userRepositoryMock;
         private Mock<IUserMapper> userMapperMock;
         private Mock<IUserAuthenticationValidator> userValidatorMock;
+        private Mock<ILikeService> likeServiceMock;
+        private Mock<IPostService> postServiceMock;
 
         private User user;
         private Guid id;
@@ -36,6 +40,8 @@ namespace ForumTemplate.Tests
             userRepositoryMock = new Mock<IUserRepository>();
             userMapperMock = new Mock<IUserMapper>();
             userValidatorMock = new Mock<IUserAuthenticationValidator>();
+            likeServiceMock = new Mock<ILikeService>();
+            postServiceMock = new Mock<IPostService>();
 
             id = Guid.NewGuid();
 
@@ -110,18 +116,10 @@ namespace ForumTemplate.Tests
                 .Setup(x => x.MapToUser(It.IsAny<UpdateUserRequest>()))
                 .Returns(new User());
 
-            //sut = new UserService(userRepositoryMock.Object, userMapperMock.Object, userValidatorMock.Object);
+            sut = new UserService(userRepositoryMock.Object, userMapperMock.Object, userValidatorMock.Object,
+                likeServiceMock.Object, postServiceMock.Object);
         }
 
-        //public UserResponse Update(Guid id, UpdateUserRequest updateUserRequest)
-        //{
-        //    userValidator.ValidateByGUIDUserLoggedAndAdmin(id);
-
-        //    var userData = this.userMapper.MapToUser(updateUserRequest);
-        //    var user = userRepository.Update(id, userData);
-
-        //    return userMapper.MapToUserResponse(user);
-        //}
 
         [TestMethod]
         public void UpdateUser_ShouldInvokeCorrectMethods()
@@ -378,7 +376,7 @@ namespace ForumTemplate.Tests
             userRepositoryMock.Verify(x => x.UnBanUser(It.IsAny<User>()), Times.Once);
         }
 
-        
+
         private UpdateUserRequest GetUpdateUserRequest()
         {
             return new UpdateUserRequest()

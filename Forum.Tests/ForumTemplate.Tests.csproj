@@ -21,4 +21,8 @@
     <ProjectReference Include="..\ForumTemplate\ForumTemplate.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ValidationTests\" />
+  </ItemGroup>
+
 </Project>

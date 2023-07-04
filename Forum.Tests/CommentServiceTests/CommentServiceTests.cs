@@ -8,7 +8,7 @@ using ForumTemplate.Services.CommentService;
 using ForumTemplate.Validation;
 using Moq;
 
-namespace ForumTemplate.Tests
+namespace ForumTemplate.Tests.CommentServiceTests
 {
     [TestClass]
     public class CommentServiceTests
@@ -72,7 +72,7 @@ namespace ForumTemplate.Tests
 
             commentRepositoryMock
                 .Setup(x => x.Create(It.IsAny<Comment>()))
-                .Returns(new Comment { UserId = id, PostId = postId});
+                .Returns(new Comment { UserId = id, PostId = postId });
 
             commentRepositoryMock
                 .Setup(x => x.Update(It.IsAny<Guid>(), It.IsAny<Comment>()))
@@ -139,21 +139,6 @@ namespace ForumTemplate.Tests
                 .Returns(new Post());
 
         }
-
-        //public string Delete(Guid id)
-        //{
-        //    userValidator.ValidateUserIsLogged();
-
-        //    var commentToDelete = commentRepository.GetById(id);
-        //    var authorId = commentToDelete.UserId;
-
-        //    userValidator.ValidateUserIdMatchAuthorIdComment(authorId);
-        //    //Validation
-        //    commentsValidator.Validate(id);
-
-        //    return this.commentRepository.Delete(id);
-        //}
-
 
         [TestMethod]
 
@@ -227,7 +212,7 @@ namespace ForumTemplate.Tests
 
         [TestMethod]
 
-        public void Update_ShouldInvokeCorrectMethods() 
+        public void Update_ShouldInvokeCorrectMethods()
         {
             //Act
             var result = sut.Update(commentId, GetCommentRequest());

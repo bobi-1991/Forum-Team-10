@@ -1,10 +1,7 @@
-﻿using ForumTemplate.Authorization;
-using ForumTemplate.Exceptions;
-using ForumTemplate.Models;
-using ForumTemplate.Persistence.LikeRepository;
+﻿using ForumTemplate.Persistence.LikeRepository;
 using ForumTemplate.Persistence.PostRepository;
+using ForumTemplate.Services.LikeServiceHelper;
 using ForumTemplate.Validation;
-using Microsoft.AspNetCore.Identity;
 
 namespace ForumTemplate.Services.LikeService
 {
@@ -14,12 +11,15 @@ namespace ForumTemplate.Services.LikeService
         private readonly ILikeRepository likeRepository;
         private readonly IUserAuthenticationValidator userValidator;
         private readonly IPostsValidator postValidator;
-        public LikeService(IPostRepository postRepository, ILikeRepository likeRepository, IUserAuthenticationValidator userValidator, IPostsValidator postValidator)
+        private readonly IHelperWrapper helper;
+
+        public LikeService(IPostRepository postRepository, ILikeRepository likeRepository, IUserAuthenticationValidator userValidator, IPostsValidator postValidator, IHelperWrapper helper)
         {
             this.postRepository = postRepository;
             this.likeRepository = likeRepository;
             this.userValidator = userValidator;
             this.postValidator = postValidator;
+            this.helper = helper;
         }
 
         public string LikeUnlike(Guid postId)
@@ -28,7 +28,7 @@ namespace ForumTemplate.Services.LikeService
             userValidator.ValidateUserIsLogged();
             postValidator.Validate(postId);
 
-            var userId = CurrentLoggedUser.LoggedUser.UserId;
+            var userId = helper.GetCurrentUserId();
             var post = postRepository.GetById(postId);
             var like = likeRepository.GetLikeByPostAndUserId(post, userId);
 
