@@ -68,6 +68,37 @@ namespace ForumTemplate.Tests.LikeServiceTests
                 postsValidatorMock.Object, helperWrapperMock.Object);
         }
 
+
+        [TestMethod]
+
+        public void DeleteByPostId_ShouldInvoke()
+        {
+            likeRepositoryMock
+                .Setup(x => x.DeleteByPostId(It.IsAny<Guid>()))
+                .Returns(new List<Like>());
+
+            //Act
+            sut.DeleteByPostId(postId);
+
+            //verify
+            likeRepositoryMock.Verify(x => x.DeleteByPostId(postId), Times.Once);
+        }
+
+        [TestMethod]
+
+        public void DeleteByUserId_ShouldInvoke()
+        {
+            likeRepositoryMock
+                .Setup(x => x.DeleteByUserId(It.IsAny<Guid>()))
+                .Returns(new List<Like>());
+
+            //Act
+            sut.DeleteByUserId(userId);
+
+            //verify
+            likeRepositoryMock.Verify(x => x.DeleteByUserId(userId), Times.Once);
+        }
+
         [TestMethod]
 
         public void LikeUnlike_ShouldInvokeCorrectMethods_WhenNotNullOrLikedFalse()
