@@ -54,6 +54,10 @@ namespace ForumTemplate.DTOs.Validations
                 .WithMessage(PasswordLengthErrorMessage)
                 .Matches(PasswordRegex)
                 .WithMessage(PasswordRegexErrorMessage);
+
+            RuleFor(x => x.Country)
+                .NotEmpty()
+                .WithMessage(RequiredErrorMessage);
         }
     }
 }
