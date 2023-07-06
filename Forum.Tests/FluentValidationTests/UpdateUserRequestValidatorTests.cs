@@ -1,17 +1,6 @@
 ﻿using FluentValidation.TestHelper;
-using ForumTemplate.DTOs.Authentication;
-using ForumTemplate.DTOs.PostDTOs;
 using ForumTemplate.DTOs.UserDTOs;
 using ForumTemplate.DTOs.Validations;
-using ForumTemplate.Mappers;
-using ForumTemplate.Models;
-using ForumTemplate.Persistence.PostRepository;
-using ForumTemplate.Services.CommentService;
-using ForumTemplate.Services.PostService;
-using ForumTemplate.Validation;
-using Microsoft.AspNetCore.Mvc;
-using Moq;
-using System.Linq;
 
 namespace ForumTemplate.Tests.FluentValidationTests
 {
