@@ -9,9 +9,9 @@ namespace ForumTemplate.Services.PostService
         List<PostResponse> GetAll();
         List<PostResponse> FilterBy(PostQueryParameters filterParameters);
         PostResponse GetById(Guid id);
-        PostResponse Create(PostRequest postRequest);
-        PostResponse Update(Guid id, PostRequest postRequest);
-        string Delete(Guid userId);
+        PostResponse Create(User loggedUser, PostRequest postRequest);
+        PostResponse Update(User loggedUser,Guid id, PostRequest postRequest);
+        string Delete(User loggedUser, Guid userId);
         void DeleteByUserId(Guid UserId);
     }
 }

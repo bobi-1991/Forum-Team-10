@@ -18,7 +18,8 @@ namespace ForumTemplate.Persistence.PostRepository
         {
             return this.dbContext.Posts
                 .Where(x => !x.User.IsDelete)
-                .Include(x => x.Likes)
+				.Where(x => !x.IsDelete)
+				.Include(x => x.Likes)
                 .Include(x => x.Comments)
                 .ToList();
         }
@@ -26,7 +27,8 @@ namespace ForumTemplate.Persistence.PostRepository
         {
             return this.dbContext.Posts
                 .Where(x => !x.User.IsDelete)
-                .Include(x => x.Likes);
+				.Where(x => !x.IsDelete)
+				.Include(x => x.Likes);
 
         }
         public List<Post> FilterBy(PostQueryParameters filterParameters)
@@ -43,16 +45,32 @@ namespace ForumTemplate.Persistence.PostRepository
 
         public Post GetById(Guid id)
         {
-            return dbContext.Posts.FirstOrDefault(p => p.PostId == id);
+            return dbContext.Posts
+			    .Where(x => !x.User.IsDelete)
+				.Where(x => !x.IsDelete)
+				.Include(x => x.Likes)
+				.Include(x => x.Comments)
+				.FirstOrDefault(p => p.PostId == id);
         }
         public Post GetByTitle(string title)
         {
-            return dbContext.Posts.FirstOrDefault(p => p.Title == title);
+            return dbContext.Posts
+			    .Where(x => !x.User.IsDelete)
+				.Where(x => !x.IsDelete)
+				.Include(x => x.Likes)
+				.Include(x => x.Comments)
+				.FirstOrDefault(p => p.Title == title);
         }
 
         public List<Post> GetByUserId(Guid id)
         {
-            return dbContext.Posts.Where(p => p.UserId == id).ToList();
+            return dbContext.Posts
+				  .Where(x => !x.User.IsDelete)
+				.Where(x => !x.IsDelete)
+				.Include(x => x.Likes)
+				.Include(x => x.Comments)
+				.Where(p => p.UserId == id)
+                .ToList();
         }
 
         public Post Create(Post post)

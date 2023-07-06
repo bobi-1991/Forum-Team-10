@@ -174,10 +174,10 @@ namespace ForumTemplate.Migrations
                 columns: new[] { "UserId", "Country", "Email", "FirstName", "IsAdmin", "IsBlocked", "IsDelete", "IsLogged", "LastName", "Password", "UpdatedAt", "Username" },
                 values: new object[,]
                 {
-                    { new Guid("4627aaf2-432d-421f-b13b-9567e8a518ec"), "Bulgaria", "strahil@email", "strahil", false, false, false, false, "mladenov", "MTIz", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "strahil" },
-                    { new Guid("7006c0df-74fe-406e-b0d7-f1be880aca69"), "Bulgaria", "admin@forum.com", "Admin", true, false, false, false, "Adminov", "MTIz", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "admin" },
-                    { new Guid("b2c6989a-cb03-4f66-89c9-8a89a8d6f78c"), "Bulgaria", "bobi@email", "borislav", false, false, false, false, "penchev", "MTIz", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "bobi" },
-                    { new Guid("c764f579-ceb8-48f2-a1b0-5234460fa0d0"), "Bulgaria", "iliyan@email", "iliyan", false, false, false, false, "tsvetkov", "MTIz", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "iliyan" }
+                    { new Guid("1b12445e-4466-4e2a-8f7e-87cd147ef1cf"), "Bulgaria", "strahil@email", "strahil", false, false, false, false, "mladenov", "MTIz", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "strahil" },
+                    { new Guid("659eba4e-2216-4fc7-bd63-93806cac48bb"), "Bulgaria", "bobi@email", "borislav", false, false, false, false, "penchev", "MTIz", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "bobi" },
+                    { new Guid("add10682-2dc5-460d-9fa5-ecb6b77a64e3"), "Bulgaria", "iliyan@email", "iliyan", false, false, false, false, "tsvetkov", "MTIz", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "iliyan" },
+                    { new Guid("c2956a41-5afb-4959-a55e-ab0f41980beb"), "Bulgaria", "admin@forum.com", "Admin", true, false, false, false, "Adminov", "MTIz", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "admin" }
                 });
 
             migrationBuilder.CreateIndex(

@@ -1,4 +1,5 @@
-﻿using ForumTemplate.Exceptions;
+﻿using ForumTemplate.Authorization;
+using ForumTemplate.Exceptions;
 using ForumTemplate.Services.LikeService;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,21 +11,28 @@ namespace ForumTemplate.Controllers
     public class LikeApiController : ControllerBase
     {
         private readonly ILikeService likeService;
+        private readonly IAuthManager authManager;
 
-        public LikeApiController(ILikeService likeService)
-        {
-            this.likeService = likeService;
-        }
+		public LikeApiController(ILikeService likeService, IAuthManager authManager)
+		{
+			this.likeService = likeService;
+			this.authManager = authManager;
+		}
 
-        [HttpPost("{postId}")]
-        public IActionResult LikeUnlike(Guid postId)
-        {
-            try
+		[HttpPost("{postId}")]
+        public IActionResult LikeUnlike([FromHeader] string credentials,Guid postId)
+		{
+			try
             {
-                var result = likeService.LikeUnlike(postId);
+				var loggedUser = authManager.TryGetUser(credentials);
+				var result = likeService.LikeUnlike(loggedUser, postId);
                 return Ok(result);
             }
-            catch (EntityLoginException e)
+			catch (EntityUnauthorizatedException e)
+			{
+				return Unauthorized(e.Message);
+			}
+			catch (EntityLoginException e)
             {
                 return Unauthorized(e.Message);
             }

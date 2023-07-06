@@ -9,26 +9,28 @@ namespace ForumTemplate.Services.UserService
         List<UserResponse> GetAll();
 
         UserResponse GetById(Guid id);
+		User GetByUsername(string username);
 
-        //UserResponse Create(RegisterRequest registerRequest);
+		//UserResponse Create(RegisterRequest registerRequest);
 
-        UserResponse Update(Guid id, UpdateUserRequest registerRequest);
+		UserResponse Update(User loggedUser, Guid id, UpdateUserRequest registerRequest);
 
-        string Delete(Guid id);
+        string Delete(User loggedUser, Guid id);
 
         //Authentication
-        User Login(string username, string encodedPassword);
+     //   User Login(string username, string encodedPassword);
 
-        User Logout(string username);
+      //  User Logout(string username);
 
         string RegisterUser(RegisterUserRequestModel user, string encodedPassword);
 
-        string PromoteUser(string username, UpdateUserRequestModel userToPromote);
+		//  string PromoteUser(string username, UpdateUserRequestModel userToPromote);
+		string PromoteUser(User user, UpdateUserRequestModel userToPromote);
 
-        string DemoteUser(string username, UpdateUserRequestModel userToPromote);
+		string DemoteUser(User loggedUser, UpdateUserRequestModel userToPromote);
 
-        string BanUser(string username, UpdateUserRequestModel userToDemote);
+        string BanUser(User loggedUser, UpdateUserRequestModel userToDemote);
 
-        string UnBanUser(string username, UpdateUserRequestModel userToUnBan);
+        string UnBanUser(User loggedUser, UpdateUserRequestModel userToUnBan);
     }
 }

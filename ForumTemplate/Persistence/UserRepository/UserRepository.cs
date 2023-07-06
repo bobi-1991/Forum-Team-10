@@ -28,11 +28,20 @@ namespace ForumTemplate.Persistence.UserRepository
         public List<User> GetAll()
         {
             return dbContext.Users
+                .Where(x=>!x.IsDelete)
+                .Include(x=>x.Likes)
+                .Include(x=>x.Posts)
+                .Include(x=>x.Comments)
                         .ToList();
         }
         public User GetById(Guid id)
         {
-            var user = dbContext.Users.FirstOrDefault(u => u.UserId == id);
+            var user = dbContext.Users
+				 .Where(x => !x.IsDelete)
+				.Include(x => x.Likes)
+				.Include(x => x.Posts)
+				.Include(x => x.Comments)
+				.FirstOrDefault(u => u.UserId == id);
 
             if (user is null)
             {
@@ -44,12 +53,12 @@ namespace ForumTemplate.Persistence.UserRepository
 
         public User GetByUsername(string username)
         {
-            var user = dbContext.Users.FirstOrDefault(u => u.Username.Equals(username));
-
-            if(user is  null) 
-            {
-                throw new EntityNotFoundException($"User with username: {username} not found.");
-            }
+            var user = dbContext.Users
+			    .Where(x => !x.IsDelete)
+				.Include(x => x.Likes)
+				.Include(x => x.Posts)
+				.Include(x => x.Comments)
+				.FirstOrDefault(u => u.Username.Equals(username));
 
             return user;
         }
@@ -85,53 +94,53 @@ namespace ForumTemplate.Persistence.UserRepository
 
         //Authentication
 
-        public User Login(string username, string encodedPassword)
-        {
+        //public User Login(string username, string encodedPassword)
+        //{
             
-            User user;
-            try
-            {
-                user = dbContext.Users.FirstOrDefault(u => u.Username.Equals(username) && u.Password.Equals(encodedPassword));
-                if (user is null)
-                {
-                    throw new ValidationException("User not found");
-                }
-                if (user.IsBlocked)
-                {
-                    throw new ValidationException("User is banned and cannot login, please contact support");
-                }
-                user.IsLogged = true;
-                dbContext.SaveChanges();
-            }
-            catch (Exception ex)
-            {
-                throw new ValidationException(ex.Message);
-            }
-            return user;
+        //    User user;
+        //    try
+        //    {
+        //        user = dbContext.Users.FirstOrDefault(u => u.Username.Equals(username) && u.Password.Equals(encodedPassword));
+        //        if (user is null)
+        //        {
+        //            throw new ValidationException("User not found");
+        //        }
+        //        if (user.IsBlocked)
+        //        {
+        //            throw new ValidationException("User is banned and cannot login, please contact support");
+        //        }
+        //        user.IsLogged = true;
+        //        dbContext.SaveChanges();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new ValidationException(ex.Message);
+        //    }
+        //    return user;
             
-        }
+        //}
 
-        public User Logout(string username)
-        {
+        //public User Logout(string username)
+        //{
             
-            User user;
-            try
-            {
-                user = dbContext.Users.FirstOrDefault(u => u.Username.Equals(username));
-                if (user is null)
-                {
-                    throw new ValidationException("User not found");
-                }
-                user.IsLogged = false;
-                dbContext.SaveChanges();
-            }
-            catch (Exception ex)
-            {
-                throw new ValidationException(ex.Message);
-            }
-            return user;
+        //    User user;
+        //    try
+        //    {
+        //        user = dbContext.Users.FirstOrDefault(u => u.Username.Equals(username));
+        //        if (user is null)
+        //        {
+        //            throw new ValidationException("User not found");
+        //        }
+        //        user.IsLogged = false;
+        //        dbContext.SaveChanges();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new ValidationException(ex.Message);
+        //    }
+        //    return user;
             
-        }
+        //}
 
         public string RegisterUser(User user)
         {

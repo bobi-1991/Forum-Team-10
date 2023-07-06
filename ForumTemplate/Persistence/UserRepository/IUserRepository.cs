@@ -9,15 +9,15 @@ namespace ForumTemplate.Persistence.UserRepository
         List<User> GetAll();
         User GetById(Guid id);
         User GetByUsername(string name);
-        User Update(Guid id, User user);
-        string Delete(Guid id);
+        User Update( Guid id, User user);
+        string Delete( Guid id);
         bool DoesExist(string usernme);
 
         //Authentication
 
-        User Login(string username, string encodedPassword);
+      //  User Login(string username, string encodedPassword);
 
-        User Logout(string username);
+      //  User Logout(string username);
 
         string RegisterUser(User user);
 

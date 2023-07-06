@@ -9,11 +9,11 @@ namespace ForumTemplate.Services.CommentService
 
         CommentResponse GetById(Guid id);
 
-        CommentResponse Create(CommentRequest commentRequest);
+        CommentResponse Create(User loggedUser,CommentRequest commentRequest);
 
-        CommentResponse Update(Guid id, CommentRequest commentRequest);
+        CommentResponse Update(User loggedUser, Guid id, CommentRequest commentRequest);
 
-        string Delete(Guid id);
+        string Delete(User loggedUser,Guid id);
 
         List<CommentResponse> GetComments(Guid postId);
 

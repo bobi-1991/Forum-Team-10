@@ -2,6 +2,6 @@
 {
     public interface IHelperWrapper
     {
-        Guid GetCurrentUserId();
+      //  Guid GetCurrentUserId();
     }
 }

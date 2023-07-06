@@ -29,33 +29,35 @@ namespace ForumTemplate.Services.UserService
         }
 
         public List<UserResponse> GetAll()
-        {
-            userValidator.ValidateUserIsLoggedAndAdmin();
-
+        {  
             var users = userRepository.GetAll();
-
             return this.userMapper.MapToUserResponse(users);
         }
 
         public UserResponse GetById(Guid id)
         {
-            userValidator.ValidateUserIsLoggedAndAdmin();
 
             var user = userRepository.GetById(id);
 
             return userMapper.MapToUserResponse(user);
         }
+		public User GetByUsername(string username)
+		{
+            userValidator.ValidateIfUsernameExist(username);
 
-        //Authentication
-        public User Login(string username, string encodedPassword)
-        {
-            return this.userRepository.Login(username, encodedPassword);
-        }
+			return this.userRepository.GetByUsername(username);
+		}
 
-        public User Logout(string username)
-        {
-            return this.userRepository.Logout(username);
-        }
+		//Authentication
+		//public User Login(string username, string encodedPassword)
+  //      {
+  //          return this.userRepository.Login(username, encodedPassword);
+  //      }
+
+  //      public User Logout(string username)
+  //      {
+  //          return this.userRepository.Logout(username);
+  //      }
 
         public string RegisterUser(RegisterUserRequestModel user, string encodedPassword)
         {
@@ -75,9 +77,11 @@ namespace ForumTemplate.Services.UserService
             return userRepository.RegisterUser(userDB);
         }
 
-        public string PromoteUser(string username, UpdateUserRequestModel userToPromote)
+        public string PromoteUser(User loggedUser, UpdateUserRequestModel userToPromote)
         {
-            userValidator.ValidateUserExistAndIsLoggedAndIsAdmin(username);
+            // userValidator.ValidateUserExistAndIsLoggedAndIsAdmin(username);
+            userValidator.ValidateLoggedUserIsAdmin(loggedUser);
+            userValidator.ValidateIfUsernameExist(userToPromote.UserName);
 
             var userToBePromoted = userRepository.GetByUsername(userToPromote.UserName);
 
@@ -86,42 +90,48 @@ namespace ForumTemplate.Services.UserService
             return userRepository.PromoteUser(userToBePromoted);
         }
 
-        public string DemoteUser(string username, UpdateUserRequestModel userToDemote)
+        public string DemoteUser(User loggedUser, UpdateUserRequestModel userToDemote)
         {
-            userValidator.ValidateUserExistAndIsLoggedAndIsAdmin(username);
+			// userValidator.ValidateUserExistAndIsLoggedAndIsAdmin(username);
+			userValidator.ValidateLoggedUserIsAdmin(loggedUser);
+			userValidator.ValidateIfUsernameExist(userToDemote.UserName);
 
-            var userToBeDemoted = userRepository.GetByUsername(userToDemote.UserName);
+			var userToBeDemoted = userRepository.GetByUsername(userToDemote.UserName);
 
             userValidator.ValidateUserAlreadyRegular(userToBeDemoted);
 
             return userRepository.DemoteUser(userToBeDemoted);
         }
 
-        public string BanUser(string username, UpdateUserRequestModel userToBeBanned)
+        public string BanUser(User loggedUser, UpdateUserRequestModel userToBeBanned)
         {
-            userValidator.ValidateUserExistAndIsLoggedAndIsAdmin(username);
+			//  userValidator.ValidateUserExistAndIsLoggedAndIsAdmin(username);
+			userValidator.ValidateLoggedUserIsAdmin(loggedUser);
+			userValidator.ValidateIfUsernameExist(userToBeBanned.UserName);
 
-            var userToBeBannedActual = userRepository.GetByUsername(userToBeBanned.UserName);
+			var userToBeBannedActual = userRepository.GetByUsername(userToBeBanned.UserName);
 
             userValidator.ValidateUserAlreadyBanned(userToBeBannedActual);
 
             return userRepository.BanUser(userToBeBannedActual);
         }
 
-        public string UnBanUser(string username, UpdateUserRequestModel userToUnBan)
+        public string UnBanUser(User loggedUser, UpdateUserRequestModel userToUnBan)
         {
-            userValidator.ValidateUserExistAndIsLoggedAndIsAdmin(username);
+			//   userValidator.ValidateUserExistAndIsLoggedAndIsAdmin(username);
+			userValidator.ValidateLoggedUserIsAdmin(loggedUser);
+			userValidator.ValidateIfUsernameExist(userToUnBan.UserName);
 
-            var userToBeUnBanned = userRepository.GetByUsername(userToUnBan.UserName);
+			var userToBeUnBanned = userRepository.GetByUsername(userToUnBan.UserName);
 
             userValidator.ValidateUserNotBanned(userToBeUnBanned);
 
             return userRepository.UnBanUser(userToBeUnBanned);
         }
 
-        public UserResponse Update(Guid id, UpdateUserRequest updateUserRequest)
+        public UserResponse Update(User loggedUser,Guid id, UpdateUserRequest updateUserRequest)
         {
-            userValidator.ValidateByGUIDUserLoggedAndAdmin(id);     
+            userValidator.ValidateByGUIDUserLoggedAndAdmin(loggedUser, id);     
 
             var userData = this.userMapper.MapToUser(updateUserRequest);
             var user = userRepository.Update(id, userData);
@@ -129,9 +139,9 @@ namespace ForumTemplate.Services.UserService
             return userMapper.MapToUserResponse(user);
         }
 
-        public string Delete(Guid id)
+        public string Delete(User loggedUser, Guid id)
         {
-            userValidator.ValidateByGUIDUserLoggedAndAdmin(id);
+            userValidator.ValidateByGUIDUserLoggedAndAdmin(loggedUser, id);
 
             this.likeService.DeleteByUserId(id);
             this.postService.DeleteByUserId(id);

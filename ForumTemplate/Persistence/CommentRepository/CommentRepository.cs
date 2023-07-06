@@ -14,30 +14,36 @@ namespace ForumTemplate.Persistence.CommentRepository
         }
         public List<Comment> GetAll()
         {
-            //if (dbContext.Comments.Count() == 0)
-            //{
-            //    throw new EntityNotFoundException("Currently, there are no comments created.");
-            //}
-            return dbContext.Comments.Where(x => !x.User.IsDelete)
-                .Where(x=>!x.Post.IsDelete)
+            return dbContext.Comments
+                .Where(x => !x.User.IsDelete)
+				.Where(x => !x.IsDelete)
+				.Where(x=>!x.Post.IsDelete)
                 .ToList();
         }
 
         public Comment GetById(Guid id)
         {
             return dbContext.Comments
-                .FirstOrDefault(c => c.CommentId == id);
+			    .Where(x => !x.User.IsDelete)
+				.Where(x => !x.IsDelete)
+				.Where(x => !x.Post.IsDelete)
+				.FirstOrDefault(c => c.CommentId == id);
         }
 
         public List<Comment> GetByPostId(Guid postId)
         {
-            return dbContext.Comments.Where(x => x.PostId == postId).ToList();      
+            return dbContext.Comments
+				.Where(x => !x.IsDelete)
+				.Where(x => !x.Post.IsDelete)
+				.Where(x => x.PostId == postId).ToList();      
         }
 
         public List<Comment> GetByUserId(Guid id)
         {
            return dbContext.Comments
-                .Where(x=>!x.User.IsDelete)
+				.Where(x => !x.IsDelete)
+				.Where(x => !x.Post.IsDelete)
+				.Where(x=>!x.User.IsDelete)
                 .Where(p => p.UserId == id).ToList();
         }
 
@@ -61,7 +67,6 @@ namespace ForumTemplate.Persistence.CommentRepository
 
         public string Delete(Guid id)
         {
-            //  var comment = dbContext.Users.FirstOrDefault(x => x.UserId == id);
             var comment = dbContext.Comments.FirstOrDefault(x => x.CommentId == id);
 
             if (comment != null)
@@ -81,7 +86,6 @@ namespace ForumTemplate.Persistence.CommentRepository
             {
                 comment.IsDelete = true;
                 dbContext.Update(comment);
-               // dbContext.Remove(comment);
             }
 
             dbContext.SaveChanges();

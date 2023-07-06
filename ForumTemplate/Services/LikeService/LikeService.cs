@@ -1,4 +1,5 @@
-﻿using ForumTemplate.Persistence.LikeRepository;
+﻿using ForumTemplate.Models;
+using ForumTemplate.Persistence.LikeRepository;
 using ForumTemplate.Persistence.PostRepository;
 using ForumTemplate.Services.LikeServiceHelper;
 using ForumTemplate.Validation;
@@ -22,19 +23,19 @@ namespace ForumTemplate.Services.LikeService
             this.helper = helper;
         }
 
-        public string LikeUnlike(Guid postId)
+        public string LikeUnlike(User loggedUser, Guid postId)
         {
             //Validation
-            userValidator.ValidateUserIsLogged();
+           // userValidator.ValidateUserIsLogged();
             postValidator.Validate(postId);
 
-            var userId = helper.GetCurrentUserId();
+           // var userId = loggedUser.UserId;
             var post = postRepository.GetById(postId);
-            var like = likeRepository.GetLikeByPostAndUserId(post, userId);
+            var like = likeRepository.GetLikeByPostAndUserId(post, loggedUser.UserId);
 
             if (like is null)
             {
-                var newLike = likeRepository.Create(userId, post.PostId);
+                var newLike = likeRepository.Create(loggedUser.UserId, post.PostId);
                 likeRepository.AddLikeInDatabase(newLike);
 
                 return "You like this post.";

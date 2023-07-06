@@ -6,10 +6,14 @@ namespace ForumTemplate.Validation
     public interface IUserAuthenticationValidator
     {
         void ValidateDoesExist(string username);
+        void ValidateIfUsernameExist(string username);
 
-        void ValidateUserExistAndIsLoggedAndIsAdmin(string username);
+      //  void ValidateUserExistAndIsLoggedAndIsAdmin(string username);
+		void ValidateLoggedUserIsAdmin(User user);
+		//void ValidateUserById(Guid userId);
 
-        void ValidateUserAlreadyAdmin(User user);
+
+		void ValidateUserAlreadyAdmin(User user);
 
         void ValidateUserAlreadyRegular(User user);
 
@@ -17,18 +21,17 @@ namespace ForumTemplate.Validation
 
         void ValidateUserNotBanned(User user);
 
-        void ValidateByGUIDUserLoggedAndAdmin(Guid Id);
+        void ValidateByGUIDUserLoggedAndAdmin(User loggedUser,Guid Id);
 
-        void ValidateUserIsLoggedAndAdmin();
+     //   void ValidateUserIsLoggedAndAdmin();
 
-        void ValidateUserIsLogged();
+      //  void ValidateUserIsLogged();
+		void ValidateUserIsNotBannedCommentCreate(User loggedUser);
 
-        void ValidatePostCreateIDMatchAndNotBlocked(PostRequest postRequest);
+		void ValidatePostCreateIDMatchAndNotBlocked(User loggedUser,PostRequest postRequest);
 
-        void ValidateUserIdMatchAuthorIdPost(Guid authorId);
+        void ValidateUserIdMatchAuthorIdPost(User loggedUser, Guid authorId);
 
-        void ValidateUserIsLoggedAndNotBannedCommentCreate();
-
-        void ValidateUserIdMatchAuthorIdComment(Guid? authorId);
+        void ValidateUserIdMatchAuthorIdComment(User loggedUser, Guid? authorId);
     }
 }

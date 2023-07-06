@@ -14,20 +14,27 @@ namespace ForumTemplate.Controllers;
 public class PostApiController : ControllerBase
 {
     private readonly IPostService postService;
-    public PostApiController(IPostService postService)
-    {
-        this.postService = postService;
-    }
+    private readonly IAuthManager authManager;
+	public PostApiController(IPostService postService, IAuthManager authManager)
+	{
+		this.postService = postService;
+		this.authManager = authManager;
+	}
 
-    [HttpGet()]
-    public IActionResult GetAll()
+	[HttpGet()]
+    public IActionResult GetAll([FromHeader] string credentials)
     {
         try
         {
-            var response = this.postService.GetAll();
+			var loggedUser = authManager.TryGetUser(credentials);
+			var response = this.postService.GetAll();
             return StatusCode(StatusCodes.Status200OK, response);
         }
-        catch (EntityLoginException e)
+		catch (EntityUnauthorizatedException e)
+		{
+			return Unauthorized(e.Message);
+		}
+		catch (EntityLoginException e)
         {
             return BadRequest(e.Message);
         }
@@ -44,15 +51,20 @@ public class PostApiController : ControllerBase
     //}
 
     [HttpGet("{id}")]
-    public IActionResult Get(Guid id)
+    public IActionResult Get([FromHeader] string credentials,Guid id)
     {
         try
         {
-            var post = this.postService.GetById(id);
+			var loggedUser = authManager.TryGetUser(credentials);
+			var post = this.postService.GetById(id);
 
             return StatusCode(StatusCodes.Status200OK, post);
         }
-        catch (ValidationException e)
+		catch (EntityUnauthorizatedException e)
+		{
+			return Unauthorized(e.Message);
+		}
+		catch (ValidationException e)
         {
             return BadRequest(e.Message);
         }
@@ -67,15 +79,20 @@ public class PostApiController : ControllerBase
     }
 
     [HttpPost()]
-    public IActionResult Create([FromBody] PostRequest postRequest)
+    public IActionResult Create([FromHeader] string credentials,[FromBody] PostRequest postRequest)
     {
         try
         {
-            var createdPost = this.postService.Create(postRequest);
+			var loggedUser = authManager.TryGetUser(credentials);
+			var createdPost = this.postService.Create(loggedUser, postRequest);
 
             return StatusCode(StatusCodes.Status201Created, postRequest);
         }
-        catch (ValidationException e)
+		catch (EntityUnauthorizatedException e)
+		{
+			return Unauthorized(e.Message);
+		}
+		catch (ValidationException e)
         {
             return BadRequest(e.Message);
         }
@@ -90,15 +107,20 @@ public class PostApiController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public IActionResult Update(Guid id, [FromBody] PostRequest postRequest)
+    public IActionResult Update([FromHeader] string credentials,Guid id, [FromBody] PostRequest postRequest)
     {
         try
         {
-            var updatedPost = this.postService.Update(id, postRequest);
+			var loggedUser = authManager.TryGetUser(credentials);
+			var updatedPost = this.postService.Update(loggedUser, id, postRequest);
 
             return StatusCode(StatusCodes.Status200OK, updatedPost);
         }
-        catch (ValidationException e)
+		catch (EntityUnauthorizatedException e)
+		{
+			return Unauthorized(e.Message);
+		}
+		catch (ValidationException e)
         {
             return BadRequest(e.Message);
         }
@@ -109,15 +131,20 @@ public class PostApiController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    public IActionResult Delete(Guid id)
+    public IActionResult Delete([FromHeader] string credentials,Guid id)
     {
         try
         {
-            var result = this.postService.Delete(id);
+			var loggedUser = authManager.TryGetUser(credentials);
+			var result = this.postService.Delete(loggedUser, id);
 
             return StatusCode(StatusCodes.Status200OK, result);
         }
-        catch (ValidationException e)
+		catch (EntityUnauthorizatedException e)
+		{
+			return Unauthorized(e.Message);
+		}
+		catch (ValidationException e)
         {
             return BadRequest(e.Message);
         }

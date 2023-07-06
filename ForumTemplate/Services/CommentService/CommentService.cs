@@ -2,6 +2,7 @@
 using ForumTemplate.DTOs.CommentDTOs;
 using ForumTemplate.Exceptions;
 using ForumTemplate.Mappers;
+using ForumTemplate.Models;
 using ForumTemplate.Persistence.CommentRepository;
 using ForumTemplate.Persistence.PostRepository;
 using ForumTemplate.Persistence.UserRepository;
@@ -41,7 +42,7 @@ namespace ForumTemplate.Services.CommentService
 
         public List<CommentResponse> GetComments(Guid postId)
         {
-            userValidator.ValidateUserIsLogged();
+      //      userValidator.ValidateUserIsLogged();
 
             commentsValidator.GetCommentsByPostID(postId);
 
@@ -60,20 +61,25 @@ namespace ForumTemplate.Services.CommentService
             return this.commentMapper.MapToCommentResponse(comment);
         }
 
-        public CommentResponse Create(CommentRequest commentRequest)
+        public CommentResponse Create(User loggedUser, CommentRequest commentRequest)
         {
-            userValidator.ValidateUserIsLoggedAndNotBannedCommentCreate();
+			//Validation
+			this.userValidator.ValidateUserIsNotBannedCommentCreate(loggedUser);
+			this.commentsValidator.Validate(commentRequest);
 
-            //Validation
-            this.commentsValidator.Validate(commentRequest);
 
-            _ = userRepositoty.GetById(commentRequest.UserId);
+            var  authorOfComment = userRepositoty.GetById(commentRequest.UserId);
+
+            if (authorOfComment == null)
+            {
+				throw new EntityNotFoundException($"User with ID: {commentRequest.UserId} not found.");
+			}
 
             var postOfComment = postRepository.GetById(commentRequest.PostId);
 
             if (postOfComment == null)
             {
-                throw new EntityNotFoundException("Post with ID: {id} not found.");
+                throw new EntityNotFoundException($"Post with ID: {commentRequest.PostId} not found.");
             }
             
             var comment = this.commentMapper.MapToComment(commentRequest);
@@ -82,9 +88,8 @@ namespace ForumTemplate.Services.CommentService
             return this.commentMapper.MapToCommentResponse(createdComment);
         }
 
-        public CommentResponse Update(Guid id, CommentRequest commentRequest)
+        public CommentResponse Update(User loggedUser,Guid id, CommentRequest commentRequest)
         {
-            userValidator.ValidateUserIsLogged();
 
             //Validation
             commentsValidator.Validate(id, commentRequest);
@@ -92,9 +97,9 @@ namespace ForumTemplate.Services.CommentService
             var commentToUpdate = commentRepository.GetById(id);
             var authorId = commentToUpdate.UserId;
 
-            userValidator.ValidateUserIdMatchAuthorIdComment(authorId);
+            userValidator.ValidateUserIdMatchAuthorIdComment(loggedUser, authorId);
 
-            _ = userRepositoty.GetById(commentRequest.UserId);
+          //  _ = userRepositoty.GetById(commentRequest.UserId);
             var postOfComment = postRepository.GetById(commentRequest.PostId);
 
             if (postOfComment == null)
@@ -108,16 +113,16 @@ namespace ForumTemplate.Services.CommentService
             return this.commentMapper.MapToCommentResponse(updatedComment);
         }
 
-        public string Delete(Guid id)
+        public string Delete(User loggedUser, Guid id)
         {
-            userValidator.ValidateUserIsLogged();
+			//Validation
+			commentsValidator.Validate(id);
 
-            var commentToDelete = commentRepository.GetById(id);
+			var commentToDelete = commentRepository.GetById(id);
             var authorId = commentToDelete.UserId;
 
-            userValidator.ValidateUserIdMatchAuthorIdComment(authorId);
-            //Validation
-            commentsValidator.Validate(id);
+			//Validation
+			userValidator.ValidateUserIdMatchAuthorIdComment(loggedUser, authorId);
 
             return this.commentRepository.Delete(id);
         }

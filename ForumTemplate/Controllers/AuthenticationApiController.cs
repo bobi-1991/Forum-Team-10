@@ -2,6 +2,7 @@
 using ForumTemplate.DTOs.Authentication;
 using ForumTemplate.Exceptions;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace ForumTemplate.Controllers
 {
@@ -18,35 +19,35 @@ namespace ForumTemplate.Controllers
             this.authManager = authManager;
         }
 
-        [HttpGet("login")]
-        public IActionResult Login([FromHeader] string credentials)
-        {
-            try
-            {
-                var message = this.authManager.TrySetCurrentLoggedUser(credentials);
+        //[HttpGet("login")]
+        //public IActionResult Login([FromHeader] string credentials)
+        //{
+        //    try
+        //    {
+        //        var message = this.authManager.TrySetCurrentLoggedUser(credentials);
 
-                return StatusCode(StatusCodes.Status200OK, message);
-            }
-            catch (ValidationException e)
-            {
-                return BadRequest(e.Message);
-            }
-        }
+        //        return StatusCode(StatusCodes.Status200OK, message);
+        //    }
+        //    catch (ValidationException e)
+        //    {
+        //        return BadRequest(e.Message);
+        //    }
+        //}
 
-        [HttpGet("logout")]
-        public IActionResult Logout([FromHeader] string username)
-        {
-            try
-            {
-                var message = this.authManager.LogoutUser(username);
+        //[HttpGet("logout")]
+        //public IActionResult Logout([FromHeader] string username)
+        //{
+        //    try
+        //    {
+        //        var message = this.authManager.LogoutUser(username);
 
-                return StatusCode(StatusCodes.Status200OK, message);
-            }
-            catch (ValidationException e)
-            {
-                return BadRequest(e.Message);
-            }
-        }
+        //        return StatusCode(StatusCodes.Status200OK, message);
+        //    }
+        //    catch (ValidationException e)
+        //    {
+        //        return BadRequest(e.Message);
+        //    }
+        //}
 
         [HttpPost("register")]
         public IActionResult Register([FromBody] RegisterUserRequestModel user)
@@ -68,15 +69,20 @@ namespace ForumTemplate.Controllers
         }
 
         [HttpPut("promote")]
-        public IActionResult Promote([FromHeader] string username, [FromBody] UpdateUserRequestModel userToPromote)
+        public IActionResult Promote([FromHeader] string credentials, [FromBody] UpdateUserRequestModel userToPromote)
         {
             try
             {
-                var message = this.authManager.TryPromoteUser(username, userToPromote);
+				var loggedUser = authManager.TryGetUser(credentials);
+				var message = this.authManager.TryPromoteUser( loggedUser, userToPromote);
 
                 return StatusCode(StatusCodes.Status200OK, message);
             }
-            catch (ArgumentException e)
+			catch (EntityUnauthorizatedException e)
+			{
+				return StatusCode(StatusCodes.Status401Unauthorized, e.Message);
+			}
+			catch (ArgumentException e)
             {
                 return StatusCode(StatusCodes.Status409Conflict, e.Message);
             }
@@ -91,11 +97,12 @@ namespace ForumTemplate.Controllers
         }
 
         [HttpPut("demote")]
-        public IActionResult Demote([FromHeader] string username, [FromBody] UpdateUserRequestModel userToDemote)
+        public IActionResult Demote([FromHeader] string credentials, [FromBody] UpdateUserRequestModel userToDemote)
         {
             try
             {
-                var message = this.authManager.TryDemoteUser(username, userToDemote);
+				var loggedUser = authManager.TryGetUser(credentials);
+				var message = this.authManager.TryDemoteUser(loggedUser, userToDemote);
                 return StatusCode(StatusCodes.Status200OK, message);
             }
             catch (ArgumentException e)
@@ -113,11 +120,12 @@ namespace ForumTemplate.Controllers
         }
 
         [HttpPut("ban")]
-        public IActionResult Ban([FromHeader] string username, [FromBody] UpdateUserRequestModel userToBeBanned)
+        public IActionResult Ban([FromHeader] string credentials, [FromBody] UpdateUserRequestModel userToBeBanned)
         {
             try
             {
-                var message = this.authManager.TryBanUser(username, userToBeBanned);
+				var loggedUser = authManager.TryGetUser(credentials);
+				var message = this.authManager.TryBanUser(loggedUser, userToBeBanned);
                 return StatusCode(StatusCodes.Status200OK, message);
             }
             catch (ArgumentException e)
@@ -135,11 +143,12 @@ namespace ForumTemplate.Controllers
         }
 
         [HttpPut("unban")]
-        public IActionResult UnBan([FromHeader] string username, [FromBody] UpdateUserRequestModel userToBeUnBanned)
+        public IActionResult UnBan([FromHeader] string credentials, [FromBody] UpdateUserRequestModel userToBeUnBanned)
         {
             try
             {
-                var message = this.authManager.TryUnBanUser(username, userToBeUnBanned);
+				var loggedUser = authManager.TryGetUser(credentials);
+				var message = this.authManager.TryUnBanUser(loggedUser, userToBeUnBanned);
                 return StatusCode(StatusCodes.Status200OK, message);
             }
             catch (ArgumentException e)

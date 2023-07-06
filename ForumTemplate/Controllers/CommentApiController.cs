@@ -1,4 +1,5 @@
-﻿using ForumTemplate.DTOs.CommentDTOs;
+﻿using ForumTemplate.Authorization;
+using ForumTemplate.DTOs.CommentDTOs;
 using ForumTemplate.Exceptions;
 using ForumTemplate.Services.CommentService;
 using Microsoft.AspNetCore.Mvc;
@@ -11,38 +12,50 @@ namespace ForumTemplate.Controllers
     public class CommentApiController : ControllerBase
     {
         private readonly ICommentService commentService;
+        private readonly IAuthManager authManager;
 
-        public CommentApiController(ICommentService commentService)
-        {
-            this.commentService = commentService;
-        }
+		public CommentApiController(ICommentService commentService, IAuthManager authManager)
+		{
+			this.commentService = commentService;
+			this.authManager = authManager;
+		}
 
         [HttpGet()]
         [Route("")]
-        public IActionResult GetAll()
+        public IActionResult GetAll([FromHeader] string credentials)
         {
             try
             {
-                var result = this.commentService.GetAll();
+				var loggedUser = authManager.TryGetUser(credentials);
+				var result = this.commentService.GetAll();
 
                 return StatusCode(StatusCodes.Status200OK, result);
             }
-            catch (EntityLoginException e)
+			catch (EntityUnauthorizatedException e)
+			{
+				return Unauthorized(e.Message);
+			}
+			catch (EntityLoginException e)
             {
                 return Unauthorized(e.Message);
             }
         }
 
         [HttpGet("{id}")]
-        public IActionResult Get(Guid postId)
+        public IActionResult Get([FromHeader] string credentials,Guid postId)
         {
             try
             {
-                var comment = this.commentService.GetById(postId);
+				var loggedUser = authManager.TryGetUser(credentials);
+				var comment = this.commentService.GetById(postId);
 
                 return StatusCode(StatusCodes.Status200OK, comment);
             }
-            catch (ValidationException e)
+			catch (EntityUnauthorizatedException e)
+			{
+				return Unauthorized(e.Message);
+			}
+			catch (ValidationException e)
             {
                 return BadRequest(e.Message);
             }
@@ -58,11 +71,12 @@ namespace ForumTemplate.Controllers
 
         [HttpPost()]
         [Route("")]
-        public IActionResult Create([FromBody] CommentRequest comment)
+        public IActionResult Create([FromHeader] string credentials,[FromBody] CommentRequest comment)
         {
             try
             {
-                var createdComment = this.commentService.Create(comment);
+				var loggedUser = authManager.TryGetUser(credentials);
+				var createdComment = this.commentService.Create(loggedUser, comment);
 
                 return StatusCode(StatusCodes.Status201Created, comment);
             }
@@ -89,14 +103,19 @@ namespace ForumTemplate.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update(Guid id, [FromBody] CommentRequest comment)
+        public IActionResult Update([FromHeader] string credentials, Guid id, [FromBody] CommentRequest comment)
         {
             try
             {
-                var updatedComment = this.commentService.Update(id, comment);
+				var loggedUser = authManager.TryGetUser(credentials);
+				var updatedComment = this.commentService.Update(loggedUser, id, comment);
                 return StatusCode(StatusCodes.Status200OK, updatedComment);
             }
-            catch (ValidationException e)
+			catch (EntityUnauthorizatedException e)
+			{
+				return Unauthorized(e.Message);
+			}
+			catch (ValidationException e)
             {
                 return BadRequest(e.Message);
             }
@@ -111,14 +130,19 @@ namespace ForumTemplate.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(Guid id)
+        public IActionResult Delete([FromHeader] string credentials, Guid id)
         {
             try
             {
-                var result = this.commentService.Delete(id);
+				var loggedUser = authManager.TryGetUser(credentials);
+				var result = this.commentService.Delete(loggedUser, id);
                 return StatusCode(StatusCodes.Status200OK, result);
             }
-            catch (ValidationException e)
+			catch (EntityUnauthorizatedException e)
+			{
+				return Unauthorized(e.Message);
+			}
+			catch (ValidationException e)
             {
                 return BadRequest(e.Message);
             }

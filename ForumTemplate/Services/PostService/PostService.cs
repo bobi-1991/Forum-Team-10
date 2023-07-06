@@ -32,7 +32,7 @@ namespace ForumTemplate.Services.PostService
 
         public List<PostResponse> GetAll()
         {
-            userValidator.ValidateUserIsLogged();
+          //  userValidator.ValidateUserIsLogged();
 
             var posts = postRepository.GetAll();
             return postMapper.MapToPostResponse(posts);
@@ -44,21 +44,18 @@ namespace ForumTemplate.Services.PostService
             //Validation
             postsValidator.Validate(id);
 
-            userValidator.ValidateUserIsLogged();
+           // userValidator.ValidateUserIsLogged();
 
             var post = postRepository.GetById(id);
           
             return postMapper.MapToPostResponse(post);
         }
 
-        public PostResponse Create(PostRequest postRequest)
+        public PostResponse Create(User loggedUser, PostRequest postRequest)
         {
             //Validation
             postsValidator.Validate(postRequest);
-
-            userValidator.ValidateUserIsLogged();
-
-            userValidator.ValidatePostCreateIDMatchAndNotBlocked(postRequest);
+            userValidator.ValidatePostCreateIDMatchAndNotBlocked(loggedUser,postRequest);
 
             var post = postMapper.MapToPost(postRequest);
             var createdPost = postRepository.Create(post);
@@ -66,18 +63,17 @@ namespace ForumTemplate.Services.PostService
             return postMapper.MapToPostResponse(createdPost);
         }
 
-        public PostResponse Update(Guid id, PostRequest postRequest)
+        public PostResponse Update(User loggedUser,Guid id, PostRequest postRequest)
         {
             //Validation
             postsValidator.Validate(id, postRequest);
-
-            userValidator.ValidateUserIsLogged();
+            postsValidator.Validate(id);
 
             var postToUpdate = postRepository.GetById(id);
 
             var authorId = postToUpdate.UserId;
 
-            userValidator.ValidateUserIdMatchAuthorIdPost(authorId);
+            userValidator.ValidateUserIdMatchAuthorIdPost(loggedUser, authorId);
 
             var currentPost = postMapper.MapToPost(postRequest);
             var updatedPost = postRepository.Update(id, currentPost);
@@ -85,17 +81,15 @@ namespace ForumTemplate.Services.PostService
             return postMapper.MapToPostResponse(updatedPost);
         }
 
-        public string Delete(Guid id)
+        public string Delete(User loggedUser, Guid id)
         {
             //Validation
             postsValidator.Validate(id);
 
-            userValidator.ValidateUserIsLogged();
-
             var postToDelete = postRepository.GetById(id);
             var authorId = postToDelete.UserId;
 
-            userValidator.ValidateUserIdMatchAuthorIdPost(authorId);
+            userValidator.ValidateUserIdMatchAuthorIdPost(loggedUser, authorId);
 
             this.commentService.DeleteByPostId(postToDelete.PostId);
             this.likeService.DeleteByPostId(postToDelete.PostId);
