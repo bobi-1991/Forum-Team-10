@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ForumTemplate.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20230706093930_initial")]
+    [Migration("20230706165730_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -163,9 +163,6 @@ namespace ForumTemplate.Migrations
                     b.Property<bool>("IsDelete")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsLogged")
-                        .HasColumnType("bit");
-
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -188,14 +185,13 @@ namespace ForumTemplate.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = new Guid("c2956a41-5afb-4959-a55e-ab0f41980beb"),
+                            UserId = new Guid("142537a7-b3ac-4c1e-9546-b55956305e08"),
                             Country = "Bulgaria",
                             Email = "admin@forum.com",
                             FirstName = "Admin",
                             IsAdmin = true,
                             IsBlocked = false,
                             IsDelete = false,
-                            IsLogged = false,
                             LastName = "Adminov",
                             Password = "MTIz",
                             UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -203,14 +199,13 @@ namespace ForumTemplate.Migrations
                         },
                         new
                         {
-                            UserId = new Guid("659eba4e-2216-4fc7-bd63-93806cac48bb"),
+                            UserId = new Guid("30db1ce0-f680-4165-a8d6-20ce6ccf69d9"),
                             Country = "Bulgaria",
                             Email = "bobi@email",
                             FirstName = "borislav",
                             IsAdmin = false,
                             IsBlocked = false,
                             IsDelete = false,
-                            IsLogged = false,
                             LastName = "penchev",
                             Password = "MTIz",
                             UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -218,14 +213,13 @@ namespace ForumTemplate.Migrations
                         },
                         new
                         {
-                            UserId = new Guid("1b12445e-4466-4e2a-8f7e-87cd147ef1cf"),
+                            UserId = new Guid("9fd9e9ee-58fd-4aa7-aa90-67bdce7d02ba"),
                             Country = "Bulgaria",
                             Email = "strahil@email",
                             FirstName = "strahil",
                             IsAdmin = false,
                             IsBlocked = false,
                             IsDelete = false,
-                            IsLogged = false,
                             LastName = "mladenov",
                             Password = "MTIz",
                             UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -233,14 +227,13 @@ namespace ForumTemplate.Migrations
                         },
                         new
                         {
-                            UserId = new Guid("add10682-2dc5-460d-9fa5-ecb6b77a64e3"),
+                            UserId = new Guid("0a0f80a0-a6b6-4b65-96a2-0962d6ac3481"),
                             Country = "Bulgaria",
                             Email = "iliyan@email",
                             FirstName = "iliyan",
                             IsAdmin = false,
                             IsBlocked = false,
                             IsDelete = false,
-                            IsLogged = false,
                             LastName = "tsvetkov",
                             Password = "MTIz",
                             UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),

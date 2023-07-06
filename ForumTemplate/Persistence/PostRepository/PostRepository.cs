@@ -13,7 +13,6 @@ namespace ForumTemplate.Persistence.PostRepository
         {
             this.dbContext = dbContext;
         }
-
         public List<Post> GetAll()
         {
             return this.dbContext.Posts
@@ -29,7 +28,6 @@ namespace ForumTemplate.Persistence.PostRepository
                 .Where(x => !x.User.IsDelete)
 				.Where(x => !x.IsDelete)
 				.Include(x => x.Likes);
-
         }
         public List<Post> FilterBy(PostQueryParameters filterParameters)
         {
@@ -38,11 +36,10 @@ namespace ForumTemplate.Persistence.PostRepository
             result = FilterByMinLikes(result, filterParameters.MinLikes);
             result = FilterByMaxLikes(result, filterParameters.MaxLikes);
             result = SortBy(result, filterParameters.SortBy);
-            result = Order(result, filterParameters.SortOrder);
+            result = Order(result, filterParameters.SortOrderByLikes);
 
             return result.ToList();
         }
-
         public Post GetById(Guid id)
         {
             return dbContext.Posts
@@ -61,7 +58,6 @@ namespace ForumTemplate.Persistence.PostRepository
 				.Include(x => x.Comments)
 				.FirstOrDefault(p => p.Title == title);
         }
-
         public List<Post> GetByUserId(Guid id)
         {
             return dbContext.Posts
@@ -72,14 +68,12 @@ namespace ForumTemplate.Persistence.PostRepository
 				.Where(p => p.UserId == id)
                 .ToList();
         }
-
         public Post Create(Post post)
         {
             this.dbContext.Posts.Add(post);
             dbContext.SaveChanges();
             return post;
         }
-
         public Post Update(Guid id, Post post)
         {
             Post postToUpdate = GetById(id);
@@ -102,7 +96,6 @@ namespace ForumTemplate.Persistence.PostRepository
 
             return "Post was successfully deleted.";
         }
-
         public void DeletePosts(List<Post> postsToDelete)
         {
             foreach (var post in postsToDelete)
@@ -112,29 +105,19 @@ namespace ForumTemplate.Persistence.PostRepository
             }
             dbContext.SaveChanges();
         }
-
         public bool Exist(Guid id)
         {
             return dbContext.Posts.Any(p => p.PostId == id);
         }
-
-
-
-        //   Queryable methods
-        //   Not tested yet
-
-
         private static List<Post> FilterByTitle(List<Post> posts, string title)
         {
             if (!string.IsNullOrEmpty(title))
             {
-                return posts.FindAll(post => post.Title.Equals(title)).ToList();
+                return posts.FindAll(post => post.Title.StartsWith(title, StringComparison.InvariantCultureIgnoreCase));
             }
 
             return posts;
         }
-
-        //not tested yet
         private static List<Post> FilterByMinLikes(List<Post> posts, string minLikes)
         {
             if (minLikes is not null)
@@ -145,8 +128,6 @@ namespace ForumTemplate.Persistence.PostRepository
 
             return posts;
         }
-
-        //not tested yet
         private static List<Post> FilterByMaxLikes(List<Post> posts, string maxLikes)
         {
             if (maxLikes is not null)
@@ -157,7 +138,6 @@ namespace ForumTemplate.Persistence.PostRepository
 
                 return posts;
         }
-
         private static List<Post> SortBy(List<Post> posts, string sortCriteria)
         {
             switch (sortCriteria)
@@ -170,25 +150,18 @@ namespace ForumTemplate.Persistence.PostRepository
                     return posts;
             }
         }
-
-        private static List<Post> Order(List<Post> posts, string sortOrder)
+        private static List<Post> Order(List<Post> posts, string sortOrderByLikes)
         {
-                switch (sortOrder)
+                switch (sortOrderByLikes)
                 {
-                case "desc":
-                        return posts.OrderByDescending(x => x.Title).ToList();
+				case "asc":
+					return posts.OrderBy(x => x.Likes.Count()).ToList();
+				case "desc":
+                        return posts.OrderByDescending(x => x.Likes.Count()).ToList();
                     default:
                         return posts;
                 }
             
-        }
-
-        // Must be tested
-        private List<Post> GetPosts()
-        {
-            return this.dbContext.Posts
-                .Include(x => x.Likes)
-                .ToList();
         }
     }
 }

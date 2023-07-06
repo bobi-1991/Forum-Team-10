@@ -13,8 +13,8 @@ namespace ForumTemplate.Controllers;
 [Route("api/posts")]
 public class PostApiController : ControllerBase
 {
-    private readonly IPostService postService;
-    private readonly IAuthManager authManager;
+	private readonly IPostService postService;
+	private readonly IAuthManager authManager;
 	public PostApiController(IPostService postService, IAuthManager authManager)
 	{
 		this.postService = postService;
@@ -22,136 +22,144 @@ public class PostApiController : ControllerBase
 	}
 
 	[HttpGet()]
-    public IActionResult GetAll([FromHeader] string credentials)
-    {
-        try
-        {
+	public IActionResult GetAll([FromHeader] string credentials)
+	{
+		try
+		{
 			var loggedUser = authManager.TryGetUser(credentials);
 			var response = this.postService.GetAll();
-            return StatusCode(StatusCodes.Status200OK, response);
-        }
+			return StatusCode(StatusCodes.Status200OK, response);
+		}
 		catch (EntityUnauthorizatedException e)
 		{
 			return Unauthorized(e.Message);
 		}
 		catch (EntityLoginException e)
-        {
-            return BadRequest(e.Message);
-        }
-    }
+		{
+			return BadRequest(e.Message);
+		}
+	}
 
+	//  Not tested yet
+	[HttpGet("query")]
+	public IActionResult GetByMultipleCriteria([FromHeader] string credentials,[FromQuery] PostQueryParameters filterParameters)
+	{
+		try
+		{
+			var loggedUser = authManager.TryGetUser(credentials);
+			List<PostResponse> posts = this.postService.FilterBy(filterParameters);
 
-    // Not tested yet
-    //[HttpGet("query")]
-    //public IActionResult GetByMultipleCriteria([FromQuery] PostQueryParameters filterParameters)
-    //{
-    //    List<PostResponse> posts = this.postService.FilterBy(filterParameters);
+			return this.StatusCode(StatusCodes.Status200OK, posts);
+		}
+		catch (EntityUnauthorizatedException e)
+		{
+			return Unauthorized(e.Message);
+		}
+	
+	}
 
-    //    return this.StatusCode(StatusCodes.Status200OK, posts);
-    //}
-
-    [HttpGet("{id}")]
-    public IActionResult Get([FromHeader] string credentials,Guid id)
-    {
-        try
-        {
+	[HttpGet("{id}")]
+	public IActionResult Get([FromHeader] string credentials, Guid id)
+	{
+		try
+		{
 			var loggedUser = authManager.TryGetUser(credentials);
 			var post = this.postService.GetById(id);
 
-            return StatusCode(StatusCodes.Status200OK, post);
-        }
+			return StatusCode(StatusCodes.Status200OK, post);
+		}
 		catch (EntityUnauthorizatedException e)
 		{
 			return Unauthorized(e.Message);
 		}
 		catch (ValidationException e)
-        {
-            return BadRequest(e.Message);
-        }
-        catch (EntityLoginException e)
-        {
-            return BadRequest(e.Message);
-        }
-        catch (EntityNotFoundException e)
-        {
-            return NotFound(e.Message);
-        }
-    }
+		{
+			return BadRequest(e.Message);
+		}
+		catch (EntityLoginException e)
+		{
+			return BadRequest(e.Message);
+		}
+		catch (EntityNotFoundException e)
+		{
+			return NotFound(e.Message);
+		}
+	}
 
-    [HttpPost()]
-    public IActionResult Create([FromHeader] string credentials,[FromBody] PostRequest postRequest)
-    {
-        try
-        {
+	[HttpPost()]
+	public IActionResult Create([FromHeader] string credentials, [FromBody] PostRequest postRequest)
+	{
+		try
+		{
 			var loggedUser = authManager.TryGetUser(credentials);
 			var createdPost = this.postService.Create(loggedUser, postRequest);
 
-            return StatusCode(StatusCodes.Status201Created, postRequest);
-        }
+			return StatusCode(StatusCodes.Status201Created, postRequest);
+		}
 		catch (EntityUnauthorizatedException e)
 		{
 			return Unauthorized(e.Message);
 		}
 		catch (ValidationException e)
-        {
-            return BadRequest(e.Message);
-        }
-        catch (EntityBannedException e)
-        {
-            return Unauthorized(e.Message);
-        }
-        catch (EntityLoginException e)
-        {
-            return Unauthorized(e.Message);
-        }
-    }
+		{
+			return BadRequest(e.Message);
+		}
+		catch (EntityBannedException e)
+		{
+			return Unauthorized(e.Message);
+		}
+		catch (EntityLoginException e)
+		{
+			return Unauthorized(e.Message);
+		}
+	}
 
-    [HttpPut("{id}")]
-    public IActionResult Update([FromHeader] string credentials,Guid id, [FromBody] PostRequest postRequest)
-    {
-        try
-        {
+	[HttpPut("{id}")]
+	public IActionResult Update([FromHeader] string credentials, Guid id, [FromBody] PostRequest postRequest)
+	{
+		try
+		{
 			var loggedUser = authManager.TryGetUser(credentials);
 			var updatedPost = this.postService.Update(loggedUser, id, postRequest);
 
-            return StatusCode(StatusCodes.Status200OK, updatedPost);
-        }
+			return StatusCode(StatusCodes.Status200OK, updatedPost);
+		}
 		catch (EntityUnauthorizatedException e)
 		{
 			return Unauthorized(e.Message);
 		}
 		catch (ValidationException e)
-        {
-            return BadRequest(e.Message);
-        }
-        catch (EntityLoginException e)
-        {
-            return Unauthorized(e.Message);
-        }
-    }
+		{
+			return BadRequest(e.Message);
+		}
+		catch (EntityLoginException e)
+		{
+			return Unauthorized(e.Message);
+		}
+	}
 
-    [HttpDelete("{id}")]
-    public IActionResult Delete([FromHeader] string credentials,Guid id)
-    {
-        try
-        {
+	[HttpDelete("{id}")]
+	public IActionResult Delete([FromHeader] string credentials, Guid id)
+	{
+		try
+		{
 			var loggedUser = authManager.TryGetUser(credentials);
 			var result = this.postService.Delete(loggedUser, id);
 
-            return StatusCode(StatusCodes.Status200OK, result);
-        }
+			return StatusCode(StatusCodes.Status200OK, result);
+		}
 		catch (EntityUnauthorizatedException e)
 		{
 			return Unauthorized(e.Message);
 		}
 		catch (ValidationException e)
-        {
-            return BadRequest(e.Message);
-        }
-        catch (EntityLoginException e)
-        {
-            return Unauthorized(e.Message);
-        }
-    }
+		{
+			return BadRequest(e.Message);
+		}
+		catch (EntityLoginException e)
+		{
+			return Unauthorized(e.Message);
+		}
+	}
 
 }
