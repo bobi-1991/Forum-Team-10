@@ -4,11 +4,6 @@ using ForumTemplate.Persistence.CommentRepository;
 using ForumTemplate.Persistence.PostRepository;
 using ForumTemplate.Validation;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ForumTemplate.Tests.RegularValidationTests
 {
@@ -47,7 +42,6 @@ namespace ForumTemplate.Tests.RegularValidationTests
 
             validator = new CommentsValidator(postRepositoryMock.Object, commentRepositoryMock.Object);
         }
-
 
         [TestMethod]
 

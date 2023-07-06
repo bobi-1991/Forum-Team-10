@@ -344,7 +344,5 @@ namespace ForumTemplate.Tests.FluentValidationTests
             Assert.IsTrue(msg.Any(x => x.ErrorMessage ==
             "Password must contain at least one uppercase letter, one lowercase letter and one digit. You entered Password123"));
         }
-
-
     }
 }

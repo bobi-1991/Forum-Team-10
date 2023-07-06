@@ -4,8 +4,6 @@ using ForumTemplate.Persistence.PostRepository;
 using ForumTemplate.Services.LikeService;
 using ForumTemplate.Services.LikeServiceHelper;
 using ForumTemplate.Validation;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities;
 using Moq;
 
 namespace ForumTemplate.Tests.LikeServiceTests
