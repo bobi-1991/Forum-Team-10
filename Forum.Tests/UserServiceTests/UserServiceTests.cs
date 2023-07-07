@@ -7,6 +7,7 @@ using ForumTemplate.Services.LikeService;
 using ForumTemplate.Services.PostService;
 using ForumTemplate.Services.UserService;
 using ForumTemplate.Validation;
+using Microsoft.AspNetCore.Identity;
 using Moq;
 
 namespace ForumTemplate.Tests.UserServiceTests
@@ -130,6 +131,18 @@ namespace ForumTemplate.Tests.UserServiceTests
                 likeServiceMock.Object, postServiceMock.Object);
         }
 
+        [TestMethod]
+
+        public void GetByUsername_ShouldInvokeCorrectMethods()
+        {
+            //Act
+            var result = sut.GetByUsername(It.IsAny<string>());
+
+            //Verify
+            userValidatorMock.Verify(x => x.ValidateIfUsernameExist(It.IsAny<string>()), Times.Once);
+
+            userRepositoryMock.Verify(x => x.GetByUsername(It.IsAny<string>()), Times.Once);
+        }
 
         [TestMethod]
         public void UpdateUser_ShouldInvokeCorrectMethods()

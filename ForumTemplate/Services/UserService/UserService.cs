@@ -1,5 +1,4 @@
-﻿using ForumTemplate.Authorization;
-using ForumTemplate.DTOs.Authentication;
+﻿using ForumTemplate.DTOs.Authentication;
 using ForumTemplate.DTOs.UserDTOs;
 using ForumTemplate.Mappers;
 using ForumTemplate.Models;
