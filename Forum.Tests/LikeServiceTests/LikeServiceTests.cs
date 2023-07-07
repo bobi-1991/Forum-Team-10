@@ -2,7 +2,6 @@
 using ForumTemplate.Persistence.LikeRepository;
 using ForumTemplate.Persistence.PostRepository;
 using ForumTemplate.Services.LikeService;
-using ForumTemplate.Services.LikeServiceHelper;
 using ForumTemplate.Validation;
 using Moq;
 
@@ -15,9 +14,7 @@ namespace ForumTemplate.Tests.LikeServiceTests
 
         private Mock<IPostRepository> postRepositoryMock;
         private Mock<ILikeRepository> likeRepositoryMock;
-        private Mock<IUserAuthenticationValidator> userValidatorMock;
         private Mock<IPostsValidator> postsValidatorMock;
-        private Mock<IHelperWrapper> helperWrapperMock;
 
         private Guid userId;
         private Guid postId;
@@ -27,15 +24,10 @@ namespace ForumTemplate.Tests.LikeServiceTests
         {
             postRepositoryMock = new Mock<IPostRepository>();
             likeRepositoryMock = new Mock<ILikeRepository>();
-            userValidatorMock = new Mock<IUserAuthenticationValidator>();
             postsValidatorMock = new Mock<IPostsValidator>();
-            helperWrapperMock = new Mock<IHelperWrapper>();
 
             userId = Guid.NewGuid();
             postId = Guid.NewGuid();
-
-            //userValidatorMock
-            //    .Setup(x => x.ValidateUserIsLogged());
 
             postsValidatorMock
                 .Setup(x => x.Validate(It.IsAny<Guid>()));
@@ -58,14 +50,8 @@ namespace ForumTemplate.Tests.LikeServiceTests
             likeRepositoryMock
                 .Setup(x => x.UpdateInDatabase(It.IsAny<Like>()));
 
-            //helperWrapperMock
-            //    .Setup(x => x.GetCurrentUserId())
-            //    .Returns(userId);
-
-            sut = new LikeService(postRepositoryMock.Object, likeRepositoryMock.Object, userValidatorMock.Object,
-                postsValidatorMock.Object, helperWrapperMock.Object);
+            sut = new LikeService(postRepositoryMock.Object, likeRepositoryMock.Object, postsValidatorMock.Object);
         }
-
 
         [TestMethod]
 
@@ -102,11 +88,9 @@ namespace ForumTemplate.Tests.LikeServiceTests
         public void LikeUnlike_ShouldInvokeCorrectMethods_WhenNotNullOrLikedFalse()
         {
             //Act
-            //var result = sut.LikeUnlike(postId);
+            var result = sut.LikeUnlike(GetUser(), postId);
 
-            ////Verify
-            //userValidatorMock.Verify(x => x.ValidateUserIsLogged(), Times.Once);
-
+            //Verify
             postsValidatorMock.Verify(x => x.Validate(It.IsAny<Guid>()), Times.Once);
 
             postRepositoryMock.Verify(x => x.GetById(It.IsAny<Guid>()), Times.Once);
@@ -126,11 +110,9 @@ namespace ForumTemplate.Tests.LikeServiceTests
                 .Returns(null as Like);
 
             //Act
-            //var result = sut.LikeUnlike(postId);
+            var result = sut.LikeUnlike(GetUser(), postId);
 
-            ////Verify
-            //userValidatorMock.Verify(x => x.ValidateUserIsLogged(), Times.Once);
-
+            //Verify
             postsValidatorMock.Verify(x => x.Validate(It.IsAny<Guid>()), Times.Once);
 
             postRepositoryMock.Verify(x => x.GetById(It.IsAny<Guid>()), Times.Once);
@@ -151,12 +133,10 @@ namespace ForumTemplate.Tests.LikeServiceTests
                 .Setup(x => x.GetLikeByPostAndUserId(It.IsAny<Post>(), It.IsAny<Guid>()))
                 .Returns(new Like { Liked = false });
 
-            ////Act
-            //var result = sut.LikeUnlike(postId);
+            //Act
+            var result = sut.LikeUnlike(GetUser(), postId);
 
-            ////Verify
-            //userValidatorMock.Verify(x => x.ValidateUserIsLogged(), Times.Once);
-
+            //Verify
             postsValidatorMock.Verify(x => x.Validate(It.IsAny<Guid>()), Times.Once);
 
             postRepositoryMock.Verify(x => x.GetById(It.IsAny<Guid>()), Times.Once);
@@ -175,12 +155,10 @@ namespace ForumTemplate.Tests.LikeServiceTests
                 .Setup(x => x.GetLikeByPostAndUserId(It.IsAny<Post>(), It.IsAny<Guid>()))
                 .Returns(null as Like);
 
-            ////Act
-            //var result = sut.LikeUnlike(postId);
+            //Act
+            var result = sut.LikeUnlike(GetUser(), postId);
 
-            ////Verify
-            //userValidatorMock.Verify(x => x.ValidateUserIsLogged(), Times.Once);
-
+            //Verify
             postsValidatorMock.Verify(x => x.Validate(It.IsAny<Guid>()), Times.Once);
 
             postRepositoryMock.Verify(x => x.GetById(It.IsAny<Guid>()), Times.Once);
@@ -191,7 +169,7 @@ namespace ForumTemplate.Tests.LikeServiceTests
 
             likeRepositoryMock.Verify(x => x.AddLikeInDatabase(It.IsAny<Like>()), Times.Once);
 
-         //   StringAssert.Contains(result, "You like this post.");
+            StringAssert.Contains(result, "You like this post.");
         }
 
         [TestMethod]
@@ -203,12 +181,10 @@ namespace ForumTemplate.Tests.LikeServiceTests
                 .Setup(x => x.GetLikeByPostAndUserId(It.IsAny<Post>(), It.IsAny<Guid>()))
                 .Returns(new Like { Liked = false });
 
-            ////Act
-            //var result = sut.LikeUnlike(postId);
+            //Act
+            var result = sut.LikeUnlike(GetUser(), postId);
 
-            ////Verify
-            //userValidatorMock.Verify(x => x.ValidateUserIsLogged(), Times.Once);
-
+            //Verify
             postsValidatorMock.Verify(x => x.Validate(It.IsAny<Guid>()), Times.Once);
 
             postRepositoryMock.Verify(x => x.GetById(It.IsAny<Guid>()), Times.Once);
@@ -217,7 +193,7 @@ namespace ForumTemplate.Tests.LikeServiceTests
 
             likeRepositoryMock.Verify(x => x.UpdateInDatabase(It.IsAny<Like>()), Times.Once);
 
-          //  StringAssert.Contains(result, "You like this post.");
+            StringAssert.Contains(result, "You like this post.");
         }
 
         [TestMethod]
@@ -229,12 +205,10 @@ namespace ForumTemplate.Tests.LikeServiceTests
                 .Setup(x => x.GetLikeByPostAndUserId(It.IsAny<Post>(), It.IsAny<Guid>()))
                 .Returns(new Like { Liked = true });
 
-            ////Act
-            //var result = sut.LikeUnlike(postId);
+            //Act
+            var result = sut.LikeUnlike(GetUser(), postId);
 
-            ////Verify
-            //userValidatorMock.Verify(x => x.ValidateUserIsLogged(), Times.Once);
-
+            //Verify
             postsValidatorMock.Verify(x => x.Validate(It.IsAny<Guid>()), Times.Once);
 
             postRepositoryMock.Verify(x => x.GetById(It.IsAny<Guid>()), Times.Once);
@@ -243,7 +217,21 @@ namespace ForumTemplate.Tests.LikeServiceTests
 
             likeRepositoryMock.Verify(x => x.UpdateInDatabase(It.IsAny<Like>()), Times.Once);
 
-           // StringAssert.Contains(result, "You unlike this post.");
+            StringAssert.Contains(result, "You unlike this post.");
+        }
+
+        private User GetUser()
+        {
+            return new User()
+            {
+                UserId = userId,
+                FirstName = "TestTestUser",
+                LastName = "TestTestUserLast",
+                Username = "TestUsername",
+                Email = "TestMail@abv.bg",
+                Password = "1234Passw0rd@",
+                Country = "BG",
+            };
         }
     }
 }

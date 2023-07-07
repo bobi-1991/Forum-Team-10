@@ -1,7 +1,6 @@
 ﻿using ForumTemplate.Models;
 using ForumTemplate.Persistence.LikeRepository;
 using ForumTemplate.Persistence.PostRepository;
-using ForumTemplate.Services.LikeServiceHelper;
 using ForumTemplate.Validation;
 
 namespace ForumTemplate.Services.LikeService
@@ -10,26 +9,19 @@ namespace ForumTemplate.Services.LikeService
     {
         private readonly IPostRepository postRepository;
         private readonly ILikeRepository likeRepository;
-        private readonly IUserAuthenticationValidator userValidator;
         private readonly IPostsValidator postValidator;
-        private readonly IHelperWrapper helper;
 
-        public LikeService(IPostRepository postRepository, ILikeRepository likeRepository, IUserAuthenticationValidator userValidator, IPostsValidator postValidator, IHelperWrapper helper)
+        public LikeService(IPostRepository postRepository, ILikeRepository likeRepository, IPostsValidator postValidator)
         {
             this.postRepository = postRepository;
             this.likeRepository = likeRepository;
-            this.userValidator = userValidator;
             this.postValidator = postValidator;
-            this.helper = helper;
         }
 
         public string LikeUnlike(User loggedUser, Guid postId)
         {
-            //Validation
-           // userValidator.ValidateUserIsLogged();
             postValidator.Validate(postId);
-
-           // var userId = loggedUser.UserId;
+            
             var post = postRepository.GetById(postId);
             var like = likeRepository.GetLikeByPostAndUserId(post, loggedUser.UserId);
 

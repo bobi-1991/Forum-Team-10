@@ -25,15 +25,7 @@ namespace ForumTemplate.Validation
 				throw new DuplicateEntityException($"User already exists.");
 			}
 		}
-		//public void ValidateUserById(Guid userId)
-		//{
-		//	var user = userRepository.GetById(userId);
-
-		//	if (user is null)
-		//	{
-		//		throw new EntityNotFoundException($"User with ID: {userId} not found.");
-		//	}
-		//}
+		
 		public void ValidateIfUsernameExist(string username)
 		{
 			var doesExists = this.userRepository.DoesExist(username);
@@ -44,19 +36,6 @@ namespace ForumTemplate.Validation
 			}
 		}
 
-		//public void ValidateUserExistAndIsLoggedAndIsAdmin(string username)
-		//      {
-		//          var userRequestor = userRepository.GetByUsername(username);
-
-		//          if (CurrentLoggedUser.LoggedUser is null || !userRequestor.IsLogged)
-		//          {
-		//              throw new ArgumentException("User who is requesting is found, but is not logged in, please log in");
-		//          }
-		//          if (userRequestor.IsLogged && !userRequestor.IsAdmin)
-		//          {
-		//              throw new ArgumentException("I am sorry, you are not an admin to perform this operation");
-		//          }
-		//      }
 		public void ValidateLoggedUserIsAdmin(User user)
 		{
 			if (!user.IsAdmin)
@@ -106,26 +85,6 @@ namespace ForumTemplate.Validation
 			}
 		}
 
-		//public void ValidateUserIsLoggedAndAdmin()
-		//{
-		//	if (CurrentLoggedUser.LoggedUser is null || !CurrentLoggedUser.LoggedUser.IsLogged)
-		//	{
-		//		throw new EntityLoginException("Please log in first.");
-		//	}
-		//	if (!CurrentLoggedUser.LoggedUser.IsAdmin)
-		//	{
-		//		throw new EntityUnauthorizatedException("You are not authorized for this functionality");
-		//	}
-		//}
-
-		//public void ValidateUserIsLogged()
-		//{
-		//	if (CurrentLoggedUser.LoggedUser is null || !CurrentLoggedUser.LoggedUser.IsLogged)
-		//	{
-		//		throw new EntityLoginException("Please log in first.");
-		//	}
-		//}
-
 		public void ValidatePostCreateIDMatchAndNotBlocked(User loggedUser, PostRequest postRequest)
 		{
 			if (!loggedUser.UserId.Equals(postRequest.UserId))
@@ -148,7 +107,6 @@ namespace ForumTemplate.Validation
 
 		public void ValidateUserIsNotBannedCommentCreate(User loggedUser)
 		{
-
 			if (loggedUser.IsBlocked)
 			{
 				throw new EntityBannedException("I'm sorry, but you cannot write a comment. You are currently banned.");

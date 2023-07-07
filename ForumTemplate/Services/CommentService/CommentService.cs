@@ -42,8 +42,6 @@ namespace ForumTemplate.Services.CommentService
 
         public List<CommentResponse> GetComments(Guid postId)
         {
-      //      userValidator.ValidateUserIsLogged();
-
             commentsValidator.GetCommentsByPostID(postId);
 
             var commentsById = this.commentRepository.GetByPostId(postId);
@@ -67,7 +65,6 @@ namespace ForumTemplate.Services.CommentService
 			this.userValidator.ValidateUserIsNotBannedCommentCreate(loggedUser);
 			this.commentsValidator.Validate(commentRequest);
 
-
             var  authorOfComment = userRepositoty.GetById(commentRequest.UserId);
 
             if (authorOfComment == null)
@@ -90,7 +87,6 @@ namespace ForumTemplate.Services.CommentService
 
         public CommentResponse Update(User loggedUser,Guid id, CommentRequest commentRequest)
         {
-
             //Validation
             commentsValidator.Validate(id, commentRequest);
 
@@ -99,7 +95,6 @@ namespace ForumTemplate.Services.CommentService
 
             userValidator.ValidateUserIdMatchAuthorIdComment(loggedUser, authorId);
 
-          //  _ = userRepositoty.GetById(commentRequest.UserId);
             var postOfComment = postRepository.GetById(commentRequest.PostId);
 
             if (postOfComment == null)

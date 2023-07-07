@@ -18,7 +18,6 @@ namespace ForumTemplate.Services.PostService
         private readonly IUserAuthenticationValidator userValidator;
         private readonly ILikeService likeService;
 
-
         public PostService(IPostRepository postRepository, ICommentService commentService,
             IPostsValidator postsValidator, IPostMapper postMapper, IUserAuthenticationValidator userValidator, ILikeService likeService)
         {
@@ -32,22 +31,17 @@ namespace ForumTemplate.Services.PostService
 
         public List<PostResponse> GetAll()
         {
-          //  userValidator.ValidateUserIsLogged();
-
             var posts = postRepository.GetAll();
             return postMapper.MapToPostResponse(posts);
         }
-
 
         public PostResponse GetById(Guid id)
         {
             //Validation
             postsValidator.Validate(id);
 
-           // userValidator.ValidateUserIsLogged();
-
             var post = postRepository.GetById(id);
-          
+
             return postMapper.MapToPostResponse(post);
         }
 
@@ -55,7 +49,7 @@ namespace ForumTemplate.Services.PostService
         {
             //Validation
             postsValidator.Validate(postRequest);
-            userValidator.ValidatePostCreateIDMatchAndNotBlocked(loggedUser,postRequest);
+            userValidator.ValidatePostCreateIDMatchAndNotBlocked(loggedUser, postRequest);
 
             var post = postMapper.MapToPost(postRequest);
             var createdPost = postRepository.Create(post);
@@ -63,7 +57,7 @@ namespace ForumTemplate.Services.PostService
             return postMapper.MapToPostResponse(createdPost);
         }
 
-        public PostResponse Update(User loggedUser,Guid id, PostRequest postRequest)
+        public PostResponse Update(User loggedUser, Guid id, PostRequest postRequest)
         {
             //Validation
             postsValidator.Validate(id, postRequest);
@@ -103,8 +97,6 @@ namespace ForumTemplate.Services.PostService
             this.postRepository.DeletePosts(postsToDelete);
         }
 
-
-
         //   Not tested yet
         public List<PostResponse> FilterBy(PostQueryParameters filterParameters)
         {
@@ -112,7 +104,5 @@ namespace ForumTemplate.Services.PostService
 
             return postMapper.MapToPostResponse(filteredPosts);
         }
-
-    
     }
 }

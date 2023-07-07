@@ -46,7 +46,7 @@ namespace ForumTemplate.Tests.CommentServiceTests
 
             SetupCommentMapperMock();
 
-          //  SetupUserValidatorMock();
+            SetupUserValidatorMock();
 
             SetupUserRepositoryMock();
 
@@ -113,17 +113,14 @@ namespace ForumTemplate.Tests.CommentServiceTests
                 .Returns(new Comment());
         }
 
-        //private void SetupUserValidatorMock()
-        //{
-        //    userValidatorMock
-        //        .Setup(x => x.ValidateUserIsLogged());
+        private void SetupUserValidatorMock()
+        {
+            userValidatorMock
+                .Setup(x => x.ValidateUserIsNotBannedCommentCreate(It.IsAny<User>()));
 
-        //    userValidatorMock
-        //        .Setup(x => x.ValidateUserIsLoggedAndNotBannedCommentCreate());
-
-        //    userValidatorMock
-        //        .Setup(x => x.ValidateUserIdMatchAuthorIdComment(It.IsAny<Guid?>()));
-        //}
+            userValidatorMock
+                .Setup(x => x.ValidateUserIdMatchAuthorIdComment(It.IsAny<User>(), It.IsAny<Guid?>()));
+        }
 
         private void SetupUserRepositoryMock()
         {
@@ -161,8 +158,6 @@ namespace ForumTemplate.Tests.CommentServiceTests
             var result = sut.GetComments(postId);
 
             //Verify
-          //  userValidatorMock.Verify(x => x.ValidateUserIsLogged(), Times.Once);
-
             commentsValidatorMock.Verify(x => x.GetCommentsByPostID(postId), Times.Once);
 
             commentRepositoryMock.Verify(x => x.GetByPostId(postId), Times.Once);
@@ -190,12 +185,12 @@ namespace ForumTemplate.Tests.CommentServiceTests
         public void Create_ShouldInvokeCorrectMethods()
         {
             //Act
-          //  var result = sut.Create(GetCommentRequest());
+            var result = sut.Create(GetUser(), GetCommentRequest());
 
             //Created Post Repository to simulate existing Post to Create Comment
 
             //Verify
-        //    userValidatorMock.Verify(x => x.ValidateUserIsLoggedAndNotBannedCommentCreate(), Times.Once);
+            userValidatorMock.Verify(x => x.ValidateUserIsNotBannedCommentCreate(It.IsAny<User>()), Times.Once);
 
             commentsValidatorMock.Verify(x => x.Validate(GetCommentRequest()), Times.Once);
 
@@ -215,18 +210,14 @@ namespace ForumTemplate.Tests.CommentServiceTests
         public void Update_ShouldInvokeCorrectMethods()
         {
             //Act
-         //   var result = sut.Update(commentId, GetCommentRequest());
+            var result = sut.Update(GetUser(), commentId, GetCommentRequest());
 
             //Verify
-         //   userValidatorMock.Verify(x => x.ValidateUserIsLogged(), Times.Once);
-
             commentsValidatorMock.Verify(x => x.Validate(It.IsAny<Guid>(), GetCommentRequest()), Times.Once);
 
             commentRepositoryMock.Verify(x => x.GetById(commentId), Times.Once);
 
-          //  userValidatorMock.Verify(x => x.ValidateUserIdMatchAuthorIdComment(It.IsAny<Guid?>()), Times.Once);
-
-            userRepositotyMock.Verify(x => x.GetById(id), Times.Once);
+            userValidatorMock.Verify(x => x.ValidateUserIdMatchAuthorIdComment(It.IsAny<User>(), It.IsAny<Guid?>()), Times.Once);
 
             postRepositoryMock.Verify(x => x.GetById(postId), Times.Once);
 
@@ -242,20 +233,18 @@ namespace ForumTemplate.Tests.CommentServiceTests
         public void Delete_ShouldInvokeCorrectMethods()
         {
             //Act
-        //    var result = sut.Delete(commentId);
+            var result = sut.Delete(GetUser(), commentId);
 
             //Verify
-          //  userValidatorMock.Verify(x => x.ValidateUserIsLogged(), Times.Once);
-
             commentRepositoryMock.Verify(x => x.GetById(commentId), Times.Once);
 
-         //   userValidatorMock.Verify(x => x.ValidateUserIdMatchAuthorIdComment(It.IsAny<Guid?>()), Times.Once);
+            userValidatorMock.Verify(x => x.ValidateUserIdMatchAuthorIdComment(It.IsAny<User>(), It.IsAny<Guid?>()), Times.Once);
 
             commentsValidatorMock.Verify(x => x.Validate(commentId), Times.Once);
 
             commentRepositoryMock.Verify(x => x.Delete(commentId), Times.Once);
 
-           // StringAssert.Contains(result, "Comment was successfully deleted.");
+            StringAssert.Contains(result, "Comment was successfully deleted.");
         }
 
         private CommentRequest GetCommentRequest()
@@ -266,6 +255,20 @@ namespace ForumTemplate.Tests.CommentServiceTests
                 id,
                 postId
             );
+        }
+
+        private User GetUser()
+        {
+            return new User()
+            {
+                UserId = id,
+                FirstName = "TestTestUser",
+                LastName = "TestTestUserLast",
+                Username = "TestUsername",
+                Email = "TestMail@abv.bg",
+                Password = "1234Passw0rd@",
+                Country = "BG",
+            };
         }
     }
 }

@@ -57,9 +57,6 @@ namespace ForumTemplate.Tests.UserServiceTests
                 IsAdmin = IsAdmin
             };
 
-            //userValidatorMock
-            //    .Setup(x => x.ValidateUserIsLoggedAndAdmin());
-
             userRepositoryMock
                 .Setup(x => x.GetById(id))
                 .Returns(user);
@@ -71,14 +68,6 @@ namespace ForumTemplate.Tests.UserServiceTests
             userRepositoryMock
                 .Setup(x => x.Delete(id))
                 .Returns("User was successfully deleted.");
-
-            //userRepositoryMock
-            //    .Setup(x => x.Login("titi", It.IsAny<string>()))
-            //    .Returns(user);
-
-            //userRepositoryMock
-            //    .Setup(x => x.Logout(It.IsAny<string>()))
-            //    .Returns(user);
 
             userRepositoryMock
              .Setup(x => x.RegisterUser(It.IsAny<User>()))
@@ -116,6 +105,27 @@ namespace ForumTemplate.Tests.UserServiceTests
                 .Setup(x => x.MapToUser(It.IsAny<UpdateUserRequest>()))
                 .Returns(new User());
 
+            userValidatorMock
+                .Setup(x => x.ValidateDoesExist(It.IsAny<string>()));
+
+            userValidatorMock
+                .Setup(x => x.ValidateLoggedUserIsAdmin(It.IsAny<User>()));
+
+            userValidatorMock
+                .Setup(x => x.ValidateIfUsernameExist(It.IsAny<string>()));
+
+            userValidatorMock
+                .Setup(x => x.ValidateUserAlreadyAdmin(It.IsAny<User>()));
+
+            userValidatorMock
+                .Setup(x => x.ValidateUserAlreadyRegular(It.IsAny<User>()));
+
+            userValidatorMock
+                .Setup(x => x.ValidateUserAlreadyBanned(It.IsAny<User>()));
+
+            userValidatorMock
+                .Setup(x => x.ValidateUserNotBanned(It.IsAny<User>()));
+
             sut = new UserService(userRepositoryMock.Object, userMapperMock.Object, userValidatorMock.Object,
                 likeServiceMock.Object, postServiceMock.Object);
         }
@@ -125,12 +135,12 @@ namespace ForumTemplate.Tests.UserServiceTests
         public void UpdateUser_ShouldInvokeCorrectMethods()
         {
             //Arrange
-            //userMapperMock
-            //    .Setup(x => x.MapToUserResponse(It.IsAny<User>()))
-            //    .Returns(It.IsAny<UserResponse>());
+            userMapperMock
+                .Setup(x => x.MapToUserResponse(It.IsAny<User>()))
+                .Returns(It.IsAny<UserResponse>());
 
             //Act
-         //   var result = sut.Update(id, GetUpdateUserRequest());
+            var result = sut.Update(GetUser(), id, GetUpdateUserRequest());
 
             //Verify
             userMapperMock.Verify(x => x.MapToUser(It.IsAny<UpdateUserRequest>()), Times.Once);
@@ -160,8 +170,6 @@ namespace ForumTemplate.Tests.UserServiceTests
             var result = sut.GetById(id);
 
             //Verify
-          //  userValidatorMock.Verify(x => x.ValidateUserIsLoggedAndAdmin(), Times.Once);
-
             userRepositoryMock.Verify(x => x.GetById(id), Times.Once);
 
             userMapperMock.Verify(x => x.MapToUserResponse(user), Times.Once);
@@ -171,17 +179,17 @@ namespace ForumTemplate.Tests.UserServiceTests
         public void DeleteByID_ShouldReturn()
         {
             //Act
-          //  var message = sut.Delete(id);
+            var message = sut.Delete(GetUser(), id);
 
             //Assert
-          //  StringAssert.Contains(message, "User was successfully deleted.");
+            StringAssert.Contains(message, "User was successfully deleted.");
         }
 
         [TestMethod]
         public void DeleteByID_ShouldInvokeCorrectMethods()
         {
             //Act
-          //  var message = sut.Delete(id);
+            var message = sut.Delete(GetUser(), id);
 
             //Verify
             userRepositoryMock.Verify(x => x.Delete(id), Times.Once);
@@ -194,34 +202,10 @@ namespace ForumTemplate.Tests.UserServiceTests
             var result = sut.GetAll();
 
             //Verify
-          //  userValidatorMock.Verify(x => x.ValidateUserIsLoggedAndAdmin(), Times.Once);
-
             userRepositoryMock.Verify(x => x.GetAll(), Times.Once);
 
             userMapperMock.Verify(x => x.MapToUserResponse(It.IsAny<List<User>>()), Times.Once);
         }
-
-      //  [TestMethod]
-
-        //public void Login_ShouldReturn()
-        //{
-        //    //Act
-        //    var result = sut.Login("titi", "123123");
-
-        //    //Assert
-        //    userRepositoryMock.Verify(x => x.Login("titi", "123123"), Times.Once);
-        //}
-
-        //[TestMethod]
-
-        //public void Logout_ShouldReturn()
-        //{
-        //    //Act
-        //    var result = sut.Logout("titi");
-
-        //    //Assert
-        //    userRepositoryMock.Verify(x => x.Logout("titi"), Times.Once);
-        //}
 
         [TestMethod]
 
@@ -248,6 +232,8 @@ namespace ForumTemplate.Tests.UserServiceTests
             sut.RegisterUser(registerUserRequest, Password);
 
             //Assert
+            userValidatorMock.Verify(x => x.ValidateDoesExist(user.Username), Times.Once);
+
             userRepositoryMock.Verify(x => x.RegisterUser(It.IsAny<User>()), Times.Once);
         }
 
@@ -260,40 +246,39 @@ namespace ForumTemplate.Tests.UserServiceTests
                 .Setup(x => x.GetByUsername(It.IsAny<string>()))
                 .Returns(new User());
 
-            var updateUserRequestModel = GetUpdateUserRequestModel();
-
             //Act
-         //   var user2 = sut.PromoteUser("TestTest", updateUserRequestModel);
+            var user2 = sut.PromoteUser(GetUser(), GetUpdateUserRequestModel());
 
             //Verify
-            userRepositoryMock.Verify(x => x.GetByUsername(updateUserRequestModel.UserName), Times.Once);
+            userValidatorMock.Verify(x => x.ValidateLoggedUserIsAdmin(It.IsAny<User>()), Times.Once);
+
+            userValidatorMock.Verify(x => x.ValidateIfUsernameExist(It.IsAny<string>()), Times.Once);
+
+            userRepositoryMock.Verify(x => x.GetByUsername(GetUpdateUserRequestModel().UserName), Times.Once);
+
+            userValidatorMock.Verify(x => x.ValidateUserAlreadyAdmin(It.IsAny<User>()), Times.Once);
+
             userRepositoryMock.Verify(x => x.PromoteUser(It.IsAny<User>()), Times.Once);
         }
 
         [TestMethod]
         public void PromoteUser_ShouldReturn()
         {
-            //Arrange
-            var updateUserRequestModel = GetUpdateUserRequestModel();
-
             //Act
-          //  var message = sut.PromoteUser("TestTest", updateUserRequestModel);
+            var message = sut.PromoteUser(GetUser(), GetUpdateUserRequestModel());
 
             //Assert
-         //   StringAssert.Contains(message, "User successfully promoted");
+            StringAssert.Contains(message, "User successfully promoted");
         }
 
         [TestMethod]
         public void DemoteUser_ShouldReturn()
         {
-            //Arrange
-            var updateUserRequestModel = GetUpdateUserRequestModel();
-
             //Act
-         //   var message = sut.DemoteUser("TestTest", updateUserRequestModel);
+            var message = sut.DemoteUser(GetUser(), GetUpdateUserRequestModel());
 
             //Assert
-          //  StringAssert.Contains(message, "User successfully demoted");
+            StringAssert.Contains(message, "User successfully demoted");
         }
 
         [TestMethod]
@@ -304,27 +289,29 @@ namespace ForumTemplate.Tests.UserServiceTests
                 .Setup(x => x.GetByUsername(It.IsAny<string>()))
                 .Returns(new User());
 
-            var updateUserRequestModel = GetUpdateUserRequestModel();
-
             //Act
-          //  var user2 = sut.DemoteUser("TestTest", updateUserRequestModel);
+            var user2 = sut.DemoteUser(GetUser(), GetUpdateUserRequestModel());
 
             //Verify
-            userRepositoryMock.Verify(x => x.GetByUsername(updateUserRequestModel.UserName), Times.Once);
+            userValidatorMock.Verify(x => x.ValidateLoggedUserIsAdmin(It.IsAny<User>()), Times.Once);
+
+            userValidatorMock.Verify(x => x.ValidateIfUsernameExist(It.IsAny<string>()), Times.Once);
+
+            userRepositoryMock.Verify(x => x.GetByUsername(GetUpdateUserRequestModel().UserName), Times.Once);
+
+            userValidatorMock.Verify(x => x.ValidateUserAlreadyRegular(It.IsAny<User>()), Times.Once);
+
             userRepositoryMock.Verify(x => x.DemoteUser(It.IsAny<User>()), Times.Once);
         }
 
         [TestMethod]
         public void BanUser_ShouldReturn()
         {
-            //Arrange
-            var updateUserRequestModel = GetUpdateUserRequestModel();
-
             //Act
-          //  var message = sut.BanUser("TestTest", updateUserRequestModel);
+            var message = sut.BanUser(GetUser(), GetUpdateUserRequestModel());
 
             //Assert
-         //   StringAssert.Contains(message, "User successfully banned");
+            StringAssert.Contains(message, "User successfully banned");
         }
 
         [TestMethod]
@@ -335,27 +322,29 @@ namespace ForumTemplate.Tests.UserServiceTests
                 .Setup(x => x.GetByUsername(It.IsAny<string>()))
                 .Returns(new User());
 
-            var updateUserRequestModel = GetUpdateUserRequestModel();
-
             //Act
-           // var user2 = sut.BanUser("TestTest", updateUserRequestModel);
+            var result = sut.BanUser(GetUser(), GetUpdateUserRequestModel());
 
             //Verify
-            userRepositoryMock.Verify(x => x.GetByUsername(updateUserRequestModel.UserName), Times.Once);
+            userValidatorMock.Verify(x => x.ValidateLoggedUserIsAdmin(It.IsAny<User>()), Times.Once);
+
+            userValidatorMock.Verify(x => x.ValidateIfUsernameExist(It.IsAny<string>()), Times.Once);
+
+            userRepositoryMock.Verify(x => x.GetByUsername(GetUpdateUserRequestModel().UserName), Times.Once);
+
+            userValidatorMock.Verify(x => x.ValidateUserAlreadyBanned(It.IsAny<User>()), Times.Once);
+
             userRepositoryMock.Verify(x => x.BanUser(It.IsAny<User>()), Times.Once);
         }
 
         [TestMethod]
         public void UnBanUser_ShouldReturn()
         {
-            //Arrange
-            var updateUserRequestModel = GetUpdateUserRequestModel();
-
             //Act
-          //  var message = sut.UnBanUser("TestTest", updateUserRequestModel);
+            var message = sut.UnBanUser(GetUser(), GetUpdateUserRequestModel());
 
             //Assert
-         //   StringAssert.Contains(message, "User successfully UnBanned");
+            StringAssert.Contains(message, "User successfully UnBanned");
         }
 
         [TestMethod]
@@ -366,16 +355,34 @@ namespace ForumTemplate.Tests.UserServiceTests
                 .Setup(x => x.GetByUsername(It.IsAny<string>()))
                 .Returns(new User());
 
-            var updateUserRequestModel = GetUpdateUserRequestModel();
-
             //Act
-        //    var user2 = sut.UnBanUser("TestTest", updateUserRequestModel);
+            var user2 = sut.UnBanUser(GetUser(), GetUpdateUserRequestModel());
 
             //Verify
-            userRepositoryMock.Verify(x => x.GetByUsername(updateUserRequestModel.UserName), Times.Once);
+            userValidatorMock.Verify(x => x.ValidateLoggedUserIsAdmin(It.IsAny<User>()), Times.Once);
+
+            userValidatorMock.Verify(x => x.ValidateIfUsernameExist(It.IsAny<string>()), Times.Once);
+
+            userRepositoryMock.Verify(x => x.GetByUsername(GetUpdateUserRequestModel().UserName), Times.Once);
+
+            userValidatorMock.Verify(x => x.ValidateUserNotBanned(It.IsAny<User>()), Times.Once);
+
             userRepositoryMock.Verify(x => x.UnBanUser(It.IsAny<User>()), Times.Once);
         }
 
+        private User GetUser()
+        {
+            return new User()
+            {
+                UserId = id,
+                FirstName = "TestTestUser",
+                LastName = "TestTestUserLast",
+                Username = "TestUsername",
+                Email = "TestMail@abv.bg",
+                Password = "1234Passw0rd@",
+                Country = "BG",
+            };
+        }
 
         private UpdateUserRequest GetUpdateUserRequest()
         {

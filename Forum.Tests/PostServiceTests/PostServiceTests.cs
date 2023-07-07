@@ -68,6 +68,10 @@ namespace ForumTemplate.Tests.PostServiceTests
                 .Returns(new Post());
 
             postRepositoryMock
+                .Setup(x => x.GetByUserId(It.IsAny<Guid>()))
+                .Returns(new List<Post>());
+
+            postRepositoryMock
                 .Setup(x => x.Delete(It.IsAny<Guid>()))
                 .Returns("Post was successfully deleted.");
 
@@ -86,6 +90,23 @@ namespace ForumTemplate.Tests.PostServiceTests
             sut = new PostService(postRepositoryMock.Object, commentServiceMock.Object,
                postValidatorMock.Object, postMapperMock.Object, userValidatorMock.Object, likeServiceMock.Object);
         }
+        
+        [TestMethod]
+
+        public void DeleteByUserId_ShouldInvokeCorrectMethods()
+        {
+            //Arrange
+            postRepositoryMock
+                .Setup(x => x.DeletePosts(It.IsAny<List<Post>>()));
+
+            //Act
+            sut.DeleteByUserId(It.IsAny<Guid>());
+
+            //Verify
+            postRepositoryMock.Verify(x => x.GetByUserId(It.IsAny<Guid>()), Times.Once);
+
+            postRepositoryMock.Verify(x => x.DeletePosts(It.IsAny<List<Post>>()), Times.Once);
+        }
 
         [TestMethod]
         public void GetAll_ShouldInvokeCorrectMethods()
@@ -94,8 +115,6 @@ namespace ForumTemplate.Tests.PostServiceTests
             var result = sut.GetAll();
 
             //Verify
-          //  userValidatorMock.Verify(x => x.ValidateUserIsLogged(), Times.Once);
-
             postRepositoryMock.Verify(x => x.GetAll(), Times.Once);
 
             postMapperMock.Verify(x => x.MapToPostResponse(It.IsAny<List<Post>>()));
@@ -111,8 +130,6 @@ namespace ForumTemplate.Tests.PostServiceTests
             //Verify
             postValidatorMock.Verify(x => x.Validate(id), Times.Once);
 
-        //    userValidatorMock.Verify(x => x.ValidateUserIsLogged(), Times.Once);
-
             postRepositoryMock.Verify(x => x.GetById(id), Times.Once);
 
             postMapperMock.Verify(x => x.MapToPostResponse(It.IsAny<Post>()));
@@ -123,14 +140,12 @@ namespace ForumTemplate.Tests.PostServiceTests
         public void Create_ShouldInvokeCorrectMethods()
         {
             //Act
-          //  var result = sut.Create(GetPostRequest());
+            var result = sut.Create(GetUser(), GetPostRequest());
 
             //Verify
             postValidatorMock.Verify(x => x.Validate(GetPostRequest()), Times.Once);
 
-         //   userValidatorMock.Verify(x => x.ValidateUserIsLogged(), Times.Once);
-
-         //   userValidatorMock.Verify(x => x.ValidatePostCreateIDMatchAndNotBlocked(GetPostRequest()), Times.Once);
+            userValidatorMock.Verify(x => x.ValidatePostCreateIDMatchAndNotBlocked(It.IsAny<User>(), GetPostRequest()), Times.Once);
 
             postMapperMock.Verify(x => x.MapToPost(GetPostRequest()), Times.Once);
 
@@ -144,16 +159,14 @@ namespace ForumTemplate.Tests.PostServiceTests
         public void Update_ShouldInvokeCorrectMethods()
         {
             //Act
-         //   var result = sut.Update(id, GetPostRequest());
+            var result = sut.Update(GetUser(), id, GetPostRequest());
 
             //Verify
             postValidatorMock.Verify(x => x.Validate(id, GetPostRequest()), Times.Once);
 
-          //  userValidatorMock.Verify(x => x.ValidateUserIsLogged(), Times.Once);
-
             postRepositoryMock.Verify(x => x.GetById(id), Times.Once);
 
-          //  userValidatorMock.Verify(x => x.ValidateUserIdMatchAuthorIdPost(id), Times.Once);
+            userValidatorMock.Verify(x => x.ValidateUserIdMatchAuthorIdPost(It.IsAny<User>(), It.IsAny<Guid>()), Times.Once);
 
             postMapperMock.Verify(x => x.MapToPost(GetPostRequest()), Times.Once);
 
@@ -167,16 +180,14 @@ namespace ForumTemplate.Tests.PostServiceTests
         public void Delete_ShouldInvokeCorrectMethods()
         {
             //Act
-          //  var result = sut.Delete(id);
+            var result = sut.Delete(GetUser(), id);
 
             //Verify
             postValidatorMock.Verify(x => x.Validate(id), Times.Once);
 
-         //   userValidatorMock.Verify(x => x.ValidateUserIsLogged(), Times.Once);
-
             postRepositoryMock.Verify(x => x.GetById(id), Times.Once);
 
-          //  userValidatorMock.Verify(x => x.ValidateUserIdMatchAuthorIdPost(id), Times.Once);
+            userValidatorMock.Verify(x => x.ValidateUserIdMatchAuthorIdPost(It.IsAny<User>(), It.IsAny<Guid>()), Times.Once);
 
             commentServiceMock.Verify(x => x.DeleteByPostId(postId), Times.Once);
 
@@ -188,10 +199,10 @@ namespace ForumTemplate.Tests.PostServiceTests
         public void Delete_ShouldReturn()
         {
             //act
-         //   var message = sut.Delete(id);
+            var message = sut.Delete(GetUser(), id);
 
             //Assert
-       //     StringAssert.Contains(message, "Post was successfully deleted.");
+            StringAssert.Contains(message, "Post was successfully deleted.");
         }
 
         private PostRequest GetPostRequest()
@@ -204,16 +215,27 @@ namespace ForumTemplate.Tests.PostServiceTests
             );
         }
 
+        private User GetUser()
+        {
+            return new User()
+            {
+                UserId = id,
+                FirstName = "TestTestUser",
+                LastName = "TestTestUserLast",
+                Username = "TestUsername",
+                Email = "TestMail@abv.bg",
+                Password = "1234Passw0rd@",
+                Country = "BG",
+            };
+        }
+
         private void SetupUserValidatorMock()
         {
-            //userValidatorMock
-            //    .Setup(x => x.ValidateUserIsLogged());
+            userValidatorMock
+                .Setup(x => x.ValidatePostCreateIDMatchAndNotBlocked(It.IsAny<User>(), GetPostRequest()));
 
-            //userValidatorMock
-            //    .Setup(x => x.ValidatePostCreateIDMatchAndNotBlocked(GetPostRequest()));
-
-            //userValidatorMock
-            //    .Setup(x => x.ValidateUserIdMatchAuthorIdPost(It.IsAny<Guid>()));
+            userValidatorMock
+                .Setup(x => x.ValidateUserIdMatchAuthorIdPost(It.IsAny<User>(), It.IsAny<Guid>()));
         }
     }
 }

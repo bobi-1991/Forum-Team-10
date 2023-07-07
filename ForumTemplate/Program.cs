@@ -16,7 +16,6 @@ using Microsoft.EntityFrameworkCore;
 using ForumTemplate.Data;
 using ForumTemplate.Persistence.LikeRepository;
 using ForumTemplate.Services.LikeService;
-using ForumTemplate.Services.LikeServiceHelper;
 
 namespace ForumTemplate
 {
@@ -65,9 +64,6 @@ namespace ForumTemplate
             builder.Services.AddScoped<IPostMapper, PostMapper>();
             builder.Services.AddScoped<ICommentMapper, CommentMapper>();
             builder.Services.AddScoped<IAuthManager, AuthManager>();
-
-            //Helpers
-            builder.Services.AddScoped<IHelperWrapper, HelperWrapper>();
 
             var app = builder.Build();
 
