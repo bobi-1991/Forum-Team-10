@@ -4,8 +4,8 @@
     "AspNetCoreDemo": {
       "commandName": "Project",
       "dotnetRunMessages": true,
-      "launchBrowser": false,
-      "launchUrl": "api",
+      "launchBrowser": true,
+      "launchUrl": "home/index",
       "applicationUrl": "http://localhost:5000"
     }
   }

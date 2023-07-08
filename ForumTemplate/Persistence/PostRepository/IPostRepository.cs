@@ -15,7 +15,8 @@ namespace ForumTemplate.Persistence.PostRepository
         string Delete(Guid id);
        void DeletePosts(List<Post> postsToDelete);
         List<Post> GetByUserId(Guid id);
-
         bool Exist(Guid id);
+        List<Post> GetTopCommentedPosts(int count);
+        List<Post> GetRecentlyCreatedPosts(int count);
     }
 }

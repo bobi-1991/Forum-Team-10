@@ -30,12 +30,12 @@ namespace ForumTemplate.Mappers
                 post.PostId,
                 post.Title,
                 post.Content,
-                post.UserId,            
+                post.UserId,
                 post.Likes.Count(),
                 commentsResponses,
                 post.CreatedAt,
                 post.UpdatedAt
-            ); 
+            );
         }
         public List<PostResponse> MapToPostResponse(List<Post> posts)
         {
@@ -59,7 +59,17 @@ namespace ForumTemplate.Mappers
 
                 postResponses.Add(response);
             }
-           return postResponses;
+            return postResponses;
+        }
+
+        public PostRequest MapToPostRequest(PostViewModel postViewModel, Guid userId)
+        {
+            return new PostRequest
+            {
+                Title = postViewModel.Title,
+                Content = postViewModel.Content,
+                UserId = userId
+            };
         }
     }
 }

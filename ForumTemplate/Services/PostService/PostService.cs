@@ -6,6 +6,7 @@ using ForumTemplate.DTOs.PostDTOs;
 using ForumTemplate.Persistence.PostRepository;
 using ForumTemplate.Models;
 using ForumTemplate.Services.LikeService;
+using Microsoft.EntityFrameworkCore;
 
 namespace ForumTemplate.Services.PostService
 {
@@ -34,6 +35,10 @@ namespace ForumTemplate.Services.PostService
             var posts = postRepository.GetAll();
             return postMapper.MapToPostResponse(posts);
         }
+        public List<Post> GetAllPosts()
+        {
+            return postRepository.GetAll();
+        }
 
         public PostResponse GetById(Guid id)
         {
@@ -43,6 +48,13 @@ namespace ForumTemplate.Services.PostService
             var post = postRepository.GetById(id);
 
             return postMapper.MapToPostResponse(post);
+        }
+
+        public Post GetByPostId(Guid id)
+        {
+            postsValidator.Validate(id);
+
+            return postRepository.GetById(id);
         }
 
         public PostResponse Create(User loggedUser, PostRequest postRequest)
@@ -103,6 +115,15 @@ namespace ForumTemplate.Services.PostService
             List<Post> filteredPosts = this.postRepository.FilterBy(filterParameters);
 
             return postMapper.MapToPostResponse(filteredPosts);
+        }
+        public List<Post> GetTopCommentedPosts(int count)
+        {
+            return this.postRepository.GetTopCommentedPosts(count);           
+        }
+
+        public List<Post> GetRecentlyCreatedPosts(int count)
+        {
+            return this.postRepository.GetRecentlyCreatedPosts(count);
         }
     }
 }

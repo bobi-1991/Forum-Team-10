@@ -28,5 +28,6 @@ namespace ForumTemplate.Persistence.UserRepository
         string BanUser(User user);
 
         string UnBanUser(User user);
+
     }
 }

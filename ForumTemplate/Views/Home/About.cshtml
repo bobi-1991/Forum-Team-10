@@ -1,0 +1,45 @@
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Fit-Body - Home</title>
+    <link rel="stylesheet" href="~/css/site.css" />
+
+
+</head>
+<body>
+    <header>
+        <div>
+            <h3>
+                <a asp-controller="Home" asp-action="Index" class="nav">Home</a>
+                | <a asp-controller="Posts" asp-action="Index" class="nav">Posts</a>
+                | <a asp-controller="Home" asp-action="About" class="nav">About</a>
+                | <a href="/api/swagger" class="nav">Developer API</a>
+            </h3>
+        </div>
+    </header>
+
+    <div class="body-content">
+        <h2>About the project</h2>
+
+        <p>
+            <b>Fit-Body</b> is a social network for sharing experience about helthy lifestyle.
+        </p>
+        <p>
+            Our goal is to provide users with the opportunity to engage in a healthy lifestyle and achieve their fitness goals. We strive to offer a comprehensive set of tools, advice, and resources to help everyone find their path to optimal shape and well-being.
+        <p />
+            We believe that community is the strength of Fit-Body. Interacting and sharing knowledge and experiences among our users is of utmost importance. Each of us is unique in our goals and challenges, but together we inspire and motivate each other to achieve success.
+        <p>
+            In the "About Us" section, you will find information about our team, including experienced trainers and experts in the field of fitness and nutrition. We are here to support you and help you build healthy habits that will complement you throughout your life.
+        </p>
+        <p>
+            Join Fit-Body and become part of our community of people striving for better health and achieving their optimal shape. Your health and well-being are paramount to us, and we will assist you in attaining them.
+        </p>
+    </div>
+
+    <footer>
+        <small>© Copyright @DateTime.Now.Year, Fit-Body</small>
+    </footer>
+</body>
+</html>

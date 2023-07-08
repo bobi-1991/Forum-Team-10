@@ -7,6 +7,7 @@ namespace ForumTemplate.Services.UserService
     public interface IUserService
     {
         List<UserResponse> GetAll();
+        List<User> GetAllUsers();
 
         UserResponse GetById(Guid id);
 		User GetByUsername(string username);

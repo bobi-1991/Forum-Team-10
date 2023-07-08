@@ -45,8 +45,10 @@ namespace ForumTemplate.Persistence.PostRepository
             return dbContext.Posts
 			    .Where(x => !x.User.IsDelete)
 				.Where(x => !x.IsDelete)
+                .Include(x=>x.User)
 				.Include(x => x.Likes)
 				.Include(x => x.Comments)
+                   .ThenInclude(x=>x.User)
 				.FirstOrDefault(p => p.PostId == id);
         }
         public Post GetByTitle(string title)
@@ -108,6 +110,23 @@ namespace ForumTemplate.Persistence.PostRepository
         public bool Exist(Guid id)
         {
             return dbContext.Posts.Any(p => p.PostId == id);
+        }
+        public List<Post> GetTopCommentedPosts(int count)
+        {
+            return dbContext.Posts
+                     .Where(x=>!x.IsDelete)
+                     .OrderByDescending(p => p.Comments.Count())
+                     .Take(count)
+                     .ToList();
+        }
+
+        public List<Post> GetRecentlyCreatedPosts(int count)
+        {
+            return dbContext.Posts
+                    .Where(x => !x.IsDelete)
+                    .OrderByDescending(p => p.CreatedAt)
+                    .Take(count)
+                    .ToList();
         }
         private static List<Post> FilterByTitle(List<Post> posts, string title)
         {

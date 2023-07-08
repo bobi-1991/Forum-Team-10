@@ -16,6 +16,7 @@ namespace ForumTemplate.Models
         // Foreign key
         public Guid UserId { get; set; }
         public User User { get; set; } = null!;
+        
         public virtual ICollection<Like> Likes { get; set; } = new List<Like>();
         public virtual ICollection<Tag> Tags { get; set; } = new List<Tag>();
         public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();

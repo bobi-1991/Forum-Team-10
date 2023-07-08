@@ -4,7 +4,7 @@ using ForumTemplate.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
-namespace ForumTemplate.Controllers
+namespace ForumTemplate.Controllers.Api
 {
 
     [ApiController]
@@ -54,7 +54,7 @@ namespace ForumTemplate.Controllers
         {
             try
             {
-                var message = this.authManager.TryRegisterUser(user);
+                var message = authManager.TryRegisterUser(user);
 
                 return StatusCode(StatusCodes.Status200OK, message);
             }
@@ -73,16 +73,16 @@ namespace ForumTemplate.Controllers
         {
             try
             {
-				var loggedUser = authManager.TryGetUser(credentials);
-				var message = this.authManager.TryPromoteUser( loggedUser, userToPromote);
+                var loggedUser = authManager.TryGetUser(credentials);
+                var message = authManager.TryPromoteUser(loggedUser, userToPromote);
 
                 return StatusCode(StatusCodes.Status200OK, message);
             }
-			catch (EntityUnauthorizatedException e)
-			{
-				return StatusCode(StatusCodes.Status401Unauthorized, e.Message);
-			}
-			catch (ArgumentException e)
+            catch (EntityUnauthorizatedException e)
+            {
+                return StatusCode(StatusCodes.Status401Unauthorized, e.Message);
+            }
+            catch (ArgumentException e)
             {
                 return StatusCode(StatusCodes.Status409Conflict, e.Message);
             }
@@ -101,8 +101,8 @@ namespace ForumTemplate.Controllers
         {
             try
             {
-				var loggedUser = authManager.TryGetUser(credentials);
-				var message = this.authManager.TryDemoteUser(loggedUser, userToDemote);
+                var loggedUser = authManager.TryGetUser(credentials);
+                var message = authManager.TryDemoteUser(loggedUser, userToDemote);
                 return StatusCode(StatusCodes.Status200OK, message);
             }
             catch (ArgumentException e)
@@ -124,8 +124,8 @@ namespace ForumTemplate.Controllers
         {
             try
             {
-				var loggedUser = authManager.TryGetUser(credentials);
-				var message = this.authManager.TryBanUser(loggedUser, userToBeBanned);
+                var loggedUser = authManager.TryGetUser(credentials);
+                var message = authManager.TryBanUser(loggedUser, userToBeBanned);
                 return StatusCode(StatusCodes.Status200OK, message);
             }
             catch (ArgumentException e)
@@ -147,8 +147,8 @@ namespace ForumTemplate.Controllers
         {
             try
             {
-				var loggedUser = authManager.TryGetUser(credentials);
-				var message = this.authManager.TryUnBanUser(loggedUser, userToBeUnBanned);
+                var loggedUser = authManager.TryGetUser(credentials);
+                var message = authManager.TryUnBanUser(loggedUser, userToBeUnBanned);
                 return StatusCode(StatusCodes.Status200OK, message);
             }
             catch (ArgumentException e)

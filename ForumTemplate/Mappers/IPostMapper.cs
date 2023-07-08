@@ -10,6 +10,7 @@ namespace ForumTemplate.Mappers
         PostResponse MapToPostResponse(Post post);
 
         List<PostResponse> MapToPostResponse(List<Post> posts);
+        PostRequest MapToPostRequest(PostViewModel postViewModel, Guid userId);
 
 
     }

@@ -217,5 +217,7 @@ namespace ForumTemplate.Persistence.UserRepository
                 throw new ValidationException(ex.Message);
             }
         }
+
+    
     }
 }

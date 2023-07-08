@@ -25,7 +25,7 @@ namespace ForumTemplate
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.AddControllers().AddNewtonsoftJson(options =>
+            builder.Services.AddControllersWithViews().AddNewtonsoftJson(options =>
             {
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
             });
@@ -67,9 +67,10 @@ namespace ForumTemplate
 
             var app = builder.Build();
 
-            app.UseRouting();
-
-            app.MapControllers();
+		
+			app.UseRouting();
+			app.UseStaticFiles();
+			app.MapDefaultControllerRoute();
 
             app.Run();
 

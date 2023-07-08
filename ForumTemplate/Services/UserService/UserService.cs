@@ -32,6 +32,10 @@ namespace ForumTemplate.Services.UserService
             var users = userRepository.GetAll();
             return this.userMapper.MapToUserResponse(users);
         }
+        public List<User> GetAllUsers()
+        {
+            return userRepository.GetAll();
+        }
 
         public UserResponse GetById(Guid id)
         {

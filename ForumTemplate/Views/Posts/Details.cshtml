@@ -1,0 +1,63 @@
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@using ForumTemplate.Models;
+@model Post
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>Fit-Body - Home</title>
+	<link rel="stylesheet" href="~/css/site.css" />
+
+</head>
+<body>
+	<header>
+		<div>
+			<h3>
+				<a asp-controller="Home" asp-action="Index" class="nav">Home</a>
+				| <a asp-controller="Posts" asp-action="Index" class="nav">Posts</a>
+				| <a asp-controller="Home" asp-action="About" class="nav">About</a>
+				| <a href="/api/swagger" class="nav">Developer API</a>
+			</h3>
+		</div>
+	</header>
+
+	<div class="body-content">
+		<h2>
+			@this.Model.Content
+		</h2>
+		    <h3>
+			  From: @this.Model.User.Username
+	    	</h3>
+
+		<h4>Comments <br></h4>
+
+		@if (this.Model.Comments.Count == 0)
+		{
+			<p>
+				<i>No comments</i>
+			</p>
+		}
+		else
+		{
+	    	<ul>
+				@foreach (var comment in this.Model.Comments)
+				{
+					<li class="margin12">
+						Comment from @comment.User.Username <br>
+						Published at: @comment.CreatedAt <br>
+					     	<p>@comment.Content</p>
+						<hr>
+					</li>
+				}	
+		    </ul>
+		}
+
+		<a asp-controller="Posts" asp-action="Index" class="nav">See all posts</a>
+	</div>
+
+	<footer>
+		<small>© Copyright @DateTime.Now.Year, Fit-Body</small>
+	</footer>
+</body>
+</html>

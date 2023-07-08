@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata;
 using System.Net;
 
-namespace ForumTemplate.Controllers
+namespace ForumTemplate.Controllers.Api
 {
     [ApiController]
     [Route("api/users")]
@@ -16,29 +16,29 @@ namespace ForumTemplate.Controllers
         private readonly IUserService userService;
         private readonly IAuthManager authManager;
 
-		public UserApiController(IUserService userService, IAuthManager authManager)
-		{
-			this.userService = userService;
-			this.authManager = authManager;
-		}
+        public UserApiController(IUserService userService, IAuthManager authManager)
+        {
+            this.userService = userService;
+            this.authManager = authManager;
+        }
 
-		//Admin Access Only
-		[HttpGet()]
+        //Admin Access Only
+        [HttpGet()]
         [Route("")]
         public IActionResult GetAll([FromHeader] string credentials)
         {
-			try
+            try
             {
-				var loggedUser = authManager.TryGetUser(credentials);
-				List<UserResponse> result = this.userService.GetAll();
+                var loggedUser = authManager.TryGetUser(credentials);
+                List<UserResponse> result = userService.GetAll();
 
                 return StatusCode(StatusCodes.Status200OK, result);
             }
-			catch (EntityUnauthorizatedException e)
-			{
-				return Unauthorized(e.Message);
-			}
-			catch (EntityLoginException e)
+            catch (EntityUnauthorizatedException e)
+            {
+                return Unauthorized(e.Message);
+            }
+            catch (EntityLoginException e)
             {
                 return BadRequest(e.Message);
             }
@@ -48,12 +48,12 @@ namespace ForumTemplate.Controllers
         //Admin - to see id
         //All - for all others
         [HttpGet("{id}")]
-        public IActionResult GetById([FromHeader] string credentials,Guid id)
+        public IActionResult GetById([FromHeader] string credentials, Guid id)
         {
             try
             {
-				var loggedUser = authManager.TryGetUser(credentials);
-				UserResponse user = this.userService.GetById(id);
+                var loggedUser = authManager.TryGetUser(credentials);
+                UserResponse user = userService.GetById(id);
 
                 return StatusCode(StatusCodes.Status200OK, user);
             }
@@ -76,20 +76,20 @@ namespace ForumTemplate.Controllers
         //If user wants to update - check is target username matches the currently logged user
         //If Admin - he will have access to all by ID or Username
         [HttpPut("{id}")]
-        public IActionResult Update([FromHeader] string credentials,Guid id, [FromBody] UpdateUserRequest user)
+        public IActionResult Update([FromHeader] string credentials, Guid id, [FromBody] UpdateUserRequest user)
         {
             try
             {
-				var loggedUser = authManager.TryGetUser(credentials);
-				UserResponse updatedUser = this.userService.Update(loggedUser,id, user);
+                var loggedUser = authManager.TryGetUser(credentials);
+                UserResponse updatedUser = userService.Update(loggedUser, id, user);
 
                 return StatusCode(StatusCodes.Status200OK, updatedUser);
             }
-			catch (EntityUnauthorizatedException e)
-			{
-				return Unauthorized(e.Message);
-			}
-			catch (EntityLoginException e)
+            catch (EntityUnauthorizatedException e)
+            {
+                return Unauthorized(e.Message);
+            }
+            catch (EntityLoginException e)
             {
                 return BadRequest(e.Message);
             }
@@ -107,16 +107,16 @@ namespace ForumTemplate.Controllers
         {
             try
             {
-				var loggedUser = authManager.TryGetUser(credentials);
-				var result = this.userService.Delete(loggedUser, id);
+                var loggedUser = authManager.TryGetUser(credentials);
+                var result = userService.Delete(loggedUser, id);
 
                 return StatusCode(StatusCodes.Status200OK, result);
             }
-			catch (EntityUnauthorizatedException e)
-			{
-				return Unauthorized(e.Message);
-			}
-			catch (EntityLoginException e)
+            catch (EntityUnauthorizatedException e)
+            {
+                return Unauthorized(e.Message);
+            }
+            catch (EntityLoginException e)
             {
                 return BadRequest(e.Message);
             }
