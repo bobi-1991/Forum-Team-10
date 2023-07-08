@@ -13,7 +13,7 @@ namespace ForumTemplate.Services.PostService
         Post GetByPostId(Guid id);
         PostResponse Create(User loggedUser, PostRequest postRequest);
         PostResponse Update(User loggedUser,Guid id, PostRequest postRequest);
-        string Delete(User loggedUser, Guid userId);
+        string Delete(User loggedUser, Guid postId);
         void DeleteByUserId(Guid UserId);
         List<Post> GetTopCommentedPosts(int count);
         List<Post> GetRecentlyCreatedPosts(int count);

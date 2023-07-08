@@ -71,5 +71,24 @@ namespace ForumTemplate.Mappers
                 UserId = userId
             };
         }
+        public PostViewModel MapToPostViewModel(Post post)
+        {
+            return new PostViewModel
+            {
+                Title = post.Title,
+                Content = post.Content,
+                UserId = post.UserId
+            };
+        }
+        public PostViewModel MapToPostViewModel(PostResponse postResponse)
+        {
+            return new PostViewModel
+            {
+                Title = postResponse.Title,
+                Content = postResponse.Content,
+                UserId = postResponse.UserId
+            };
+        }
+
     }
 }

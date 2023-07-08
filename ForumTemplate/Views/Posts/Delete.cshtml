@@ -21,23 +21,16 @@
             </h3>
         </div>
     </header>
-    <h2>Create a new post</h2>
-    <form asp-controller="Posts" asp-action="Create" method="post">
-        <div>
-            <label asp-for="Title" class="form-label"></label>
-            <br />
-            <input asp-for="Title" type="text" class="form-input" />
-            <span asp-validation-for="Title" class="form-error"></span>
-        </div>
-        <div>
-            <label asp-for="Content" class="form-label"></label>
-            <br />
-            <input asp-for="Content" type="text" class="form-input" />
-            <span asp-validation-for="Content" class="form-error"></span>
-        </div>
-        <input type="submit" value="Create" class="btn-primary" />
+    <div class="body-content">
+        <h2>Delete <b>@this.Model.Title</b>?</h2>
+
+        <form asp-controller="Posts" asp-action="Delete" method="post">
+            <input type="submit" value="Delete" class="btn-danger" />
+        </form>
+
         <a asp-controller="Posts" asp-action="Index" class="nav">Back</a>
-    </form>
+    </div>
+
     <footer>
         <small>© Copyright @DateTime.Now.Year, Fit-Body</small>
     </footer>

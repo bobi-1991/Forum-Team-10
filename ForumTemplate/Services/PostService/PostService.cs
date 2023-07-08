@@ -76,7 +76,6 @@ namespace ForumTemplate.Services.PostService
             postsValidator.Validate(id);
 
             var postToUpdate = postRepository.GetById(id);
-
             var authorId = postToUpdate.UserId;
 
             userValidator.ValidateUserIdMatchAuthorIdPost(loggedUser, authorId);

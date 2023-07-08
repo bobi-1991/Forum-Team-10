@@ -6,7 +6,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <title>Fit-Body - Home</title>
+    <title>Fit-Body - Index</title>
     <link rel="stylesheet" href="~/css/site.css" />
 
 </head>
@@ -41,6 +41,8 @@
 
                         <div class="cell">
                             <a asp-controller="Posts" asp-action="Details" asp-route-id="@post.PostId" class="btn btn-primary">Details</a>
+                            <a asp-controller="Posts" asp-action="Edit" asp-route-id="@post.PostId" class="btn btn-primary">Edit</a>
+                            <a asp-controller="Posts" asp-action="Delete" asp-route-id="@post.PostId" class="btn btn-primary">Delete</a>
                         </div>
                     </div>
                 }
