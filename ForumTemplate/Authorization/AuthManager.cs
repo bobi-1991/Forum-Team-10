@@ -1,6 +1,7 @@
 ﻿using ForumTemplate.DTOs.Authentication;
 using ForumTemplate.Exceptions;
 using ForumTemplate.Models;
+using ForumTemplate.Models.ViewModels;
 using ForumTemplate.Services.UserService;
 using System.Text;
 
@@ -8,12 +9,16 @@ namespace ForumTemplate.Authorization
 {
     public class AuthManager : IAuthManager
     {
+        private const string CURRENT_USER = "CURRENT_USER";
         private readonly IUserService userService;
-        //To Add Current Logged User
-        public AuthManager(IUserService userService)
+        private readonly IHttpContextAccessor contextAccessor;
+
+        public AuthManager(IUserService userService, IHttpContextAccessor contextAccessor)
         {
             this.userService = userService;
+            this.contextAccessor = contextAccessor;
         }
+ 
 
 		public User TryGetUser(string credentials)
 		{
@@ -38,34 +43,83 @@ namespace ForumTemplate.Authorization
 			}
 		}
 
-		//public string TrySetCurrentLoggedUser(string credentials)
-  //      {
-  //          string[] credentialsArray = credentials.Split(':');
-  //          string username = credentialsArray[0];
-  //          string password = credentialsArray[1];
+		public User TryGetUser(string username, string password)
+		{
+			string encodedPassword = Convert.ToBase64String(Encoding.UTF8.GetBytes(password));
 
-  //          string encodedPassword = Convert.ToBase64String(Encoding.UTF8.GetBytes(password));
+			try
+			{
+				var user = this.userService.GetByUsername(username);
+				if (user.Password == encodedPassword)
+				{
+					return user;
+				}
+                throw new EntityUnauthorizatedException("Invalid username or password");
+            }
+			catch (EntityNotFoundException)
+			{
+                throw new EntityUnauthorizatedException("Invalid username or password");
+            }
+		}
 
-  //          var user = this.userService.Login(username, encodedPassword);
+        //For login auth
+        public void Login(string username, string password)
+        {
+            this.CurrentUser = this.TryGetUser(username, password);
 
-  //          SetCurrentLoggedUser(user);
+            if (this.CurrentUser == null)
+            {
+                int? loginAttempts = this.contextAccessor.HttpContext.Session.GetInt32("LOGIN_ATTEMPTS");
 
-  //          return "User successfully logged in";
-  //      }
+                if (loginAttempts.HasValue && loginAttempts == 5)
+                {
+                    // redirect
+                }
+                else
+                {
+                    this.contextAccessor.HttpContext.Session.SetInt32("LOGIN_ATTEMPTS", (int)loginAttempts + 1);
+                }
 
-        //public string LogoutUser(string username)
-        //{
-        //    if (CurrentLoggedUser.LoggedUser != null && CurrentLoggedUser.LoggedUser.Username.Equals(username))
-        //    {
-        //        this.userService.Logout(username);
-        //        CurrentLoggedUser.LoggedUser = null;
-        //        return "User successfully logged out";
-        //    }
-        //    else
-        //    {
-        //        return "Тhis User is not the currently logged in User";
-        //    }
-        //}
+            }
+        }
+
+        public void Logout()
+        {
+            this.CurrentUser = null;
+        }
+
+        public User CurrentUser
+        {
+            get
+            {
+                try
+                {
+                    string username = this.contextAccessor.HttpContext.Session.GetString(CURRENT_USER);
+                    User user = this.userService.GetByUsername(username);
+                    return user;
+                }
+                catch (EntityNotFoundException)
+                {
+                    return null;
+                }
+            }
+            set
+            {
+                // User
+                User user = value;
+                if (user != null)
+                {
+                    // add username to session
+                    this.contextAccessor.HttpContext.Session.SetString(CURRENT_USER, user.Username);
+                }
+                else
+                {
+                    this.contextAccessor.HttpContext.Session.Remove(CURRENT_USER);
+                }
+            }
+        }
+
+
 
         public string TryRegisterUser(RegisterUserRequestModel user)
         {
@@ -94,14 +148,6 @@ namespace ForumTemplate.Authorization
         {
             return this.userService.UnBanUser(loggedUser, user);
         }
-        //private void SetCurrentLoggedUser(User user)
-        //{
-        //    CurrentLoggedUser.LoggedUser = user;
-        //}
 
-        //public User GetCurrentLoggedUser()
-        //{
-        //    return CurrentLoggedUser.LoggedUser;
-        //}
     }
 }

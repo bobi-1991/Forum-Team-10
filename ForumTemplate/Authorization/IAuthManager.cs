@@ -1,27 +1,22 @@
 ﻿using ForumTemplate.DTOs.Authentication;
 using ForumTemplate.Models;
+using ForumTemplate.Models.ViewModels;
 using System.Net;
 
 namespace ForumTemplate.Authorization
 {
-    public interface IAuthManager
-    {
+	public interface IAuthManager
+	{
 		User TryGetUser(string credentials);
-	//	string TrySetCurrentLoggedUser(string credentials);
-
-       // string LogoutUser(string username);
-
+		User TryGetUser(string username, string password);
+		void Login(string username, string password);
+		void Logout();
+		User CurrentUser { get; set; }
         string TryRegisterUser(RegisterUserRequestModel user);
+		string TryPromoteUser(User loggedUser, UpdateUserRequestModel user);
+		string TryDemoteUser(User loggeduser, UpdateUserRequestModel user);
+		string TryBanUser(User loggeduser, UpdateUserRequestModel user);
+		string TryUnBanUser(User loggedUser, UpdateUserRequestModel user);
 
-        string TryPromoteUser(User loggedUser, UpdateUserRequestModel user);
-
-        string TryDemoteUser(User loggeduser, UpdateUserRequestModel user);
-
-        string TryBanUser(User loggeduser, UpdateUserRequestModel user);
-
-        string TryUnBanUser(User loggedUser, UpdateUserRequestModel user);
-
-      //  User GetCurrentLoggedUser();
-
-    }
+	}
 }

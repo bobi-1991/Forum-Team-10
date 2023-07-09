@@ -10,232 +10,232 @@ using Moq;
 
 namespace ForumTemplate.Tests.PostServiceTests
 {
-    [TestClass]
-    public class PostServiceTests
-    {
-        private PostService sut;
+	[TestClass]
+	public class PostServiceTests
+	{
+		private PostService sut;
 
-        private Mock<IPostRepository> postRepositoryMock;
-        private Mock<ICommentService> commentServiceMock;
-        private Mock<IUserAuthenticationValidator> userValidatorMock;
-        private Mock<IPostsValidator> postValidatorMock;
-        private Mock<IPostMapper> postMapperMock;
-        private Mock<ILikeService> likeServiceMock;
+		private Mock<IPostRepository> postRepositoryMock;
+		private Mock<ICommentService> commentServiceMock;
+		private Mock<IUserAuthenticationValidator> userValidatorMock;
+		private Mock<IPostsValidator> postValidatorMock;
+		private Mock<IPostMapper> postMapperMock;
+		private Mock<ILikeService> likeServiceMock;
 
-        private Guid id;
-        private Guid postId;
+		private Guid id;
+		private Guid postId;
 
-        [TestInitialize]
+		[TestInitialize]
 
-        public void Initialize()
-        {
-            postRepositoryMock = new Mock<IPostRepository>();
-            commentServiceMock = new Mock<ICommentService>();
-            userValidatorMock = new Mock<IUserAuthenticationValidator>();
-            postValidatorMock = new Mock<IPostsValidator>();
-            postMapperMock = new Mock<IPostMapper>();
-            likeServiceMock = new Mock<ILikeService>();
+		public void Initialize()
+		{
+			postRepositoryMock = new Mock<IPostRepository>();
+			commentServiceMock = new Mock<ICommentService>();
+			userValidatorMock = new Mock<IUserAuthenticationValidator>();
+			postValidatorMock = new Mock<IPostsValidator>();
+			postMapperMock = new Mock<IPostMapper>();
+			likeServiceMock = new Mock<ILikeService>();
 
-            id = Guid.NewGuid();
-            postId = Guid.NewGuid();
+			id = Guid.NewGuid();
+			postId = Guid.NewGuid();
 
-            SetupUserValidatorMock();
+			SetupUserValidatorMock();
 
 
-            postValidatorMock
-                .Setup(x => x.Validate(id));
+			postValidatorMock
+				.Setup(x => x.Validate(id));
 
-            postValidatorMock
-                .Setup(x => x.Validate(GetPostRequest()));
+			postValidatorMock
+				.Setup(x => x.Validate(GetPostRequest()));
 
-            postValidatorMock
-                .Setup(x => x.Validate(id, GetPostRequest()));
+			postValidatorMock
+				.Setup(x => x.Validate(id, GetPostRequest()));
 
-            postRepositoryMock
-                .Setup(x => x.GetAll())
-                .Returns(new List<Post>());
+			postRepositoryMock
+				.Setup(x => x.GetAll())
+				.Returns(new List<Post>());
 
-            postRepositoryMock
-                .Setup(x => x.GetById(id))
-                .Returns(new Post { UserId = id, PostId = postId });
+			postRepositoryMock
+				.Setup(x => x.GetById(id))
+				.Returns(new Post { UserId = id, PostId = postId });
 
-            postRepositoryMock
-                .Setup(x => x.Create(It.IsAny<Post>()))
-                .Returns(new Post());
+			postRepositoryMock
+				.Setup(x => x.Create(It.IsAny<Post>()))
+				.Returns(new Post());
 
-            postRepositoryMock
-                .Setup(x => x.Update(It.IsAny<Guid>(), It.IsAny<Post>()))
-                .Returns(new Post());
+			postRepositoryMock
+				.Setup(x => x.Update(It.IsAny<Guid>(), It.IsAny<Post>()))
+				.Returns(new Post());
 
-            postRepositoryMock
-                .Setup(x => x.GetByUserId(It.IsAny<Guid>()))
-                .Returns(new List<Post>());
+			postRepositoryMock
+				.Setup(x => x.GetByUserId(It.IsAny<Guid>()))
+				.Returns(new List<Post>());
 
-            postRepositoryMock
-                .Setup(x => x.Delete(It.IsAny<Guid>()))
-                .Returns("Post was successfully deleted.");
+			postRepositoryMock
+				.Setup(x => x.Delete(It.IsAny<Guid>()))
+				.Returns("Post was successfully deleted.");
 
-            postMapperMock
-                .Setup(x => x.MapToPostResponse(It.IsAny<List<Post>>()))
-                .Returns(new List<PostResponse>());
+			postMapperMock
+				.Setup(x => x.MapToPostResponse(It.IsAny<List<Post>>()))
+				.Returns(new List<PostResponse>());
 
-            postMapperMock
-                .Setup(x => x.MapToPostResponse(It.IsAny<Post>()))
-                .Returns(It.IsAny<PostResponse>());
+			postMapperMock
+				.Setup(x => x.MapToPostResponse(It.IsAny<Post>()))
+				.Returns(It.IsAny<PostResponse>());
 
-            postMapperMock
-                .Setup(x => x.MapToPost(GetPostRequest()))
-                .Returns(new Post());
+			postMapperMock
+				.Setup(x => x.MapToPost(GetPostRequest()))
+				.Returns(new Post());
 
-            sut = new PostService(postRepositoryMock.Object, commentServiceMock.Object,
-               postValidatorMock.Object, postMapperMock.Object, userValidatorMock.Object, likeServiceMock.Object);
-        }
-        
-        [TestMethod]
+			sut = new PostService(postRepositoryMock.Object, commentServiceMock.Object,
+			   postValidatorMock.Object, postMapperMock.Object, userValidatorMock.Object, likeServiceMock.Object);
+		}
 
-        public void DeleteByUserId_ShouldInvokeCorrectMethods()
-        {
-            //Arrange
-            postRepositoryMock
-                .Setup(x => x.DeletePosts(It.IsAny<List<Post>>()));
+		[TestMethod]
 
-            //Act
-            sut.DeleteByUserId(It.IsAny<Guid>());
+		public void DeleteByUserId_ShouldInvokeCorrectMethods()
+		{
+			//Arrange
+			postRepositoryMock
+				.Setup(x => x.DeletePosts(It.IsAny<List<Post>>()));
 
-            //Verify
-            postRepositoryMock.Verify(x => x.GetByUserId(It.IsAny<Guid>()), Times.Once);
+			//Act
+			sut.DeleteByUserId(It.IsAny<Guid>());
 
-            postRepositoryMock.Verify(x => x.DeletePosts(It.IsAny<List<Post>>()), Times.Once);
-        }
+			//Verify
+			postRepositoryMock.Verify(x => x.GetByUserId(It.IsAny<Guid>()), Times.Once);
 
-        [TestMethod]
-        public void GetAll_ShouldInvokeCorrectMethods()
-        {
-            //Act
-            var result = sut.GetAll();
+			postRepositoryMock.Verify(x => x.DeletePosts(It.IsAny<List<Post>>()), Times.Once);
+		}
 
-            //Verify
-            postRepositoryMock.Verify(x => x.GetAll(), Times.Once);
+		[TestMethod]
+		public void GetAll_ShouldInvokeCorrectMethods()
+		{
+			//Act
+			var result = sut.GetAll();
 
-            postMapperMock.Verify(x => x.MapToPostResponse(It.IsAny<List<Post>>()));
+			//Verify
+			postRepositoryMock.Verify(x => x.GetAll(), Times.Once);
 
-        }
+			postMapperMock.Verify(x => x.MapToPostResponse(It.IsAny<List<Post>>()));
 
-        [TestMethod]
-        public void GetById_ShouldInvokeCorrectMethods()
-        {
-            //Act
-            var result = sut.GetById(id);
+		}
 
-            //Verify
-            postValidatorMock.Verify(x => x.Validate(id), Times.Once);
+		[TestMethod]
+		public void GetById_ShouldInvokeCorrectMethods()
+		{
+			//Act
+			var result = sut.GetById(id);
 
-            postRepositoryMock.Verify(x => x.GetById(id), Times.Once);
+			//Verify
+			postValidatorMock.Verify(x => x.Validate(id), Times.Once);
 
-            postMapperMock.Verify(x => x.MapToPostResponse(It.IsAny<Post>()));
-        }
+			postRepositoryMock.Verify(x => x.GetById(id), Times.Once);
 
-        [TestMethod]
+			postMapperMock.Verify(x => x.MapToPostResponse(It.IsAny<Post>()));
+		}
 
-        public void Create_ShouldInvokeCorrectMethods()
-        {
-            //Act
-            var result = sut.Create(GetUser(), GetPostRequest());
+		[TestMethod]
 
-            //Verify
-            postValidatorMock.Verify(x => x.Validate(GetPostRequest()), Times.Once);
+		public void Create_ShouldInvokeCorrectMethods()
+		{
+			//Act
+			var result = sut.Create(GetUser(), GetPostRequest());
 
-            userValidatorMock.Verify(x => x.ValidatePostCreateIDMatchAndNotBlocked(It.IsAny<User>(), GetPostRequest()), Times.Once);
+			//Verify
+			postValidatorMock.Verify(x => x.Validate(GetPostRequest()), Times.Once);
 
-            postMapperMock.Verify(x => x.MapToPost(GetPostRequest()), Times.Once);
+			userValidatorMock.Verify(x => x.ValidatePostCreateIDMatchAndNotBlocked(It.IsAny<User>(), GetPostRequest()), Times.Once);
 
-            postRepositoryMock.Verify(x => x.Create(It.IsAny<Post>()), Times.Once);
+			postMapperMock.Verify(x => x.MapToPost(GetPostRequest()), Times.Once);
 
-            postMapperMock.Verify(x => x.MapToPostResponse(It.IsAny<Post>()));
-        }
+			postRepositoryMock.Verify(x => x.Create(It.IsAny<Post>()), Times.Once);
 
-        [TestMethod]
+			postMapperMock.Verify(x => x.MapToPostResponse(It.IsAny<Post>()));
+		}
 
-        public void Update_ShouldInvokeCorrectMethods()
-        {
-            //Act
-            var result = sut.Update(GetUser(), id, GetPostRequest());
+		[TestMethod]
 
-            //Verify
-            postValidatorMock.Verify(x => x.Validate(id, GetPostRequest()), Times.Once);
+		public void Update_ShouldInvokeCorrectMethods()
+		{
+			//Act
+			var result = sut.Update(GetUser(), id, GetPostRequest());
 
-            postRepositoryMock.Verify(x => x.GetById(id), Times.Once);
+			//Verify
+			postValidatorMock.Verify(x => x.Validate(id, GetPostRequest()), Times.Once);
 
-            userValidatorMock.Verify(x => x.ValidateUserIdMatchAuthorIdPost(It.IsAny<User>(), It.IsAny<Guid>()), Times.Once);
+			postRepositoryMock.Verify(x => x.GetById(id), Times.Once);
 
-            postMapperMock.Verify(x => x.MapToPost(GetPostRequest()), Times.Once);
+			userValidatorMock.Verify(x => x.ValidateUserIdMatchAuthorIdPost(It.IsAny<User>(), It.IsAny<Guid>()), Times.Once);
 
-            postRepositoryMock.Verify(x => x.Update(id, It.IsAny<Post>()), Times.Once);
+			postMapperMock.Verify(x => x.MapToPost(GetPostRequest()), Times.Once);
 
-            postMapperMock.Verify(x => x.MapToPostResponse(It.IsAny<Post>()), Times.Once);
-        }
+			postRepositoryMock.Verify(x => x.Update(id, It.IsAny<Post>()), Times.Once);
 
-        [TestMethod]
+			postMapperMock.Verify(x => x.MapToPostResponse(It.IsAny<Post>()), Times.Once);
+		}
 
-        public void Delete_ShouldInvokeCorrectMethods()
-        {
-            //Act
-            var result = sut.Delete(GetUser(), id);
+		[TestMethod]
 
-            //Verify
-            postValidatorMock.Verify(x => x.Validate(id), Times.Once);
+		public void Delete_ShouldInvokeCorrectMethods()
+		{
+			//Act
+			var result = sut.Delete(GetUser(), id);
 
-            postRepositoryMock.Verify(x => x.GetById(id), Times.Once);
+			//Verify
+			postValidatorMock.Verify(x => x.Validate(id), Times.Once);
 
-            userValidatorMock.Verify(x => x.ValidateUserIdMatchAuthorIdPost(It.IsAny<User>(), It.IsAny<Guid>()), Times.Once);
+			postRepositoryMock.Verify(x => x.GetById(id), Times.Once);
 
-            commentServiceMock.Verify(x => x.DeleteByPostId(postId), Times.Once);
+			userValidatorMock.Verify(x => x.ValidateUserIdMatchAuthorIdPost(It.IsAny<User>(), It.IsAny<Guid>()), Times.Once);
 
-            postRepositoryMock.Verify(x => x.Delete(id), Times.Once);
-        }
+			commentServiceMock.Verify(x => x.DeleteByPostId(postId), Times.Once);
 
-        [TestMethod]
+			postRepositoryMock.Verify(x => x.Delete(id), Times.Once);
+		}
 
-        public void Delete_ShouldReturn()
-        {
-            //act
-            var message = sut.Delete(GetUser(), id);
+		[TestMethod]
 
-            //Assert
-            StringAssert.Contains(message, "Post was successfully deleted.");
-        }
+		public void Delete_ShouldReturn()
+		{
+			//act
+			var message = sut.Delete(GetUser(), id);
 
-        private PostRequest GetPostRequest()
-        {
-            return new PostRequest
-            (
-                "Title",
-                "content",
-                id
-            );
-        }
+			//Assert
+			StringAssert.Contains(message, "Post was successfully deleted.");
+		}
 
-        private User GetUser()
-        {
-            return new User()
-            {
-                UserId = id,
-                FirstName = "TestTestUser",
-                LastName = "TestTestUserLast",
-                Username = "TestUsername",
-                Email = "TestMail@abv.bg",
-                Password = "1234Passw0rd@",
-                Country = "BG",
-            };
-        }
+		private PostRequest GetPostRequest()
+		{
+			return new PostRequest
+			{
+				Title = "Title",
+				Content = "content",
+				UserId = id
+			};
+		}
 
-        private void SetupUserValidatorMock()
-        {
-            userValidatorMock
-                .Setup(x => x.ValidatePostCreateIDMatchAndNotBlocked(It.IsAny<User>(), GetPostRequest()));
+		private User GetUser()
+		{
+			return new User()
+			{
+				UserId = id,
+				FirstName = "TestTestUser",
+				LastName = "TestTestUserLast",
+				Username = "TestUsername",
+				Email = "TestMail@abv.bg",
+				Password = "1234Passw0rd@",
+				Country = "BG",
+			};
+		}
 
-            userValidatorMock
-                .Setup(x => x.ValidateUserIdMatchAuthorIdPost(It.IsAny<User>(), It.IsAny<Guid>()));
-        }
-    }
+		private void SetupUserValidatorMock()
+		{
+			userValidatorMock
+				.Setup(x => x.ValidatePostCreateIDMatchAndNotBlocked(It.IsAny<User>(), GetPostRequest()));
+
+			userValidatorMock
+				.Setup(x => x.ValidateUserIdMatchAuthorIdPost(It.IsAny<User>(), It.IsAny<Guid>()));
+		}
+	}
 }

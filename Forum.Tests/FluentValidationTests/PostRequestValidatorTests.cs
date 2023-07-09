@@ -21,7 +21,11 @@ namespace ForumTemplate.Tests.FluentValidationTests
         public void PostRequest_ShouldReturn_WhenAllValid()
         {
             //Arrange
-            var model = new PostRequest("TitleTitleTestTest", new string('a', 50), Guid.NewGuid());
+            var model = new PostRequest{
+               Title = "TitleTitleTestTest", 
+                Content = new string('a', 50),
+              UserId =  Guid.NewGuid()
+            };
 
             //Act
             var result = validator.TestValidate(model);
@@ -36,9 +40,14 @@ namespace ForumTemplate.Tests.FluentValidationTests
         {
             string title = null;
 
-            var model = new PostRequest(title, new string('a', 50), Guid.NewGuid());
+			var model = new PostRequest
+			{
+				Title = "TitleTitleTestTest",
+				Content = new string('a', 50),
+				UserId = Guid.NewGuid()
+			};
 
-            var result = validator.TestValidate(model);
+			var result = validator.TestValidate(model);
 
             result.ShouldHaveValidationErrorFor(x => x.Title);
 
@@ -54,9 +63,14 @@ namespace ForumTemplate.Tests.FluentValidationTests
         {
             string content = null;
 
-            var model = new PostRequest(new string('a', 50), content, Guid.NewGuid());
+			var model = new PostRequest
+			{
+				Title = "TitleTitleTestTest",
+				Content = new string('a', 50),
+				UserId = Guid.NewGuid()
+			};
 
-            var result = validator.TestValidate(model);
+			var result = validator.TestValidate(model);
 
             result.ShouldHaveValidationErrorFor(x => x.Content);
 
@@ -75,10 +89,15 @@ namespace ForumTemplate.Tests.FluentValidationTests
             //Arrange
             var title = new string('a', count);
 
-            var model = new PostRequest(title, new string('a', 50), Guid.NewGuid());
+			var model = new PostRequest
+			{
+				Title = "TitleTitleTestTest",
+				Content = new string('a', 50),
+				UserId = Guid.NewGuid()
+			};
 
-            //Act
-            var result = validator.TestValidate(model);
+			//Act
+			var result = validator.TestValidate(model);
 
             //Assert
             result.ShouldHaveValidationErrorFor(x => x.Title);
@@ -99,10 +118,15 @@ namespace ForumTemplate.Tests.FluentValidationTests
             //Arrange
             var content = new string('a', count);
 
-            var model = new PostRequest(new string('a', 50), content, Guid.NewGuid());
+			var model = new PostRequest
+			{
+				Title = "TitleTitleTestTest",
+				Content = new string('a', 50),
+				UserId = Guid.NewGuid()
+			};
 
-            //Act
-            var result = validator.TestValidate(model);
+			//Act
+			var result = validator.TestValidate(model);
 
             //Assert
             result.ShouldHaveValidationErrorFor(x => x.Content);

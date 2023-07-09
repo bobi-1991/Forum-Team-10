@@ -1,4 +1,4 @@
-﻿using ForumTemplate.Models;
+﻿using ForumTemplate.Models.ViewModels;
 using ForumTemplate.Services.PostService;
 using ForumTemplate.Services.UserService;
 using Microsoft.AspNetCore.Mvc;

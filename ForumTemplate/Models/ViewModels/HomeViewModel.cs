@@ -1,4 +1,4 @@
-﻿namespace ForumTemplate.Models
+﻿namespace ForumTemplate.Models.ViewModels
 {
     public class HomeViewModel
     {

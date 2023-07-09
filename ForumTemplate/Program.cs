@@ -65,11 +65,23 @@ namespace ForumTemplate
             builder.Services.AddScoped<ICommentMapper, CommentMapper>();
             builder.Services.AddScoped<IAuthManager, AuthManager>();
 
-            var app = builder.Build();
+            //Session
+			builder.Services.AddSession(options =>
+			{
+				options.IdleTimeout = TimeSpan.FromSeconds(1000);
+				options.Cookie.HttpOnly = true;
+				options.Cookie.IsEssential = true;
+			});
+
+			var app = builder.Build();
 
 		
 			app.UseRouting();
+            app.UseSession();
+
+			// Enables the views to use resources from wwwroot
 			app.UseStaticFiles();
+
 			app.MapDefaultControllerRoute();
 
             app.Run();
