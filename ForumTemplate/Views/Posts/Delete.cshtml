@@ -1,38 +1,10 @@
-﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
-@using ForumTemplate.Models;
-@model PostViewModel
+﻿@{
+    this.ViewData["Title"] = "Delete";
+}
+<h2>Delete <b>@this.Model.Title</b>?</h2>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8" />
-    <title>Fit-Body - Create</title>
-    <link rel="stylesheet" href="~/css/site.css" />
+<form asp-controller="Posts" asp-action="Delete" method="post">
+    <input type="submit" value="Delete" class="btn-danger" />
+</form>
 
-</head>
-<body>
-    <header>
-        <div>
-            <h3>
-                <a asp-controller="Home" asp-action="Index" class="nav">Home</a>
-                | <a asp-controller="Posts" asp-action="Index" class="nav">Posts</a>
-                | <a asp-controller="Home" asp-action="About" class="nav">About</a>
-                | <a href="/api/swagger" class="nav">Developer API</a>
-            </h3>
-        </div>
-    </header>
-    <div class="body-content">
-        <h2>Delete <b>@this.Model.Title</b>?</h2>
-
-        <form asp-controller="Posts" asp-action="Delete" method="post">
-            <input type="submit" value="Delete" class="btn-danger" />
-        </form>
-
-        <a asp-controller="Posts" asp-action="Index" class="nav">Back</a>
-    </div>
-
-    <footer>
-        <small>© Copyright @DateTime.Now.Year, Fit-Body</small>
-    </footer>
-</body>
-</html>
+<a asp-controller="Posts" asp-action="Index" class="nav">Back</a>

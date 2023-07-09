@@ -1,41 +1,21 @@
-﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+﻿@{
+    this.ViewData["Title"] = "Home";
+}
 @using ForumTemplate.Models;
 @model HomeViewModel
 
+    <h2>Welcome to Fit-Body</h2>
+    <img src="~/images/Fit-Body.jpg" />
+    <p>
+        Welcome to Fit-Body - your place for a healthy lifestyle! Explore a variety of features designed to help you achieve your fitness goals. Find inspiration from a large community of <b> more than @Model.TotalUserCount active users and more than @Model.TotalPostCount topics </b> who share their achievements, tips, and motivation. With our platform, you'll stay up-to-date with the latest trends and learn how to create healthy habits that will help you achieve and maintain your ideal shape.
+    </p>
+    <p>
+        Join our dynamic community and be part of a growing group of people dedicated to a healthy and active lifestyle. Start your fitness and wellness journey today and join thousands of others who have already achieved excellent results.
+    </p>
+    <p>
+        Let us assist you in reaching your fitness goals and make a healthy lifestyle an integral part of your daily routine. Unleash your potential with Fit-Body and become the best version of yourself!
+    </p>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8" />
-    <title>Fit-Body - Home</title>
-    <link rel="stylesheet" href="~/css/site.css" />
-</head>
-<body>
-    <header>
-        <div>
-            <h3>
-                <a asp-controller="Home" asp-action="Index" class="nav">Home</a>
-                | <a asp-controller="Posts" asp-action="Index" class="nav">Posts</a>
-                | <a asp-controller="Home" asp-action="About" class="nav">About</a>
-                | <a href="/api/swagger" class="nav">Developer API</a>
-            </h3>
-        </div>
-    </header>
-
-    <div class="body-content">
-        <h2>Welcome to Fit-Body</h2>
-        <img src="~/images/Fit-Body.jpg" />
-
-        <p>
-            Welcome to Fit-Body - your place for a healthy lifestyle! Explore a variety of features designed to help you achieve your fitness goals. Find inspiration from a large community of <b> more than @Model.TotalUserCount active users and more than @Model.TotalPostCount topics </b> who share their achievements, tips, and motivation. With our platform, you'll stay up-to-date with the latest trends and learn how to create healthy habits that will help you achieve and maintain your ideal shape.
-        </p>
-        <p>
-            Join our dynamic community and be part of a growing group of people dedicated to a healthy and active lifestyle. Start your fitness and wellness journey today and join thousands of others who have already achieved excellent results.
-        </p>
-        <p>
-            Let us assist you in reaching your fitness goals and make a healthy lifestyle an integral part of your daily routine. Unleash your potential with Fit-Body and become the best version of yourself!
-        </p>
-    </div>
 
     <h2 class="my-section-title">Top 10 Most Commented Posts</h2>
  
@@ -63,10 +43,3 @@
             </div>
         </div>
         }
-
-
-    <footer>
-        <small>© Copyright @DateTime.Now.Year, Fit-Body</small>
-    </footer>
-</body>
-</html>

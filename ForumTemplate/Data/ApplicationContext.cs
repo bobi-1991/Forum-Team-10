@@ -1,5 +1,6 @@
 ﻿using ForumTemplate.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using System.Diagnostics;
 
 namespace ForumTemplate.Data
@@ -15,7 +16,14 @@ namespace ForumTemplate.Data
         public DbSet<Post> Posts { get; set; } = null!;
         public DbSet<Comment> Comments { get; set; } = null!;
         public DbSet<Like> Likes { get; set; } = null!;
-     //   public DbSet<Tag> Tags { get; set; } = null!;
+        //   public DbSet<Tag> Tags { get; set; } = null!;
+
+
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    optionsBuilder.ConfigureWarnings(warnings =>
+        //        warnings.Throw(RelationalEventId.MultipleCollectionIncludeWarning));
+        //}
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //seed users

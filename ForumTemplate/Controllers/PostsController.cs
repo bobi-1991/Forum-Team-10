@@ -65,7 +65,7 @@ namespace ForumTemplate.Controllers
                 {
                     return this.View(postViewModel);
                 }
-
+                // Warning: We bypass authentication and authorization just for this moment
                 var user = userService.GetByUsername("admin");
                 var post = postMapper.MapToPostRequest(postViewModel, user.UserId);
                 var createdPost = postService.Create(user, post);
@@ -125,7 +125,7 @@ namespace ForumTemplate.Controllers
                 {
                     return this.View(postViewModel);
                 }
-
+                // Warning: We bypass authentication and authorization just for this moment
                 var user = userService.GetByUsername("admin");
                 var post = postMapper.MapToPostRequest(postViewModel, user.UserId);
                 var updatedPost = postService.Update(user, id, post);
@@ -166,6 +166,7 @@ namespace ForumTemplate.Controllers
         [HttpPost, ActionName("Delete")]
         public IActionResult DeleteConfirmed([FromRoute] Guid id)
         {
+            // Warning: We bypass authentication and authorization just for this moment
             var user = userService.GetByUsername("admin");
             _ = postService.Delete(user, id);
 
