@@ -49,11 +49,16 @@ namespace ForumTemplate.Services.UserService
 
 			return this.userRepository.GetByUsername(username);
 		}
+        public bool UsernameExists(string username)
+        { 
+        return this.userRepository.DoesExist(username);
+        }
 
-		//Authentication
-        public string RegisterUser(RegisterUserRequestModel user, string encodedPassword)
+
+		public string RegisterUser(RegisterUserRequestModel user, string encodedPassword)
         {
             userValidator.ValidateDoesExist(user.Username);
+            userValidator.ValidateIfEmailDoesExist(user.Email);
 
             //Must be done by mapper
             var userDB = new User

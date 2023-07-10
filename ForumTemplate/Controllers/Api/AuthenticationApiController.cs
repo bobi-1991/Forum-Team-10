@@ -17,37 +17,7 @@ namespace ForumTemplate.Controllers.Api
         public AuthApiController(IAuthManager authManager)
         {
             this.authManager = authManager;
-        }
-
-        //[HttpGet("login")]
-        //public IActionResult Login([FromHeader] string credentials)
-        //{
-        //    try
-        //    {
-        //        var message = this.authManager.TrySetCurrentLoggedUser(credentials);
-
-        //        return StatusCode(StatusCodes.Status200OK, message);
-        //    }
-        //    catch (ValidationException e)
-        //    {
-        //        return BadRequest(e.Message);
-        //    }
-        //}
-
-        //[HttpGet("logout")]
-        //public IActionResult Logout([FromHeader] string username)
-        //{
-        //    try
-        //    {
-        //        var message = this.authManager.LogoutUser(username);
-
-        //        return StatusCode(StatusCodes.Status200OK, message);
-        //    }
-        //    catch (ValidationException e)
-        //    {
-        //        return BadRequest(e.Message);
-        //    }
-        //}
+        }  
 
         [HttpPost("register")]
         public IActionResult Register([FromBody] RegisterUserRequestModel user)

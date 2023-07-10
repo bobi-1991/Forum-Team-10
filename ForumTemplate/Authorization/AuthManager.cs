@@ -45,7 +45,7 @@ namespace ForumTemplate.Authorization
 
 		public User TryGetUser(string username, string password)
 		{
-			string encodedPassword = Convert.ToBase64String(Encoding.UTF8.GetBytes(password));
+            string encodedPassword = this.EncodePassword(password);
 
 			try
 			{
@@ -61,9 +61,13 @@ namespace ForumTemplate.Authorization
                 throw new EntityUnauthorizatedException("Invalid username or password");
             }
 		}
+        public string EncodePassword(string password)
+        {
+			return Convert.ToBase64String(Encoding.UTF8.GetBytes(password));
+		}
 
-        //For login auth
-        public void Login(string username, string password)
+		//For login auth
+		public void Login(string username, string password)
         {
             this.CurrentUser = this.TryGetUser(username, password);
 

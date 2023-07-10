@@ -1,5 +1,6 @@
 ﻿using ForumTemplate.Authorization;
 using ForumTemplate.Exceptions;
+using ForumTemplate.Mappers;
 using ForumTemplate.Models;
 using ForumTemplate.Models.ViewModels;
 using ForumTemplate.Services.UserService;
@@ -11,12 +12,14 @@ namespace ForumTemplate.Controllers
     {
         private readonly IAuthManager authManager;
         private readonly IUserService userService;
+        private readonly IUserMapper userMapper;
 
 
-		public AuthController(IAuthManager authManager, IUserService userService)
+		public AuthController(IAuthManager authManager, IUserService userService, IUserMapper userMapper)
 		{
 			this.authManager = authManager;
 			this.userService = userService;
+			this.userMapper = userMapper;
 		}
 
 		[HttpGet]
@@ -42,17 +45,10 @@ namespace ForumTemplate.Controllers
             }
 			catch (EntityUnauthorizatedException e)
 			{
-                //this.ModelState.AddModelError("Username", e.Message);
+
                 this.ModelState.AddModelError("Password", e.Message);
 
                 return this.View(loginViewModel);
-
-                //HttpContext.Response.StatusCode= StatusCodes.Status401Unauthorized;
-                //this.TempData["ErrorMessage"] = e.Message;
-
-
-                // return this.View(loginViewModel);
-
             }
 
 		}
@@ -62,44 +58,54 @@ namespace ForumTemplate.Controllers
             this.authManager.Logout();
 
             return this.RedirectToAction("Index", "Home");
-            //this.HttpContext.Session.Remove("LoggedUser");
-
-            //return RedirectToAction(actionName: "Index", controllerName: "Home");
         }
-        //[HttpGet]
-        //public IActionResult Register()
-        //{
-        //    var viewModel = new RegisterViewModel();
 
-        //    return this.View(viewModel);
-        //}
+        [HttpGet]
+        public IActionResult Register()
+        {
+            var viewModel = new RegisterViewModel();
 
-        //[HttpPost]
-        //public IActionResult Register(RegisterViewModel viewModel)
-        //{
-        //    if (!this.ModelState.IsValid)
-        //    {
-        //        return this.View(viewModel);
-        //    }
+            return this.View(viewModel);
+        }
 
-        //    if (this.usersService.UsernameExists(viewModel.Username))
-        //    {
-        //        this.ModelState.AddModelError("Username", "User with same username already exists.");
+        [HttpPost]
+        public IActionResult Register(RegisterViewModel viewModel)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return this.View(viewModel);
+            }
 
-        //        return this.View(viewModel);
-        //    }
+            if (this.userService.UsernameExists(viewModel.Username))
+            {
+                this.ModelState.AddModelError("Username", "User with same username already exists.");
 
-        //    if (viewModel.Password != viewModel.ConfirmPassword)
-        //    {
-        //        this.ModelState.AddModelError("ConfirmPassword", "The password and confirmation password do not match.");
+                return this.View(viewModel);
+            }
 
-        //        return this.View(viewModel);
-        //    }
+            if (viewModel.Password != viewModel.ConfirmPassword)
+            {
+                this.ModelState.AddModelError("ConfirmPassword", "The password and confirmation password do not match.");
 
-        //    User user = this.modelMapper.Map(viewModel);
-        //    this.usersService.Create(user);
+                return this.View(viewModel);
+            }
 
-        //    return this.RedirectToAction("Login", "Users");
-        //}
+            try
+            {
+                var user = this.userMapper.MapToRegisterUserRequestModel(viewModel);
+                string encodedPassword = this.authManager.EncodePassword(user.Password);
+                this.userService.RegisterUser(user, encodedPassword);
+                this.authManager.Login(user.Username, user.Password);
+
+                return this.RedirectToAction("Index", "Home");
+            }
+            catch (DuplicateEntityException e)
+            {
+                this.ModelState.AddModelError("Email", e.Message);
+
+                return this.View(viewModel);
+            }
+        }
+        
     }
 }

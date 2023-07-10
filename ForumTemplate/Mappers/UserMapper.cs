@@ -1,65 +1,78 @@
 ﻿using ForumTemplate.DTOs.Authentication;
 using ForumTemplate.DTOs.UserDTOs;
 using ForumTemplate.Models;
+using ForumTemplate.Models.ViewModels;
 
 namespace ForumTemplate.Mappers
 {
-    public class UserMapper : IUserMapper
-    {
-        public User MapToUser(RegisterUserRequestModel registerUser)
-        {
-            return User.Create(
-                registerUser.FirstName,
-                registerUser.LastName,
-                registerUser.Username,
-                registerUser.Email,
-                registerUser.Password,
-                registerUser.Country
-            );
-        }
-        public User MapToUser(UpdateUserRequest updateUserRequest)
-        {
-            return new User
-            {
-                FirstName = updateUserRequest.FirstName,
-                LastName = updateUserRequest.LastName,
-                Email = updateUserRequest.Email,
-                Password = updateUserRequest.Password,
-                Country = updateUserRequest.Country
-            };
-        }
-        public UserResponse MapToUserResponse(User user)
-        {
-            return new UserResponse(
-                user.UserId,
-                user.FirstName,
-                user.LastName,
-                user.Country,
-                user.Username,
-                user.Email,
-                user.UpdatedAt
-            );
-        }
-        public List<UserResponse> MapToUserResponse(List<User> users)
-        {
-            var userResponses = new List<UserResponse>();
+	public class UserMapper : IUserMapper
+	{
+		public User MapToUser(RegisterUserRequestModel registerUser)
+		{
+			return User.Create(
+				registerUser.FirstName,
+				registerUser.LastName,
+				registerUser.Username,
+				registerUser.Email,
+				registerUser.Password,
+				registerUser.Country
+			);
+		}
+		public User MapToUser(UpdateUserRequest updateUserRequest)
+		{
+			return new User
+			{
+				FirstName = updateUserRequest.FirstName,
+				LastName = updateUserRequest.LastName,
+				Email = updateUserRequest.Email,
+				Password = updateUserRequest.Password,
+				Country = updateUserRequest.Country
+			};
+		}
+		public UserResponse MapToUserResponse(User user)
+		{
+			return new UserResponse(
+				user.UserId,
+				user.FirstName,
+				user.LastName,
+				user.Country,
+				user.Username,
+				user.Email,
+				user.UpdatedAt
+			);
+		}
+		public List<UserResponse> MapToUserResponse(List<User> users)
+		{
+			var userResponses = new List<UserResponse>();
 
-            foreach (var user in users)
-            {
-                var result = new UserResponse(
-                         user.UserId,
-                         user.FirstName,
-                         user.LastName,
-                         user.Country,
-                         user.Username,
-                         user.Email,
-                         user.UpdatedAt
-                         );
+			foreach (var user in users)
+			{
+				var result = new UserResponse(
+						 user.UserId,
+						 user.FirstName,
+						 user.LastName,
+						 user.Country,
+						 user.Username,
+						 user.Email,
+						 user.UpdatedAt
+						 );
 
-                userResponses.Add(result);
-            }
+				userResponses.Add(result);
+			}
 
-            return userResponses;
-        }
-    }
+			return userResponses;
+		}
+		public RegisterUserRequestModel MapToRegisterUserRequestModel(RegisterViewModel registerViewModel)
+		{
+			return new RegisterUserRequestModel
+			{
+				FirstName = registerViewModel.FirstName,
+				LastName = registerViewModel.LastName,
+				Country = registerViewModel.Country,
+				Username = registerViewModel.Username,
+				Password = registerViewModel.Password,
+				Email = registerViewModel.Email
+			};
+		}
+	}
 }

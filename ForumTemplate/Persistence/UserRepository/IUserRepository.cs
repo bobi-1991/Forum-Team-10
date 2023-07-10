@@ -12,12 +12,13 @@ namespace ForumTemplate.Persistence.UserRepository
         User Update( Guid id, User user);
         string Delete( Guid id);
         bool DoesExist(string usernme);
+        bool EmailDoesExists(string email);
 
         //Authentication
 
-      //  User Login(string username, string encodedPassword);
+        //  User Login(string username, string encodedPassword);
 
-      //  User Logout(string username);
+        //  User Logout(string username);
 
         string RegisterUser(User user);
 

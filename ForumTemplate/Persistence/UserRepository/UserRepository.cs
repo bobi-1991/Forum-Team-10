@@ -89,59 +89,16 @@ namespace ForumTemplate.Persistence.UserRepository
 
         public bool DoesExist(string usernme)
         {
-            return dbContext.Users.Any(x => x.Username.Equals(usernme));
+            return dbContext.Users
+                .Where(x=>!x.IsDelete)
+                .Any(x => x.Username.Equals(usernme));
         }
-
-        //Authentication
-
-        //public User Login(string username, string encodedPassword)
-        //{
-            
-        //    User user;
-        //    try
-        //    {
-        //        user = dbContext.Users.FirstOrDefault(u => u.Username.Equals(username) && u.Password.Equals(encodedPassword));
-        //        if (user is null)
-        //        {
-        //            throw new ValidationException("User not found");
-        //        }
-        //        if (user.IsBlocked)
-        //        {
-        //            throw new ValidationException("User is banned and cannot login, please contact support");
-        //        }
-        //        user.IsLogged = true;
-        //        dbContext.SaveChanges();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new ValidationException(ex.Message);
-        //    }
-        //    return user;
-            
-        //}
-
-        //public User Logout(string username)
-        //{
-            
-        //    User user;
-        //    try
-        //    {
-        //        user = dbContext.Users.FirstOrDefault(u => u.Username.Equals(username));
-        //        if (user is null)
-        //        {
-        //            throw new ValidationException("User not found");
-        //        }
-        //        user.IsLogged = false;
-        //        dbContext.SaveChanges();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new ValidationException(ex.Message);
-        //    }
-        //    return user;
-            
-        //}
-
+        public bool EmailDoesExists(string email)
+        {
+            return dbContext.Users
+                   .Where(x => !x.IsDelete)
+                   .Any(x => x.Email.Equals(email));
+        }
         public string RegisterUser(User user)
         {
             

@@ -2,10 +2,6 @@
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @inject IAuthManager authManager;
 
-@*@{
-    var isLogged = Context.Session.Keys.Contains("LoggedUser");
-}*@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -38,21 +34,21 @@
                             <a class="nav-link text-dark" href="/api/swagger">Developer API</a>
                         </li>
                         <li class="nav-item">
-                            @if (this.authManager.CurrentUser is null)
+                            @if (this.authManager.CurrentUser == null)
                             {
-                                <a class="nav-link text-dark" asp-controller="Auth" asp-action="Login">Login</a>
+                                <a asp-controller="Auth" asp-action="Login" class="btn btn-outline-success">Login</a>
                             }
                             else
                             {
-                                <a class="nav-link text-dark" asp-controller="Auth" asp-action="Logout">Logout</a>
+                                <a asp-controller="Auth" asp-action="Logout" class="btn btn-outline-danger">Logout</a>
                             }
                         </li>
-                        <li class="nav-item">
+                 @*       <li class="nav-item">
                             @if (this.authManager.CurrentUser is null)
                             {
                                 <a class="nav-link text-dark" asp-controller="Auth" asp-action="Register">Register</a>
                             }
-                        </li>
+                        </li>*@
                     </ul>
                 </div>
             </div>

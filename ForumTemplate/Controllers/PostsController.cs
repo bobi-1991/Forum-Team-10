@@ -75,7 +75,7 @@ namespace ForumTemplate.Controllers
 
                 if (this.authManager.CurrentUser == null)
                 {
-                    return this.RedirectToAction("Login", "Users");
+                    return this.RedirectToAction("Login", "Auth");
                 }
 
                 var user = this.authManager.CurrentUser;
@@ -99,7 +99,7 @@ namespace ForumTemplate.Controllers
         {
             if (this.authManager.CurrentUser == null)
             {
-                return this.RedirectToAction(actionName: "Login", controllerName: "Users");
+                return this.RedirectToAction(actionName: "Login", controllerName: "Auth");
             }
       
             try
@@ -160,7 +160,7 @@ namespace ForumTemplate.Controllers
         {
             if (this.authManager.CurrentUser == null)
             {
-                return this.RedirectToAction(actionName: "Login", controllerName: "Users");
+                return this.RedirectToAction(actionName: "Login", controllerName: "Auth");
             }
 
             try

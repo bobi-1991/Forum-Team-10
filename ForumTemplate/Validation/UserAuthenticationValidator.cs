@@ -25,8 +25,17 @@ namespace ForumTemplate.Validation
 				throw new DuplicateEntityException($"User already exists.");
 			}
 		}
-		
-		public void ValidateIfUsernameExist(string username)
+        public void ValidateIfEmailDoesExist(string email)
+        {
+            var doesExists = this.userRepository.EmailDoesExists(email);
+
+            if (doesExists)
+            {
+                throw new DuplicateEntityException($"User with this email already exists.");
+            }
+        }
+
+        public void ValidateIfUsernameExist(string username)
 		{
 			var doesExists = this.userRepository.DoesExist(username);
 
