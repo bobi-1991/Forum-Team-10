@@ -25,9 +25,9 @@ namespace ForumTemplate.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public IActionResult Index([FromQuery] PostQueryParameters postQueryParameters)
         {
-            List<Post> posts = this.postService.GetAllPosts();
+            var posts = this.postService.SearchBy(postQueryParameters);
 
             return this.View(posts);
         }

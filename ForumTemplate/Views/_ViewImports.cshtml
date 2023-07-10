@@ -1,5 +1,7 @@
 ﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @using ForumTemplate.Models.ViewModels;
+@using ForumTemplate.Models.Pagination;
 @using ForumTemplate.Models;
 @using ForumTemplate.Services;
 @using ForumTemplate.Authorization;
+@inject IAuthManager authManager;

@@ -1,5 +1,6 @@
 ﻿
 using ForumTemplate.Models;
+using ForumTemplate.Models.Pagination;
 
 namespace ForumTemplate.Persistence.PostRepository
 {
@@ -8,6 +9,7 @@ namespace ForumTemplate.Persistence.PostRepository
         List<Post> GetAll();
         IQueryable<Post> GetAllToQueriable();
         List<Post> FilterBy(PostQueryParameters filterParameters);
+        PaginatedList<Post> SearchBy(PostQueryParameters search);
         Post GetById(Guid id);
         Post GetByTitle(string title);
         Post Create(Post post);

@@ -1,8 +1,10 @@
 ﻿using ForumTemplate.Data;
 using ForumTemplate.Exceptions;
 using ForumTemplate.Models;
+using ForumTemplate.Models.Pagination;
 using ForumTemplate.Services.PostService;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 
 namespace ForumTemplate.Persistence.PostRepository
 {
@@ -17,8 +19,8 @@ namespace ForumTemplate.Persistence.PostRepository
         {
             return this.dbContext.Posts
                 .Where(x => !x.User.IsDelete)
-				.Where(x => !x.IsDelete)
-				.Include(x => x.Likes)
+                .Where(x => !x.IsDelete)
+                .Include(x => x.Likes)
                 .Include(x => x.Comments)
                 .ToList();
         }
@@ -28,6 +30,22 @@ namespace ForumTemplate.Persistence.PostRepository
                 .Where(x => !x.User.IsDelete)
 				.Where(x => !x.IsDelete)
 				.Include(x => x.Likes);
+        }
+        public PaginatedList<Post> SearchBy(PostQueryParameters filter)
+        {
+            List<Post> posts = this.GetAll();
+            posts = FilterByTitle(posts,filter.Title);
+
+            int totalPages = (posts.Count() + 1) / filter.PageSize;
+            posts = Paginate(posts, filter.PageNumber, filter.PageSize);
+
+            return new PaginatedList<Post>(posts, totalPages, filter.PageNumber);
+        }
+        public static List<Post> Paginate(List<Post> result, int pageNumber, int pageSize)
+        {
+            return result
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize).ToList();
         }
         public List<Post> FilterBy(PostQueryParameters filterParameters)
         {

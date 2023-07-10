@@ -9,6 +9,7 @@ namespace ForumTemplate.Services.PostService
         List<PostResponse> GetAll();
         List<Post> GetAllPosts();
         List<PostResponse> FilterBy(PostQueryParameters filterParameters);
+        List<Post> SearchBy(PostQueryParameters search);
         PostResponse GetById(Guid id);
         Post GetByPostId(Guid id);
         PostResponse Create(User loggedUser, PostRequest postRequest);

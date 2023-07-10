@@ -107,13 +107,15 @@ namespace ForumTemplate.Services.PostService
 
             this.postRepository.DeletePosts(postsToDelete);
         }
-
-        //   Not tested yet
         public List<PostResponse> FilterBy(PostQueryParameters filterParameters)
         {
             List<Post> filteredPosts = this.postRepository.FilterBy(filterParameters);
 
             return postMapper.MapToPostResponse(filteredPosts);
+        }
+        public List<Post> SearchBy(PostQueryParameters search)
+        { 
+        return this.postRepository.SearchBy(search);
         }
         public List<Post> GetTopCommentedPosts(int count)
         {
