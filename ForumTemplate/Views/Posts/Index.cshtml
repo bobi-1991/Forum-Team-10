@@ -17,29 +17,39 @@
     <input type="submit" value="Search" class="btn btn-primary" />
 </form>
 
-
-
+@*
 <div class="table">
     <div class="header">
         <div class="header-cell">Title</div>
-        <div class="header-cell">Actions</div>
     </div>
 
     @{
         foreach (var post in this.Model)
         {
-            <div class="row">
+            <div class="row" onclick="location.href='@Url.Action("Details", "Posts", new { id = post.PostId })'">
                 <div class="cell">@post.Title</div>
-
-                <div class="cell">
-                    <a asp-controller="Posts" asp-action="Details" asp-route-id="@post.PostId" class="btn btn-primary">Details</a>
-                    <a asp-controller="Posts" asp-action="Edit" asp-route-id="@post.PostId" class="btn btn-warning">Edit</a>
-                    <a asp-controller="Posts" asp-action="Delete" asp-route-id="@post.PostId" class="btn btn-danger">Delete</a>
-                </div>
             </div>
         }
     }
+</div>*@
+
+
+
+<div class="table">
+    <div class="header">
+        <div class="header-cell">Title</div>
+    </div>
+
+    @{
+        foreach (var post in this.Model)
+        {
+            <a class="row clickable-row" href="@Url.Action("Details", "Posts", new { id = post.PostId })">
+                <div class="cell">@post.Title</div>
+            </a>
+        }
+    }
 </div>
+
 
 @*Pagination*@
 @{

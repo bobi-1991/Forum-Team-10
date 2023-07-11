@@ -1,0 +1,13 @@
+﻿@model UserViewModel
+
+@{
+    this.ViewData["Title"] = "Profile";
+}
+
+<h2>Welcome, @Model.Username!</h2>
+<h3>Your Profile:</h3>
+<p><i class="fas fa-user"></i> Name: @Model.FirstName @Model.LastName</p>
+<p><i class="fas fa-envelope"></i> Email: @Model.Email</p>
+<p><i class="fas fa-globe"></i> Country: @Model.Country</p>
+<p><i class="fas fa-user-tag"></i> Role: @Model.Role</p>
+<p><i class="fas fa-check-circle"></i> Status: @Model.IsBlocked</p>

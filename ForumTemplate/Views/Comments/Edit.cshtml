@@ -1,0 +1,11 @@
+﻿@model CommentViewModel
+
+
+<h4>Edit a comment</h4>
+<form asp-controller="Comments" asp-action="Edit" method="post">
+@*    <input type="hidden" name="commentId" value="@Model.id" />*@
+   @* <textarea name="content" rows="3" required></textarea>*@
+    <textarea name="content" rows="3" required>@Model.Content</textarea>
+    <br>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>

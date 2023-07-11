@@ -1,4 +1,4 @@
-﻿
+﻿@*
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
 
@@ -42,6 +42,8 @@
                             else
                             {
                                 <a asp-controller="Auth" asp-action="Logout" class="btn btn-outline-danger">Logout</a>
+
+                                <a asp-controller="User" asp-action="Index" class="btn btn-outline-success">Account</a>
                             }
                         </li>
                     </ul>
@@ -56,6 +58,100 @@
 
     <footer>
         <small>© Copyright @DateTime.Now.Year, Fit-Body</small>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>*@
+
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Fit-Body - @this.ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-...вашето-интегритетно-хеширане..." crossorigin="anonymous" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container">
+                <a class="navbar-brand" asp-controller="Home" asp-action="Index">Fit-Body</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="Posts" asp-action="Index">Posts</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="Home" asp-action="About">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" href="/api/swagger">Developer API</a>
+                        </li>              
+                            @if (this.authManager.CurrentUser == null)
+                        {
+                        <li class="nav-item">
+                        <a asp-controller="Auth" asp-action="Login" class="nav-link text-dark">Login</a>
+                        </li>
+                        }
+                        else
+                        {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Account
+                            </a>
+
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                <a asp-controller="User" asp-action="Index" class="dropdown-item" onmouseover="changeColor(this, 'blue')" onmouseout="resetColor(this)">
+                                    <i class="fas fa-user-circle"></i> Profile
+                                </a>
+                                <a asp-controller="Auth" asp-action="Logout" class="dropdown-item" id="logout-link" onmouseover="changeColor(this, 'red')" onmouseout="resetColor(this)">
+                                    <i class="fas fa-sign-out-alt"></i> Logout
+                                </a>
+                            </div>
+
+                            <script>
+                                    function changeColor(element, color) {
+                                        element.style.color = color;
+                                    }
+
+                                    function resetColor(element) {
+                                        element.style.color = '';
+                                    }
+                            </script>
+                              
+
+                            @*    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                            <a asp-controller="User" asp-action="Index" class="dropdown-item">
+                            <i class="fas fa-user-circle"></i> Profile
+                            </a>
+                            <a asp-controller="Auth" asp-action="Logout" class="dropdown-item">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                            </a>
+                            </div>*@
+                        </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="body-content">
+        @RenderBody()
+    </div>
+
+    <footer>
+        <small>&copy; @DateTime.Now.Year, Fit-Body</small>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

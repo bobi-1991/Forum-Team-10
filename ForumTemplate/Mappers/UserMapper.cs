@@ -74,5 +74,20 @@ namespace ForumTemplate.Mappers
 				Email = registerViewModel.Email
 			};
 		}
-	}
+        public UserViewModel MapToUserViewModel(User user)
+        {
+            return new UserViewModel
+            {
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Country = user.Country,
+                Username = user.Username,
+                Password = user.Password,
+                Email = user.Email,
+				Role = user.IsAdmin ? "Admin" : "User",
+				IsBlocked = user.IsBlocked ? "Blocked" : "Active"
+				
+            };
+        }
+    }
 }

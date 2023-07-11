@@ -21,7 +21,12 @@ namespace ForumTemplate.Tests.FluentValidationTests
         public void CommentRequest_ShouldReturn_WhenAllValid()
         {
             //Arrange
-            var model = new CommentRequest(new string('a', 50), Guid.NewGuid(), Guid.NewGuid());
+            var model = new CommentRequest
+            {
+                Content = new string('a', 50),
+                UserId = Guid.NewGuid(),
+                PostId = Guid.NewGuid()
+            };
 
             //Act
             var result = validator.TestValidate(model);
@@ -36,7 +41,12 @@ namespace ForumTemplate.Tests.FluentValidationTests
         {
             string content = null;
 
-            var model = new CommentRequest(content, Guid.NewGuid(), Guid.NewGuid());
+            var model = new CommentRequest
+            { 
+              Content = content,
+                UserId = Guid.NewGuid(),
+                 PostId = Guid.NewGuid()
+            };
 
             var result = validator.TestValidate(model);
 
@@ -53,7 +63,12 @@ namespace ForumTemplate.Tests.FluentValidationTests
         public void CommentRequest_ShouldThrow_WhenContentInvalid()
         {
             //Arrange
-            var model = new CommentRequest(new string('a', 8193), Guid.NewGuid(), Guid.NewGuid());
+            var model = new CommentRequest
+            {
+                Content = new string('a', 8193),
+                UserId = Guid.NewGuid(),
+                PostId = Guid.NewGuid()
+            };
 
             //Act
             var result = validator.TestValidate(model);

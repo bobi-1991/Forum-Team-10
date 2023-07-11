@@ -7,13 +7,22 @@ namespace ForumTemplate.Mappers
     {
         public CommentResponse MapToCommentResponse(Comment comment)
         {
-               return new CommentResponse(
-                    comment.CommentId,
-                    comment.Content,
-                    comment.UserId.Value,
-                    comment.PostId,
-                    comment.CreatedAt,
-                    comment.UpdatedAt);
+            return new CommentResponse(
+                 comment.CommentId,
+                 comment.Content,
+                 comment.UserId.Value,
+                 comment.PostId,
+                 comment.CreatedAt,
+                 comment.UpdatedAt);
+        }
+        public CommentRequest MapToCommentRequest(CommentResponse commentResponse)
+        {
+            return new CommentRequest
+            {
+                Content = commentResponse.Content,
+                UserId = commentResponse.UserId,
+                PostId = commentResponse.PostId
+            };
         }
         public List<CommentResponse> MapToCommentResponse(List<Comment> comments)
         {
@@ -35,14 +44,14 @@ namespace ForumTemplate.Mappers
             return commentResponses;
         }
 
-        public Comment MapToComment(CommentRequest commentRequest)       
+        public Comment MapToComment(CommentRequest commentRequest)
         {
-           var comment = Comment.Create(
-                 commentRequest.Content,
-                 commentRequest.UserId,
-                 commentRequest.PostId);
+            var comment = Comment.Create(
+                  commentRequest.Content,
+                  commentRequest.UserId,
+                  commentRequest.PostId);
 
-            return comment; 
+            return comment;
         }
     }
 }

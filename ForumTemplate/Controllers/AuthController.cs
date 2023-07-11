@@ -97,6 +97,8 @@ namespace ForumTemplate.Controllers
                 this.userService.RegisterUser(user, encodedPassword);
                 this.authManager.Login(user.Username, user.Password);
 
+                this.TempData["SuccessMessage"] = "Registration successfully";
+
                 return this.RedirectToAction("Index", "Home");
             }
             catch (DuplicateEntityException e)

@@ -346,11 +346,11 @@ namespace ForumTemplate.Tests.CommentServiceTests
         private CommentRequest GetCommentRequest()
         {
             return new CommentRequest
-            (
-                "ContentTestTest",
-                id,
-                postId
-            );
+            {
+                Content = "ContentTestTest",
+                UserId = id,
+                PostId = postId
+            };
         }
 
         private User GetUser()

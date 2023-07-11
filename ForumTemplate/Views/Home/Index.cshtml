@@ -3,6 +3,13 @@
 }
 @model HomeViewModel
 
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
     <h2>Welcome to Fit-Body</h2>
     <img src="~/images/Fit-Body.jpg" />
     <p>
