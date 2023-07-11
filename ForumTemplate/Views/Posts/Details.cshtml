@@ -1,36 +1,145 @@
-﻿@{
-	this.ViewData["Title"] = "Details";
+﻿@*
+@{
+    this.ViewData["Title"] = "Details";
 }
 @model Post
 
 <h2>
-	@this.Model.Content
+    @this.Model.Content
 </h2>
 <h3>
-	From: @this.Model.User.Username
+    From: @this.Model.User.Username
 </h3>
+
+
+   <div>
+        Likes: @this.Model.Likes.Count();
+    </div>
+    <form asp-controller="Likes" asp-action="Like" method="post">
+        <input type="hidden" name="postId" value="@Model.PostId" />
+        <button type="submit" class="btn btn-link" style="color:@(Model.Likes.Any(l => l.UserId == authManager.CurrentUser?.UserId && l.Liked) ? "blue" : "black")">
+            <i class="@(Model.Likes.Any(l => l.UserId == authManager.CurrentUser?.UserId && l.Liked) ? "fas fa-thumbs-up" : "far fa-thumbs-up")"></i>
+        </button>
+        <span>@Model.Likes.Count(l => l.Liked)</span>
+        <button type="submit" class="btn btn-link" style="color:@(Model.Likes.Any(l => l.UserId == authManager.CurrentUser?.UserId && !l.Liked) ? "red" : "black")">
+            <i class="@(Model.Likes.Any(l => l.UserId == authManager.CurrentUser?.UserId && !l.Liked) ? "fas fa-thumbs-down" : "far fa-thumbs-down")"></i>
+        </button>
+    </form>
+}
+
+@if (authManager.CurrentUser is not null && (authManager.CurrentUser.UserId == this.Model.UserId || authManager.CurrentUser.IsAdmin))
+{
+    <div>
+        <a asp-controller="Posts" asp-action="Edit" asp-route-id="@this.Model.PostId" class="btn btn-primary">Edit Post</a>
+        <a asp-controller="Posts" asp-action="Delete" asp-route-id="@this.Model.PostId" class="btn btn-danger">Delete Post</a>
+    </div>
+
+}
 
 <h4>Comments <br></h4>
 
 @if (this.Model.Comments.Count == 0)
 {
-	<p>
-		<i>No comments</i>
-	</p>
+    <p>
+        <i>No comments</i>
+    </p>
 }
 else
 {
-	<ul>
-		@foreach (var comment in this.Model.Comments)
-		{
-			<li class="margin12">
-				Comment from @comment.User.Username <br>
-				Published at: @comment.CreatedAt <br>
-				<p>@comment.Content</p>
-				<hr>
-			</li>
-		}
-	</ul>
+    <ul>
+        @foreach (var comment in this.Model.Comments.OrderBy(x => x.CreatedAt))
+        {
+            <li class="margin12">
+                Comment from @comment.User.Username <br>
+                Published at: @comment.CreatedAt <br>
+                <p>@comment.Content</p>
+                <hr>
+            </li>
+        }
+    </ul>
 }
+
+<!-- Форма за създаване на коментар -->
+<h4>Add a comment</h4>
+<form asp-controller="Comments" asp-action="Create" method="post">
+    <input type="hidden" name="postId" value="@this.Model.PostId" />
+    <textarea name="content" rows="3" required></textarea>
+    <br>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+<a asp-controller="Posts" asp-action="Index" class="nav">See all posts</a>*@
+
+@{
+    this.ViewData["Title"] = "Details";
+}
+@model Post
+
+<h2>
+    @this.Model.Content
+</h2>
+<h3>
+    From: @this.Model.User.Username
+</h3>
+<form asp-controller="Likes" asp-action="Like" method="post">
+    <input type="hidden" name="postId" value="@Model.PostId" />
+    <button type="submit" class="btn btn-link" style="color:@(Model.Likes.Any(l => l.UserId == authManager.CurrentUser?.UserId && l.Liked) ? "blue" : "black")" @(Model.Likes.Any(l => l.UserId == authManager.CurrentUser?.UserId && l.Liked) ? "disabled" : "")>
+        <i class="@(Model.Likes.Any(l => l.UserId == authManager.CurrentUser?.UserId && l.Liked) ? "fas fa-thumbs-up" : "far fa-thumbs-up")"></i>
+    </button>
+    <span>@Model.Likes.Count(l => l.Liked)</span>
+    <button type="submit" class="btn btn-link" style="color:@(Model.Likes.Any(l => l.UserId == authManager.CurrentUser?.UserId && !l.Liked) ? "red" : "black")" @(Model.Likes.Any(l => l.UserId == authManager.CurrentUser?.UserId && !l.Liked) ? "disabled" : "")>
+        <i class="@(Model.Likes.Any(l => l.UserId == authManager.CurrentUser?.UserId && !l.Liked) ? "fas fa-thumbs-down" : "far fa-thumbs-down")"></i>
+    </button>
+</form>
+@*<form asp-controller="Likes" asp-action="Like" method="post">
+    <input type="hidden" name="postId" value="@Model.PostId" />
+    <button type="submit" class="btn btn-link" style="color:@(Model.Likes.Any(l => l.UserId == authManager.CurrentUser?.UserId && l.Liked) ? "blue" : "black")">
+        <i class="@(Model.Likes.Any(l => l.UserId == authManager.CurrentUser?.UserId && l.Liked) ? "fas fa-thumbs-up" : "far fa-thumbs-up")"></i>
+    </button>
+    <span>@Model.Likes.Count(l => l.Liked)</span>
+    <button type="submit" class="btn btn-link" style="color:@(Model.Likes.Any(l => l.UserId == authManager.CurrentUser?.UserId && !l.Liked) ? "red" : "black")">
+        <i class="@(Model.Likes.Any(l => l.UserId == authManager.CurrentUser?.UserId && !l.Liked) ? "fas fa-thumbs-down" : "far fa-thumbs-down")"></i>
+    </button>
+</form>*@
+
+@if (authManager.CurrentUser is not null && (authManager.CurrentUser.UserId == this.Model.UserId || authManager.CurrentUser.IsAdmin))
+{
+    <div>
+        <a asp-controller="Posts" asp-action="Edit" asp-route-id="@this.Model.PostId" class="btn btn-primary">Edit Post</a>
+        <a asp-controller="Posts" asp-action="Delete" asp-route-id="@this.Model.PostId" class="btn btn-danger">Delete Post</a>
+    </div>
+}
+
+<h4>Comments <br></h4>
+
+@if (this.Model.Comments.Count == 0)
+{
+    <p>
+        <i>No comments</i>
+    </p>
+}
+else
+{
+    <ul>
+        @foreach (var comment in this.Model.Comments.OrderBy(x => x.CreatedAt))
+        {
+            <li class="margin12">
+                Comment from @comment.User.Username <br>
+                Published at: @comment.CreatedAt <br>
+                <p>@comment.Content</p>
+                <hr>
+            </li>
+        }
+    </ul>
+}
+
+<!-- Форма за създаване на коментар -->
+<h4>Add a comment</h4>
+<form asp-controller="Comments" asp-action="Create" method="post">
+    <input type="hidden" name="postId" value="@this.Model.PostId" />
+    <textarea name="content" rows="3" required></textarea>
+    <br>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
 
 <a asp-controller="Posts" asp-action="Index" class="nav">See all posts</a>
