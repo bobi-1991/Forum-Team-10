@@ -22,6 +22,7 @@ namespace ForumTemplate.Persistence.PostRepository
                 .Where(x => !x.IsDelete)
                 .Include(x => x.Likes)
                 .Include(x => x.Comments)
+                .Include(x => x.Tags)
                 .ToList();
         }
         public IQueryable<Post> GetAllToQueriable()
@@ -29,7 +30,8 @@ namespace ForumTemplate.Persistence.PostRepository
             return this.dbContext.Posts
                 .Where(x => !x.User.IsDelete)
 				.Where(x => !x.IsDelete)
-				.Include(x => x.Likes);
+				.Include(x => x.Likes)
+                .Include(x => x.Tags);
         }
         public PaginatedList<Post> SearchBy(PostQueryParameters filter)
         {
@@ -66,6 +68,7 @@ namespace ForumTemplate.Persistence.PostRepository
                 .Include(x=>x.User)
 				.Include(x => x.Likes)
 				.Include(x => x.Comments)
+                .Include(x => x.Tags)
                    .ThenInclude(x=>x.User)
 				.FirstOrDefault(p => p.PostId == id);
         }
@@ -76,7 +79,8 @@ namespace ForumTemplate.Persistence.PostRepository
 				.Where(x => !x.IsDelete)
 				.Include(x => x.Likes)
 				.Include(x => x.Comments)
-				.FirstOrDefault(p => p.Title == title);
+                .Include(x => x.Tags)
+                .FirstOrDefault(p => p.Title == title);
         }
         public List<Post> GetByUserId(Guid id)
         {

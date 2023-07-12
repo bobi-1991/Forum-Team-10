@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ForumTemplate.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20230706165730_initial")]
-    partial class initial
+    [Migration("20230712150509_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -124,16 +124,32 @@ namespace ForumTemplate.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Title")
+                    b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("PostId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("TagId");
 
-                    b.ToTable("Tag");
+                    b.HasIndex("PostId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Tags");
                 });
 
             modelBuilder.Entity("ForumTemplate.Models.User", b =>
@@ -185,7 +201,7 @@ namespace ForumTemplate.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = new Guid("142537a7-b3ac-4c1e-9546-b55956305e08"),
+                            UserId = new Guid("a8cd869b-f350-4aa6-bf13-0641e35efd60"),
                             Country = "Bulgaria",
                             Email = "admin@forum.com",
                             FirstName = "Admin",
@@ -199,7 +215,7 @@ namespace ForumTemplate.Migrations
                         },
                         new
                         {
-                            UserId = new Guid("30db1ce0-f680-4165-a8d6-20ce6ccf69d9"),
+                            UserId = new Guid("48d65dc5-8e23-489d-8550-57fb768604b3"),
                             Country = "Bulgaria",
                             Email = "bobi@email",
                             FirstName = "borislav",
@@ -213,7 +229,7 @@ namespace ForumTemplate.Migrations
                         },
                         new
                         {
-                            UserId = new Guid("9fd9e9ee-58fd-4aa7-aa90-67bdce7d02ba"),
+                            UserId = new Guid("4eebadba-3bef-4e1b-8092-85b615260124"),
                             Country = "Bulgaria",
                             Email = "strahil@email",
                             FirstName = "strahil",
@@ -227,7 +243,7 @@ namespace ForumTemplate.Migrations
                         },
                         new
                         {
-                            UserId = new Guid("0a0f80a0-a6b6-4b65-96a2-0962d6ac3481"),
+                            UserId = new Guid("1f3a4fe9-09c9-46eb-b50b-57ae7bf9d1dd"),
                             Country = "Bulgaria",
                             Email = "iliyan@email",
                             FirstName = "iliyan",
@@ -239,36 +255,6 @@ namespace ForumTemplate.Migrations
                             UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Username = "iliyan"
                         });
-                });
-
-            modelBuilder.Entity("PostTag", b =>
-                {
-                    b.Property<Guid>("PostsPostId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("TagsTagId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("PostsPostId", "TagsTagId");
-
-                    b.HasIndex("TagsTagId");
-
-                    b.ToTable("PostTag");
-                });
-
-            modelBuilder.Entity("TagUser", b =>
-                {
-                    b.Property<Guid>("TagsTagId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("UsersUserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("TagsTagId", "UsersUserId");
-
-                    b.HasIndex("UsersUserId");
-
-                    b.ToTable("TagUser");
                 });
 
             modelBuilder.Entity("ForumTemplate.Models.Comment", b =>
@@ -316,34 +302,21 @@ namespace ForumTemplate.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("PostTag", b =>
+            modelBuilder.Entity("ForumTemplate.Models.Tag", b =>
                 {
-                    b.HasOne("ForumTemplate.Models.Post", null)
-                        .WithMany()
-                        .HasForeignKey("PostsPostId")
+                    b.HasOne("ForumTemplate.Models.Post", "Post")
+                        .WithMany("Tags")
+                        .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ForumTemplate.Models.Tag", null)
-                        .WithMany()
-                        .HasForeignKey("TagsTagId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
+                    b.HasOne("ForumTemplate.Models.User", "User")
+                        .WithMany("Tags")
+                        .HasForeignKey("UserId");
 
-            modelBuilder.Entity("TagUser", b =>
-                {
-                    b.HasOne("ForumTemplate.Models.Tag", null)
-                        .WithMany()
-                        .HasForeignKey("TagsTagId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Post");
 
-                    b.HasOne("ForumTemplate.Models.User", null)
-                        .WithMany()
-                        .HasForeignKey("UsersUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ForumTemplate.Models.Post", b =>
@@ -351,6 +324,8 @@ namespace ForumTemplate.Migrations
                     b.Navigation("Comments");
 
                     b.Navigation("Likes");
+
+                    b.Navigation("Tags");
                 });
 
             modelBuilder.Entity("ForumTemplate.Models.User", b =>
@@ -360,6 +335,8 @@ namespace ForumTemplate.Migrations
                     b.Navigation("Likes");
 
                     b.Navigation("Posts");
+
+                    b.Navigation("Tags");
                 });
 #pragma warning restore 612, 618
         }

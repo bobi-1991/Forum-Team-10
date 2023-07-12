@@ -122,7 +122,15 @@ namespace ForumTemplate.Validation
 			}
 		}
 
-		public void ValidateUserIdMatchAuthorIdComment(User loggedUser, Guid? authorId)
+        public void ValidateUserIsNotBannedTagCreate(User loggedUser)
+        {
+            if (loggedUser.IsBlocked)
+            {
+                throw new EntityBannedException("I'm sorry, but you cannot write a tag. You are currently banned.");
+            }
+        }
+
+        public void ValidateUserIdMatchAuthorIdComment(User loggedUser, Guid? authorId)
 		{
 			if (!loggedUser.UserId.Equals(authorId) && !loggedUser.IsAdmin)
 			{
@@ -130,6 +138,14 @@ namespace ForumTemplate.Validation
 			}
 		}
 
+        public void ValidateUserIdMatchAuthorIdTag(User loggedUser, Guid? authorId)
+        {
+            if (!loggedUser.UserId.Equals(authorId) && !loggedUser.IsAdmin)
+            {
+                throw new ValidationException("The id you entered does not match yours Tag(s) id");
+            }
+        }
 
-	}
+
+    }
 }

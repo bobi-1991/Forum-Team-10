@@ -1,24 +1,41 @@
-﻿namespace ForumTemplate.Models
+﻿using System.ComponentModel.Design;
+
+namespace ForumTemplate.Models
 {
     public class Tag
     {
         public Guid TagId { get; set; }
-        public string Title { get; set; } = null!;
-        public virtual ICollection<Post> Posts { get; set; } = new List<Post>();
-        public virtual ICollection<User> Users { get; set; } = new List<User>();
+        public string Content { get; set; } = null!;
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
+
+        // Foreign keys
+        public Guid? UserId { get; set; }
+        public User User { get; set; } = null!;
+        public Guid PostId { get; set; }
+        public Post Post { get; set; } = null!;
         public bool IsDelete { get; set; }
         public Tag()
         {
         }
-        private Tag(string title)
+        public Tag(
+            string content,
+            Guid userId,
+            Guid postId)
         {
-            Title = title;
+            TagId = Guid.NewGuid();
+            Content = content;
+            CreatedAt = DateTime.UtcNow;
+            UserId = userId;
+            PostId = postId;
         }
-        public Tag Create(string description)
+        public static Tag Create(
+            string content,
+            Guid userId,
+            Guid postId)
         {
-            var tag = new Tag(description);
 
-            return tag;
+            return new Tag(content, userId, postId);
         }
     }
 }

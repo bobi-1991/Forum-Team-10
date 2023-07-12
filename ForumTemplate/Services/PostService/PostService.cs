@@ -6,7 +6,6 @@ using ForumTemplate.DTOs.PostDTOs;
 using ForumTemplate.Persistence.PostRepository;
 using ForumTemplate.Models;
 using ForumTemplate.Services.LikeService;
-using Microsoft.EntityFrameworkCore;
 
 namespace ForumTemplate.Services.PostService
 {
