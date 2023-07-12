@@ -23,12 +23,12 @@ namespace ForumTemplate.Controllers.Api
         }
 
         [HttpGet("{id}")]
-        public IActionResult Get([FromHeader] string credentials, Guid postId)
+        public IActionResult Get([FromHeader] string credentials, Guid id)
         {
             try
             {
                 var loggedUser = authManager.TryGetUser(credentials);
-                var tag = tagService.GetById(postId);
+                var tag = tagService.GetById(id);
 
                 return StatusCode(StatusCodes.Status200OK, tag);
             }
@@ -59,7 +59,7 @@ namespace ForumTemplate.Controllers.Api
                 var loggedUser = authManager.TryGetUser(credentials);
                 var createdTag = tagService.Create(loggedUser, tag);
 
-                return StatusCode(StatusCodes.Status201Created, tag);
+                return StatusCode(StatusCodes.Status201Created, createdTag);
             }
             catch (EntityNotFoundException e)
             {
