@@ -82,12 +82,34 @@ namespace ForumTemplate.Mappers
                 LastName = user.LastName,
                 Country = user.Country,
                 Username = user.Username,
-                Password = user.Password,
                 Email = user.Email,
 				Role = user.IsAdmin ? "Admin" : "User",
-				IsBlocked = user.IsBlocked ? "Blocked" : "Active"
-				
+				IsBlocked = user.IsBlocked ? "Blocked" : "Active"	
             };
         }
-    }
+
+		public UserEditViewModel MapToUserEditViewModel(User user)
+		{
+            return new UserEditViewModel
+            {
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Country = user.Country,
+                Password = user.Password,
+                Email = user.Email,
+				Username = user.Username
+            };
+        }
+		public UpdateUserRequest MapToUpdateUserRequest(UserEditViewModel userEditViewModel)
+		{
+			return new UpdateUserRequest
+			{
+				FirstName = userEditViewModel.FirstName,
+				LastName = userEditViewModel.LastName,
+				Country = userEditViewModel.Country,
+				Password = userEditViewModel.Password,
+				Email = userEditViewModel.Email
+			};
+		}
+	}
 }

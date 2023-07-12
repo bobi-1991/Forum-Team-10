@@ -13,7 +13,10 @@ namespace ForumTemplate.Mappers
         List<UserResponse> MapToUserResponse(List<User> users);
         RegisterUserRequestModel MapToRegisterUserRequestModel(RegisterViewModel registerViewModel);
         UserViewModel MapToUserViewModel(User user);
+        UserEditViewModel MapToUserEditViewModel(User user);
+        UpdateUserRequest MapToUpdateUserRequest(UserEditViewModel userEditViewModel);
 
 
-    }
+
+	}
 }

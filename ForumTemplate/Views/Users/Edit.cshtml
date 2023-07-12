@@ -1,0 +1,46 @@
+﻿@{
+	this.ViewData["Title"] = "Edit";
+}
+@model UserEditViewModel
+
+<h2>@this.Model.Username</h2>
+<form asp-controller="Users" asp-action="Edit" method="post">
+	<div>
+		<label asp-for="FirstName" class="form-label"></label>
+		<br />
+		<input asp-for="FirstName" type="text" class="form-input" />
+		<span asp-validation-for="FirstName" class="form-error"></span>
+	</div>
+	<div>
+		<label asp-for="LastName" class="form-label"></label>
+		<br />
+		<input asp-for="LastName" type="text" class="form-input" />
+		<span asp-validation-for="LastName" class="form-error"></span>
+	</div>
+	<div>
+		<label asp-for="Email" class="form-label"></label>
+		<br />
+		<input asp-for="Email" type="text" class="form-input" />
+		<span asp-validation-for="Email" class="form-error"></span>
+	</div>
+	<div>
+		<label asp-for="Password" class="form-label"></label>
+		<br />
+		<input asp-for="Password" type="text" class="form-input" />
+		<span asp-validation-for="Password" class="form-error"></span>
+	</div>
+	<div>
+		<label asp-for="ConfirmPassword" class="form-label"></label>
+		<br />
+		<input asp-for="ConfirmPassword" type="text" class="form-input" />
+		<span asp-validation-for="ConfirmPassword" class="form-error"></span>
+	</div>
+	<div>
+		<label asp-for="Country" class="form-label"></label>
+		<br />
+		<input asp-for="Country" type="text" class="form-input" />
+		<span asp-validation-for="Country" class="form-error"></span>
+	</div>
+	<input type="submit" value="Confirm changes" class="btn-primary" />
+	<a asp-controller="Users" asp-action="Index" class="nav">Back</a>
+</form>
