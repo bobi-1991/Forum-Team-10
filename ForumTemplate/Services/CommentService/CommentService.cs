@@ -1,5 +1,4 @@
-﻿using ForumTemplate.Authorization;
-using ForumTemplate.DTOs.CommentDTOs;
+﻿using ForumTemplate.DTOs.CommentDTOs;
 using ForumTemplate.Exceptions;
 using ForumTemplate.Mappers;
 using ForumTemplate.Models;
