@@ -1,7 +1,5 @@
 ﻿using ForumTemplate.Data;
-using ForumTemplate.Exceptions;
 using ForumTemplate.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace ForumTemplate.Persistence.CommentRepository
 {
@@ -16,35 +14,35 @@ namespace ForumTemplate.Persistence.CommentRepository
         {
             return dbContext.Comments
                 .Where(x => !x.User.IsDelete)
-				.Where(x => !x.IsDelete)
-				.Where(x=>!x.Post.IsDelete)
+                .Where(x => !x.IsDelete)
+                .Where(x => !x.Post.IsDelete)
                 .ToList();
         }
 
         public Comment GetById(Guid id)
         {
             return dbContext.Comments
-			    .Where(x => !x.User.IsDelete)
-				.Where(x => !x.IsDelete)
-				.Where(x => !x.Post.IsDelete)
-				.FirstOrDefault(c => c.CommentId == id);
+                .Where(x => !x.User.IsDelete)
+                .Where(x => !x.IsDelete)
+                .Where(x => !x.Post.IsDelete)
+                .FirstOrDefault(c => c.CommentId == id);
         }
 
         public List<Comment> GetByPostId(Guid postId)
         {
             return dbContext.Comments
-				.Where(x => !x.IsDelete)
-				.Where(x => !x.Post.IsDelete)
-				.Where(x => x.PostId == postId).ToList();      
+                .Where(x => !x.IsDelete)
+                .Where(x => !x.Post.IsDelete)
+                .Where(x => x.PostId == postId).ToList();
         }
 
         public List<Comment> GetByUserId(Guid id)
         {
-           return dbContext.Comments
-				.Where(x => !x.IsDelete)
-				.Where(x => !x.Post.IsDelete)
-				.Where(x=>!x.User.IsDelete)
-                .Where(p => p.UserId == id).ToList();
+            return dbContext.Comments
+                 .Where(x => !x.IsDelete)
+                 .Where(x => !x.Post.IsDelete)
+                 .Where(x => !x.User.IsDelete)
+                 .Where(p => p.UserId == id).ToList();
         }
 
         public Comment Create(Comment comment)

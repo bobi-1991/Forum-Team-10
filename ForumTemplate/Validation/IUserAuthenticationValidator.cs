@@ -19,5 +19,9 @@ namespace ForumTemplate.Validation
 		void ValidatePostCreateIDMatchAndNotBlocked(User loggedUser,PostRequest postRequest);
         void ValidateUserIdMatchAuthorIdPost(User loggedUser, Guid authorId);
         void ValidateUserIdMatchAuthorIdComment(User loggedUser, Guid? authorId);
+
+        void ValidateUserIsNotBannedTagCreate(User loggedUser);
+
+        void ValidateUserIdMatchAuthorIdTag(User loggedUser, Guid? authorId);
     }
 }

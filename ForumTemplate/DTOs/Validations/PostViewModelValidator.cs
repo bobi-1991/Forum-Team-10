@@ -4,7 +4,7 @@ using ForumTemplate.Models.ViewModels;
 
 namespace ForumTemplate.DTOs.Validations
 {
-    public class PostViewModelValidator: AbstractValidator<PostViewModel>
+    public class PostViewModelValidator : AbstractValidator<PostViewModel>
     {
         private const int MinTitleLength = 16;
         private const int MaxTitleLength = 64;

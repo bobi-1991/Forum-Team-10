@@ -1,5 +1,4 @@
-﻿using ForumTemplate.Authorization;
-using ForumTemplate.DTOs.CommentDTOs;
+﻿using ForumTemplate.DTOs.CommentDTOs;
 using ForumTemplate.Exceptions;
 using ForumTemplate.Mappers;
 using ForumTemplate.Models;
@@ -19,7 +18,6 @@ namespace ForumTemplate.Services.CommentService
         private readonly IUserRepository userRepositoty;
         private readonly IPostRepository postRepository;
         private readonly IUserAuthenticationValidator userValidator;
-
 
         public CommentService(ICommentRepository commentRepository, ICommentsValidator commentsValidator,
             ICommentMapper commentMapper, IUserRepository userRepositoty, IPostRepository postRepository,

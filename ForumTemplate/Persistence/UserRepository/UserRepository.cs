@@ -32,6 +32,7 @@ namespace ForumTemplate.Persistence.UserRepository
                 .Include(x=>x.Likes)
                 .Include(x=>x.Posts)
                 .Include(x=>x.Comments)
+                .Include(x => x.Tags)
                         .ToList();
         }
         public User GetById(Guid id)
@@ -41,7 +42,8 @@ namespace ForumTemplate.Persistence.UserRepository
 				.Include(x => x.Likes)
 				.Include(x => x.Posts)
 				.Include(x => x.Comments)
-				.FirstOrDefault(u => u.UserId == id);
+                .Include(x => x.Tags)
+                .FirstOrDefault(u => u.UserId == id);
 
             if (user is null)
             {
@@ -58,7 +60,8 @@ namespace ForumTemplate.Persistence.UserRepository
 				.Include(x => x.Likes)
 				.Include(x => x.Posts)
 				.Include(x => x.Comments)
-				.FirstOrDefault(u => u.Username.Equals(username));
+                .Include(x => x.Tags)
+                .FirstOrDefault(u => u.Username.Equals(username));
 
             return user;
         }

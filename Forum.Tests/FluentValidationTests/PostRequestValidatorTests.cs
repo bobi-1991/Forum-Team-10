@@ -42,7 +42,7 @@ namespace ForumTemplate.Tests.FluentValidationTests
 
 			var model = new PostRequest
 			{
-				Title = "TitleTitleTestTest",
+				Title = title,
 				Content = new string('a', 50),
 				UserId = Guid.NewGuid()
 			};
@@ -66,7 +66,7 @@ namespace ForumTemplate.Tests.FluentValidationTests
 			var model = new PostRequest
 			{
 				Title = "TitleTitleTestTest",
-				Content = new string('a', 50),
+				Content = content,
 				UserId = Guid.NewGuid()
 			};
 
@@ -91,7 +91,7 @@ namespace ForumTemplate.Tests.FluentValidationTests
 
 			var model = new PostRequest
 			{
-				Title = "TitleTitleTestTest",
+				Title = title,
 				Content = new string('a', 50),
 				UserId = Guid.NewGuid()
 			};
@@ -121,7 +121,7 @@ namespace ForumTemplate.Tests.FluentValidationTests
 			var model = new PostRequest
 			{
 				Title = "TitleTitleTestTest",
-				Content = new string('a', 50),
+				Content = content,
 				UserId = Guid.NewGuid()
 			};
 

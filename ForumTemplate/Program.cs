@@ -16,6 +16,8 @@ using Microsoft.EntityFrameworkCore;
 using ForumTemplate.Data;
 using ForumTemplate.Persistence.LikeRepository;
 using ForumTemplate.Services.LikeService;
+using ForumTemplate.Persistence.TagRepository;
+using ForumTemplate.Services.TagService;
 
 namespace ForumTemplate
 {
@@ -41,19 +43,20 @@ namespace ForumTemplate
             builder.Services.AddScoped<IPostRepository, PostRepository>();
             builder.Services.AddScoped<ICommentRepository, CommentRepository>();
             builder.Services.AddScoped<ILikeRepository, LikeRepository>();
-
+            builder.Services.AddScoped<ITagRepository, TagRepository>();
 
             // Services
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IPostService, PostService>();
             builder.Services.AddScoped<ICommentService, CommentService>();
             builder.Services.AddScoped<ILikeService, LikeService>();
-
+            builder.Services.AddScoped<ITagService, TagService>();
 
             //Validators
             builder.Services.AddScoped<ICommentsValidator, CommentsValidator>();
             builder.Services.AddScoped<IPostsValidator, PostsValidator>();
             builder.Services.AddScoped<IUserAuthenticationValidator, UserAuthenticationValidator>();
+            builder.Services.AddScoped<ITagsValidator, TagsValidator>();
 
             // Fluent Validation
             builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
@@ -63,6 +66,7 @@ namespace ForumTemplate
             builder.Services.AddScoped<IUserMapper, UserMapper>();
             builder.Services.AddScoped<IPostMapper, PostMapper>();
             builder.Services.AddScoped<ICommentMapper, CommentMapper>();
+            builder.Services.AddScoped<ITagMapper, TagMapper>();
             builder.Services.AddScoped<IAuthManager, AuthManager>();
 
             //Session
