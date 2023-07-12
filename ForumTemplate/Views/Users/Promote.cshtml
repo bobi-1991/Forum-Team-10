@@ -2,3 +2,44 @@
 	this.ViewData["Title"] = "Promote";
 }
 
+
+@model List<User>
+
+<h2 class="my-section-title">Users</h2>
+
+@foreach (var user in Model)
+{
+    <div class="row">
+        <div>
+            <a class="row clickable-row" href="@Url.Action("Users", "Promote", new { id = user.UserId})">
+                <div class="cell">@user.Username</div>
+            </a>
+        </div>
+    </div>
+}
+
+
+
+
+@*@model User
+
+<h2>User Promotion/Demotion</h2>
+
+<h3>@Model.Username</h3>
+<p>Current Role: @(Model.IsAdmin ? "Admin" : "User")</p>
+
+<form asp-controller="Users" asp-action="Promote" method="post">
+    <input type="hidden" asp-for="UserId" />
+    <input type="hidden" asp-for="@Model.IsAdmin" />
+
+    <div class="form-group">
+        <label for="newRole">New Role:</label>
+        <select id="newRole" asp-for="IsAdmin" class="form-control">
+            <option value="Admin">Admin</option>
+            <option value="User">User</option>
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+    <a asp-controller="Users" asp-action="Tools" class="btn btn-secondary">Cancel</a>
+</form>*@

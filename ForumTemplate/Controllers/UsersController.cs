@@ -64,6 +64,7 @@ namespace ForumTemplate.Controllers
 					return this.View(userEditModel);
 				}
 
+
 				if (userEditModel.Password != userEditModel.ConfirmPassword)
 				{
 					this.ModelState.AddModelError("ConfirmPassword", "The password and confirmation password do not match.");

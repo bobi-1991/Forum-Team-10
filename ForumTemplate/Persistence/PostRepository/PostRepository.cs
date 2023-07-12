@@ -29,8 +29,8 @@ namespace ForumTemplate.Persistence.PostRepository
         {
             return this.dbContext.Posts
                 .Where(x => !x.User.IsDelete)
-				.Where(x => !x.IsDelete)
-				.Include(x => x.Likes)
+                .Where(x => !x.IsDelete)
+                .Include(x => x.Likes)
                 .Include(x => x.Tags);
         }
         public PaginatedList<Post> SearchBy(PostQueryParameters filter)

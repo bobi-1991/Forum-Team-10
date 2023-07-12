@@ -51,7 +51,7 @@ namespace ForumTemplate.Data
             modelBuilder.Entity<Post>().HasQueryFilter(x => !x.IsDelete);
             modelBuilder.Entity<Comment>().HasQueryFilter(x => !x.IsDelete);
             modelBuilder.Entity<Like>().HasQueryFilter(x => !x.IsDelete);
-            // modelBuilder.Entity<Tag>().HasQueryFilter(x => !x.IsDelete);
+            modelBuilder.Entity<Tag>().HasQueryFilter(x => !x.IsDelete);
 
             base.OnModelCreating(modelBuilder);
         }
