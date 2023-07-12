@@ -10,42 +10,42 @@
     </div>
 }
 
-    <h2>Welcome to Fit-Body</h2>
-    <img src="~/images/Fit-Body.jpg" />
-    <p>
-        Welcome to Fit-Body - your place for a healthy lifestyle! Explore a variety of features designed to help you achieve your fitness goals. Find inspiration from a large community of <b> more than @Model.TotalUserCount active users and more than @Model.TotalPostCount topics </b> who share their achievements, tips, and motivation. With our platform, you'll stay up-to-date with the latest trends and learn how to create healthy habits that will help you achieve and maintain your ideal shape.
-    </p>
-    <p>
-        Join our dynamic community and be part of a growing group of people dedicated to a healthy and active lifestyle. Start your fitness and wellness journey today and join thousands of others who have already achieved excellent results.
-    </p>
-    <p>
-        Let us assist you in reaching your fitness goals and make a healthy lifestyle an integral part of your daily routine. Unleash your potential with Fit-Body and become the best version of yourself!
-    </p>
+<h2>Welcome to Fit-Body</h2>
+<img src="~/images/Fit-Body.jpg" />
+<p>
+    Welcome to Fit-Body - your place for a healthy lifestyle! Explore a variety of features designed to help you achieve your fitness goals. Find inspiration from a large community of <b> more than @Model.TotalUserCount active users and more than @Model.TotalPostCount topics </b> who share their achievements, tips, and motivation. With our platform, you'll stay up-to-date with the latest trends and learn how to create healthy habits that will help you achieve and maintain your ideal shape.
+</p>
+<p>
+    Join our dynamic community and be part of a growing group of people dedicated to a healthy and active lifestyle. Start your fitness and wellness journey today and join thousands of others who have already achieved excellent results.
+</p>
+<p>
+    Let us assist you in reaching your fitness goals and make a healthy lifestyle an integral part of your daily routine. Unleash your potential with Fit-Body and become the best version of yourself!
+</p>
 
 
-    <h2 class="my-section-title">Top 10 Most Commented Posts</h2>
- 
-        @foreach (var post in Model.TopCommentedPosts)
-        {
-            <div class="row">
+<h2 class="my-section-title">Top 10 Most Commented Posts</h2>
+
+@foreach (var post in Model.TopCommentedPosts)
+{
+    <div class="row">
+        <div>
+            <a class="row clickable-row" href="@Url.Action("Details", "Posts", new { id = post.PostId })">
                 <div class="cell">@post.Title</div>
-
-                <div class="cell">
-                    <a asp-controller="Posts" asp-action="Details" asp-route-id="@post.PostId" class="btn btn-primary">Details</a>
-                </div>
-            </div>
-        }
-  
-
-    <h2 class="my-section-title">10 Most Recently Created Posts</h2>
- 
-        @foreach (var post in Model.RecentlyCreatedPosts)
-        {
-        <div class="row">
-            <div class="cell">@post.Title</div>
-
-            <div class="cell">
-                <a asp-controller="Posts" asp-action="Details" asp-route-id="@post.PostId" class="btn btn-primary">Details</a>
-            </div>
+            </a>
         </div>
-        }
+    </div>
+}
+
+
+<h2 class="my-section-title">10 Most Recently Created Posts</h2>
+
+@foreach (var post in Model.RecentlyCreatedPosts)
+{
+    <div class="row">
+        <div>
+            <a class="row clickable-row" href="@Url.Action("Details", "Posts", new { id = post.PostId })">
+                <div class="cell">@post.Title</div>
+            </a>
+        </div>
+    </div>
+}

@@ -9,7 +9,8 @@ namespace ForumTemplate.Validation
         void ValidateIfUsernameExist(string username);
 		void ValidateLoggedUserIsAdmin(User user);
         void ValidateIfEmailDoesExist(string email);
-        void ValidateUserAlreadyAdmin(User user);
+        void ValidateIfEmailAndUserEmailIsSame(User loggedUser, string email);
+		void ValidateUserAlreadyAdmin(User user);
         void ValidateUserAlreadyRegular(User user);
         void ValidateUserAlreadyBanned(User user);
         void ValidateUserNotBanned(User user);

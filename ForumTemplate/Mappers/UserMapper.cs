@@ -2,6 +2,7 @@
 using ForumTemplate.DTOs.UserDTOs;
 using ForumTemplate.Models;
 using ForumTemplate.Models.ViewModels;
+using System.Text;
 
 namespace ForumTemplate.Mappers
 {
@@ -88,28 +89,43 @@ namespace ForumTemplate.Mappers
             };
         }
 
-		public UserEditViewModel MapToUserEditViewModel(User user)
+        public UserEditViewModel MapToUserEditViewModel(User user)
 		{
-            return new UserEditViewModel
-            {
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Country = user.Country,
-                Password = user.Password,
-                Email = user.Email,
+			string encodedPassword = user.Password;
+			byte[] passwordBytes = Convert.FromBase64String(encodedPassword);
+			string decodedPassword = Encoding.UTF8.GetString(passwordBytes);
+
+
+			return new UserEditViewModel
+			{
+				FirstName = user.FirstName,
+				LastName = user.LastName,
+				Country = user.Country,		
+				Password = decodedPassword,
+				ConfirmPassword = decodedPassword,
+				Email = user.Email,
 				Username = user.Username
-            };
-        }
+			};
+		}
 		public UpdateUserRequest MapToUpdateUserRequest(UserEditViewModel userEditViewModel)
 		{
+
+
 			return new UpdateUserRequest
 			{
 				FirstName = userEditViewModel.FirstName,
 				LastName = userEditViewModel.LastName,
 				Country = userEditViewModel.Country,
-				Password = userEditViewModel.Password,
+				Password = Convert.ToBase64String(Encoding.UTF8.GetBytes(userEditViewModel.Password)),
 				Email = userEditViewModel.Email
 			};
 		}
-	}
+		public UpdateUserRequestModel MapToUpdateUserRequestModel(User user)
+        {
+            return new UpdateUserRequestModel
+            {
+                UserName = user.Username
+            };
+        }
+    }
 }

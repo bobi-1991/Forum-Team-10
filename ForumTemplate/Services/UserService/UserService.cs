@@ -1,4 +1,5 @@
-﻿using ForumTemplate.DTOs.Authentication;
+﻿using ForumTemplate.Authorization;
+using ForumTemplate.DTOs.Authentication;
 using ForumTemplate.DTOs.UserDTOs;
 using ForumTemplate.Mappers;
 using ForumTemplate.Models;
@@ -18,16 +19,16 @@ namespace ForumTemplate.Services.UserService
         private readonly IPostService postService;
 
 
-        public UserService(IUserRepository userRepository, IUserMapper userMapper, IUserAuthenticationValidator userValidator, ILikeService likeService, IPostService postService)
-        {
-            this.userRepository = userRepository;
-            this.userMapper = userMapper;
-            this.userValidator = userValidator;
-            this.likeService = likeService;
-            this.postService = postService;
-        }
+		public UserService(IUserRepository userRepository, IUserMapper userMapper, IUserAuthenticationValidator userValidator, ILikeService likeService, IPostService postService)
+		{
+			this.userRepository = userRepository;
+			this.userMapper = userMapper;
+			this.userValidator = userValidator;
+			this.likeService = likeService;
+			this.postService = postService;
+		}
 
-        public List<UserResponse> GetAll()
+		public List<UserResponse> GetAll()
         {  
             var users = userRepository.GetAll();
             return this.userMapper.MapToUserResponse(users);
@@ -43,7 +44,11 @@ namespace ForumTemplate.Services.UserService
 
             return userMapper.MapToUserResponse(user);
         }
-		public User GetByUsername(string username)
+        public User GetByUserId(Guid id)
+        {
+            return this.userRepository.GetById(id);
+        }
+        public User GetByUsername(string username)
 		{
             userValidator.ValidateIfUsernameExist(username);
 
@@ -52,6 +57,11 @@ namespace ForumTemplate.Services.UserService
         public bool UsernameExists(string username)
         { 
         return this.userRepository.DoesExist(username);
+        }
+
+        public void ValidateUpdatedUserEmail(User loggedUser, string email)
+        {
+            this.userValidator.ValidateIfEmailAndUserEmailIsSame(loggedUser,email);
         }
 
 

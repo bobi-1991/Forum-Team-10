@@ -64,5 +64,12 @@ else
     </ul>
 }
 
+@if (authManager.CurrentUser is null)
+{
+    <a asp-controller="Home" asp-action="Index" class="nav">Go back</a>
+}
 
-<a asp-controller="Posts" asp-action="Index" class="nav">See all posts</a>
+@if(authManager.CurrentUser is not null)
+{
+    <a asp-controller="Posts" asp-action="Index" class="nav">See all posts</a>
+}

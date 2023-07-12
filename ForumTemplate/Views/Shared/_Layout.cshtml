@@ -66,6 +66,49 @@
                             
                         </li>
                         }
+
+
+                       @*Only for admin *@
+                        @if (authManager.CurrentUser is not null  && @authManager.CurrentUser.IsAdmin)
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Tools
+                                </a>
+
+                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                    <a asp-controller="Users" asp-action="Index" class="dropdown-item" onmouseover="changeColor(this, 'blue')" onmouseout="resetColor(this)">
+                                        <i class="fas fa-user-circle"></i> Promote
+                                    </a>
+                                    <a asp-controller="Auth" asp-action="Logout" class="dropdown-item" id="logout-link" onmouseover="changeColor(this, 'red')" onmouseout="resetColor(this)">
+                                        <i class="fas fa-sign-out-alt"></i> Demote
+                                    </a>
+                                    <a asp-controller="Users" asp-action="Index" class="dropdown-item" onmouseover="changeColor(this, 'blue')" onmouseout="resetColor(this)">
+                                        <i class="fas fa-user-circle"></i> Promote
+                                    </a>
+                                    <a asp-controller="Auth" asp-action="Logout" class="dropdown-item" id="logout-link" onmouseover="changeColor(this, 'red')" onmouseout="resetColor(this)">
+                                        <i class="fas fa-sign-out-alt"></i> Demote
+                                    </a>
+                                </div>
+
+                                <script>
+                                    function changeColor(element, color) {
+                                        element.style.color = color;
+                                    }
+
+                                    function resetColor(element) {
+                                        element.style.color = '';
+                                    }
+                                </script>
+
+                            </li>
+                        }
+
+
+
+
+
+
                     </ul>
                 </div>
             </div>

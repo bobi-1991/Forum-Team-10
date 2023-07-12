@@ -17,23 +17,6 @@
     <input type="submit" value="Search" class="btn btn-primary" />
 </form>
 
-@*
-<div class="table">
-    <div class="header">
-        <div class="header-cell">Title</div>
-    </div>
-
-    @{
-        foreach (var post in this.Model)
-        {
-            <div class="row" onclick="location.href='@Url.Action("Details", "Posts", new { id = post.PostId })'">
-                <div class="cell">@post.Title</div>
-            </div>
-        }
-    }
-</div>*@
-
-
 
 <div class="table">
     <div class="header">

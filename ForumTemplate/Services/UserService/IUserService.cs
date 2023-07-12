@@ -9,8 +9,10 @@ namespace ForumTemplate.Services.UserService
         List<UserResponse> GetAll();
         List<User> GetAllUsers();
         UserResponse GetById(Guid id);
+        User GetByUserId(Guid id);
 		User GetByUsername(string username);
-        bool UsernameExists(string username);
+        void ValidateUpdatedUserEmail(User loggedUser, string email);
+		bool UsernameExists(string username);
 		UserResponse Update(User loggedUser, Guid id, UpdateUserRequest registerRequest);
         string Delete(User loggedUser, Guid id);
         string RegisterUser(RegisterUserRequestModel user, string encodedPassword);

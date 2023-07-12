@@ -13,3 +13,13 @@
 <p><i class="fas fa-check-circle"></i> Status: @Model.IsBlocked</p>
 <a href="@Url.Action("Edit", "Users")" class="btn btn-primary">Edit Profile</a>
 
+
+@*For profile picture*@
+
+@*<h3>Upload Profile Picture:</h3>
+<form asp-controller="Users" asp-action="UploadPicture" method="post" enctype="multipart/form-data">
+    <input type="file" name="profilePicture" accept="image/*" />
+    <br />
+    <input type="submit" value="Upload" class="btn btn-primary" />
+</form>*@
+

@@ -1,8 +1,11 @@
 ﻿using ForumTemplate.Authorization;
+using ForumTemplate.Exceptions;
 using ForumTemplate.Mappers;
 using ForumTemplate.Models.ViewModels;
 using ForumTemplate.Services.PostService;
 using ForumTemplate.Services.UserService;
+using ForumTemplate.Validation;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
@@ -13,12 +16,14 @@ namespace ForumTemplate.Controllers
         private readonly IAuthManager authManager;
         private readonly IUserMapper userMapper;
         private readonly IUserService userService;
+        private readonly IUserAuthenticationValidator uservalidator;
 
-		public UsersController(IAuthManager authManager, IUserMapper userMapper, IUserService userService)
+		public UsersController(IAuthManager authManager, IUserMapper userMapper, IUserService userService, IUserAuthenticationValidator uservalidator)
 		{
 			this.authManager = authManager;
 			this.userMapper = userMapper;
 			this.userService = userService;
+			this.uservalidator = uservalidator;
 		}
 
 		[HttpGet]
@@ -59,20 +64,71 @@ namespace ForumTemplate.Controllers
 					return this.View(userEditModel);
 				}
 
+				if (userEditModel.Password != userEditModel.ConfirmPassword)
+				{
+					this.ModelState.AddModelError("ConfirmPassword", "The password and confirmation password do not match.");
+
+					return this.View(userEditModel);
+				}
+
 				var user = this.authManager.CurrentUser;
 				var userInfoForUpdate = userMapper.MapToUpdateUserRequest(userEditModel);
+				this.userService.ValidateUpdatedUserEmail(user, userInfoForUpdate.Email);
 				var updatedUser = userService.Update(user, user.UserId, userInfoForUpdate);
+				this.userService.ValidateUpdatedUserEmail(user, updatedUser.Email);
 
 				return RedirectToAction("Index", "Users");
-
 			}
-			catch (ValidationException e)
+			catch (DuplicateEntityException e)
 			{
-				this.Response.StatusCode = StatusCodes.Status404NotFound;
-				this.ViewData["ErrorMessage"] = e.Message;
+				this.ModelState.AddModelError("Email", "This email is already exist.");
 
-				return View("Error");
+				return this.View(userEditModel);
 			}
 		}
-	}
+
+        [HttpGet]
+        public IActionResult Promote()
+        {
+            if (this.authManager.CurrentUser == null)
+            {
+                return this.RedirectToAction("Login", "Auth");
+            }
+
+            var users = this.userService.GetAllUsers();
+
+            return View(users);
+        }
+
+        [HttpPost]
+        public IActionResult Promote(Guid id)
+        {
+            try
+            {
+                var loggeduser = this.authManager.CurrentUser;
+
+                var user = userService.GetByUserId(id);
+                var userToPromote = userMapper.MapToUpdateUserRequestModel(user);
+             //   userService.PromoteUser(loggeduser, userToPromote);
+
+                this.TempData["Promote"] = userService.PromoteUser(loggeduser, userToPromote);
+
+                return RedirectToAction("Index","Home");
+            }
+            catch (EntityNotFoundException e)
+            {
+                this.Response.StatusCode = StatusCodes.Status404NotFound;
+                this.ViewData["ErrorMessage"] = e.Message;
+
+                return this.View("Error");
+            }
+            catch (ArgumentException e)
+            {
+                this.Response.StatusCode = StatusCodes.Status403Forbidden;
+                this.ViewData["ErrorMessage"] = e.Message;
+
+                return this.View("Error");
+            }
+        }
+    }
 }
