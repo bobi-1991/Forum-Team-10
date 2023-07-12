@@ -1,0 +1,21 @@
+﻿@{
+    this.ViewData["Title"] = "Info";
+}
+
+@model UserViewModel
+
+<div>
+    <h2>User, @Model.Username!</h2>
+    <h5>Profile Details:</h5>
+    <br>
+    <p><i class="fas fa-user"></i> First name: @Model.FirstName</p>
+    <p><i class="fas fa-user"></i> Last name: @Model.LastName</p>
+    <p><i class="fas fa-envelope"></i> Email: @Model.Email</p>
+    <p><i class="fas fa-globe"></i> Country: @Model.Country</p>
+    <p><i class="fas fa-user-tag"></i> Role: @Model.Role</p>
+    <p><i class="fas fa-check-circle"></i> Status: @Model.IsBlocked</p>
+</div>
+
+<div style="margin-top: 20px;">
+    <a href="@Url.Action("AdminEdit", "Users", new { id = ViewBag.UserId })" style="display: inline-block; background-color: #007bff; color: #fff; padding: 8px 16px; text-decoration: none;">Edit Profile</a>
+</div>

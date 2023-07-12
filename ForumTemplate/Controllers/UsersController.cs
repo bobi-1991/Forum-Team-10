@@ -89,7 +89,7 @@ namespace ForumTemplate.Controllers
 		}
 
         [HttpGet]
-        public IActionResult Promote()
+        public IActionResult Tools()
         {
             if (this.authManager.CurrentUser == null)
             {
@@ -101,20 +101,52 @@ namespace ForumTemplate.Controllers
             return View(users);
         }
 
-        [HttpPost]
-        public IActionResult Promote(Guid id)
+        [HttpGet]
+        public IActionResult Info(Guid id)
+        {
+            if (this.authManager.CurrentUser == null)
+            {
+                return this.RedirectToAction("Login", "Auth");
+            }
+
+            var user = this.userService.GetByUserId(id);
+            var userViewModel = this.userMapper.MapToUserViewModel(user);
+            this.ViewBag.UserId = id;
+            return View(userViewModel);
+        }
+
+        [HttpGet]
+        public IActionResult AdminEdit(Guid id)
         {
             try
             {
                 var loggeduser = this.authManager.CurrentUser;
 
                 var user = userService.GetByUserId(id);
-                var userToPromote = userMapper.MapToUpdateUserRequestModel(user);
-             //   userService.PromoteUser(loggeduser, userToPromote);
+                var editModel = this.userMapper.MapToAdminEditUserModel(user);
+              
+                return this.View(editModel);
+            }
+            catch (EntityNotFoundException e)
+            {
+                this.Response.StatusCode = StatusCodes.Status404NotFound;
+                this.ViewData["ErrorMessage"] = e.Message;
 
-                this.TempData["Promote"] = userService.PromoteUser(loggeduser, userToPromote);
+                return this.View("Error");
+            }
+        }
 
-                return RedirectToAction("Index","Home");
+        [HttpPost]
+        public IActionResult AdminEdit(AdminEditViewModel adminEditViewModel)
+        {
+            try
+            {
+                var loggeduser = this.authManager.CurrentUser;
+
+              //  var user = userService.GetByUserId(id);
+
+
+                return RedirectToAction("Index", "Home");
             }
             catch (EntityNotFoundException e)
             {
