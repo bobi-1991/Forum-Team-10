@@ -59,8 +59,6 @@ namespace ForumTemplate.Services.PostService
 
         public PostResponse Create(User loggedUser, PostRequest postRequest)
         {
-            //Validation
-            postsValidator.Validate(postRequest);
             userValidator.ValidatePostCreateIDMatchAndNotBlocked(loggedUser, postRequest);
 
             var post = postMapper.MapToPost(postRequest);
@@ -72,7 +70,6 @@ namespace ForumTemplate.Services.PostService
         public PostResponse Update(User loggedUser, Guid id, PostRequest postRequest)
         {
             //Validation
-            postsValidator.Validate(id, postRequest);
             postsValidator.Validate(id);
 
             var postToUpdate = postRepository.GetById(id);

@@ -197,13 +197,13 @@ namespace ForumTemplate.Tests.CommentServiceTests
             //Verify
             userValidatorMock.Verify(x => x.ValidateUserIsNotBannedCommentCreate(It.IsAny<User>()), Times.Once);
 
-            commentsValidatorMock.Verify(x => x.Validate(GetCommentRequest()), Times.Once);
+            commentsValidatorMock.Verify(x => x.Validate(It.IsAny<CommentRequest>()), Times.Once);
 
             userRepositoryMock.Verify(x => x.GetById(id), Times.Once);
 
             postRepositoryMock.Verify(x => x.GetById(postId), Times.Once);
 
-            commentMapperMock.Verify(x => x.MapToComment(GetCommentRequest()), Times.Once);
+            commentMapperMock.Verify(x => x.MapToComment(It.IsAny<CommentRequest>()), Times.Once);
 
             commentRepositoryMock.Verify(x => x.Create(It.IsAny<Comment>()), Times.Once);
 
@@ -270,7 +270,7 @@ namespace ForumTemplate.Tests.CommentServiceTests
             var result = sut.Update(GetUser(), commentId, GetCommentRequest());
 
             //Verify
-            commentsValidatorMock.Verify(x => x.Validate(It.IsAny<Guid>(), GetCommentRequest()), Times.Once);
+            commentsValidatorMock.Verify(x => x.Validate(It.IsAny<Guid>(), It.IsAny<CommentRequest>()), Times.Once);
 
             commentRepositoryMock.Verify(x => x.GetById(commentId), Times.Once);
 
@@ -278,7 +278,7 @@ namespace ForumTemplate.Tests.CommentServiceTests
 
             postRepositoryMock.Verify(x => x.GetById(postId), Times.Once);
 
-            commentMapperMock.Verify(x => x.MapToComment(GetCommentRequest()), Times.Once);
+            commentMapperMock.Verify(x => x.MapToComment(It.IsAny<CommentRequest>()), Times.Once);
 
             commentRepositoryMock.Verify(x => x.Update(commentId, It.IsAny<Comment>()), Times.Once);
 

@@ -54,7 +54,6 @@ namespace ForumTemplate.Services.UserService
         return this.userRepository.DoesExist(username);
         }
 
-
 		public string RegisterUser(RegisterUserRequestModel user, string encodedPassword)
         {
             userValidator.ValidateDoesExist(user.Username);

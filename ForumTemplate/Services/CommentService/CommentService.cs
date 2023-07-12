@@ -20,7 +20,6 @@ namespace ForumTemplate.Services.CommentService
         private readonly IPostRepository postRepository;
         private readonly IUserAuthenticationValidator userValidator;
 
-
         public CommentService(ICommentRepository commentRepository, ICommentsValidator commentsValidator,
             ICommentMapper commentMapper, IUserRepository userRepositoty, IPostRepository postRepository,
             IUserAuthenticationValidator userValidator)

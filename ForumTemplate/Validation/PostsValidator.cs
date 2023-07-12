@@ -21,56 +21,5 @@ namespace ForumTemplate.Validation
                 throw new ValidationException($"Post with ID: {id} not found.");
             }
         }
-
-        public void Validate(PostRequest postRequest)
-        {
-            var errors = new List<string>();
-            // DEPRECATED - replaced by Fluid Validation
-            if (postRequest is null)
-            {
-                errors.Add("Post input cannot be null");
-            }
-            // DEPRECATED - replaced by Fluid Validation
-            if (string.IsNullOrWhiteSpace(postRequest.Title))
-            {
-                errors.Add("Post Title cannot be null or whitespace");
-            }
-            // DEPRECATED - replaced by Fluid Validation
-            if (string.IsNullOrWhiteSpace(postRequest.Content))
-            {
-                errors.Add("Post Description cannot be null or whitespace");
-            }
-
-            if (errors.Count > 0)
-            {
-                throw new ValidationException($"Following Validation Errors Occured: {string.Join(", ", errors)}");
-            }
-        }
-        public void Validate(Guid id, PostRequest postRequest)
-        {
-            var errors = new List<string>();
-
-            // DEPRECATED - replaced by Fluid Validation
-            if (postRequest is null)
-            {
-                errors.Add("Post input cannot be null");
-            }
-            // DEPRECATED - replaced by Fluid Validation
-            if (string.IsNullOrWhiteSpace(postRequest.Title))
-            {
-                errors.Add("Post Title cannot be null or whitespace");
-            }
-            // DEPRECATED - replaced by Fluid Validation
-            if (string.IsNullOrWhiteSpace(postRequest.Content))
-            {
-                errors.Add("Post Description cannot be null or whitespace");
-            }
-
-            if (errors.Count > 0)
-            {
-                throw new ValidationException($"Following Validation Errors Occured: {string.Join(", ", errors)}");
-
-            }
-        }
     }
 }

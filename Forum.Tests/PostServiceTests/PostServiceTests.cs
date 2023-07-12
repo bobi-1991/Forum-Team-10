@@ -1,6 +1,7 @@
 ﻿using ForumTemplate.DTOs.PostDTOs;
 using ForumTemplate.Mappers;
 using ForumTemplate.Models;
+using ForumTemplate.Models.Pagination;
 using ForumTemplate.Persistence.PostRepository;
 using ForumTemplate.Services.CommentService;
 using ForumTemplate.Services.LikeService;
@@ -41,15 +42,8 @@ namespace ForumTemplate.Tests.PostServiceTests
 
 			SetupUserValidatorMock();
 
-
 			postValidatorMock
 				.Setup(x => x.Validate(id));
-
-			postValidatorMock
-				.Setup(x => x.Validate(GetPostRequest()));
-
-			postValidatorMock
-				.Setup(x => x.Validate(id, GetPostRequest()));
 
 			postRepositoryMock
 				.Setup(x => x.GetAll())
@@ -143,11 +137,9 @@ namespace ForumTemplate.Tests.PostServiceTests
 			var result = sut.Create(GetUser(), GetPostRequest());
 
 			//Verify
-			postValidatorMock.Verify(x => x.Validate(GetPostRequest()), Times.Once);
+			userValidatorMock.Verify(x => x.ValidatePostCreateIDMatchAndNotBlocked(It.IsAny<User>(), It.IsAny<PostRequest>()), Times.Once);
 
-			userValidatorMock.Verify(x => x.ValidatePostCreateIDMatchAndNotBlocked(It.IsAny<User>(), GetPostRequest()), Times.Once);
-
-			postMapperMock.Verify(x => x.MapToPost(GetPostRequest()), Times.Once);
+			postMapperMock.Verify(x => x.MapToPost(It.IsAny<PostRequest>()), Times.Once);
 
 			postRepositoryMock.Verify(x => x.Create(It.IsAny<Post>()), Times.Once);
 
@@ -162,13 +154,11 @@ namespace ForumTemplate.Tests.PostServiceTests
 			var result = sut.Update(GetUser(), id, GetPostRequest());
 
 			//Verify
-			postValidatorMock.Verify(x => x.Validate(id, GetPostRequest()), Times.Once);
-
 			postRepositoryMock.Verify(x => x.GetById(id), Times.Once);
 
 			userValidatorMock.Verify(x => x.ValidateUserIdMatchAuthorIdPost(It.IsAny<User>(), It.IsAny<Guid>()), Times.Once);
 
-			postMapperMock.Verify(x => x.MapToPost(GetPostRequest()), Times.Once);
+			postMapperMock.Verify(x => x.MapToPost(It.IsAny<PostRequest>()), Times.Once);
 
 			postRepositoryMock.Verify(x => x.Update(id, It.IsAny<Post>()), Times.Once);
 
@@ -205,7 +195,101 @@ namespace ForumTemplate.Tests.PostServiceTests
 			StringAssert.Contains(message, "Post was successfully deleted.");
 		}
 
-		private PostRequest GetPostRequest()
+		[TestMethod]
+
+		public void GetAllPosts_ShouldInvoke()
+		{
+			//Act
+			var result = sut.GetAllPosts();
+
+			//Assert
+			postRepositoryMock.Verify(x => x.GetAll(), Times.Once);
+		}
+
+		[TestMethod]
+
+		public void GetByPostId_ShouldInvoke()
+		{
+			//Act
+			var result = sut.GetByPostId(It.IsAny<Guid>());
+
+			//Assert
+			postValidatorMock.Verify(x => x.Validate(It.IsAny<Guid>()), Times.Once);
+
+			postRepositoryMock.Verify(x => x.GetById(It.IsAny<Guid>()), Times.Once);
+		}
+
+		[TestMethod]
+
+		public void GetTopCommentedPosts_ShouldInvoke()
+		{
+			//Arrange
+			postRepositoryMock
+				.Setup(x => x.GetTopCommentedPosts(It.IsAny<int>()))
+				.Returns(new List<Post>());
+
+			//Act
+			var result = sut.GetTopCommentedPosts(It.IsAny<int>());
+
+			//Assert
+			postRepositoryMock.Verify(x => x.GetTopCommentedPosts(It.IsAny<int>()), Times.Once);
+		}
+
+        [TestMethod]
+
+        public void GetRecentlyCreatedPosts_ShouldInvoke()
+        {
+            //Arrange
+            postRepositoryMock
+                .Setup(x => x.GetRecentlyCreatedPosts(It.IsAny<int>()))
+                .Returns(new List<Post>());
+
+            //Act
+            var result = sut.GetRecentlyCreatedPosts(It.IsAny<int>());
+
+            //Assert
+            postRepositoryMock.Verify(x => x.GetRecentlyCreatedPosts(It.IsAny<int>()), Times.Once);
+        }
+
+		[TestMethod]
+
+		public void FilterBy_ShouldInvoke()
+		{
+			//Arrange
+			postRepositoryMock
+				.Setup(x => x.FilterBy(It.IsAny<PostQueryParameters>()))
+				.Returns(new List<Post>());
+
+			postMapperMock
+				.Setup(x => x.MapToPostResponse(It.IsAny<List<Post>>()))
+				.Returns(new List<PostResponse>());
+
+			//Act
+			var result = sut.FilterBy(It.IsAny<PostQueryParameters>());
+
+			//Assert
+			postRepositoryMock.Verify(x => x.FilterBy(It.IsAny<PostQueryParameters>()), Times.Once);
+
+			postMapperMock.Verify(x => x.MapToPostResponse(It.IsAny<List<Post>>()), Times.Once);
+		}
+
+		[TestMethod]
+
+		public void SearchBy_ShouldInvoke()
+		{
+			//Arrange
+			postRepositoryMock
+				.Setup(x => x.SearchBy(It.IsAny<PostQueryParameters>()))
+				.Returns(new PaginatedList<Post>(new List<Post>(), It.IsAny<int>(), It.IsAny<int>()));
+
+			//Act
+			var result = sut.SearchBy(It.IsAny<PostQueryParameters>());
+
+			//Assert
+			postRepositoryMock.Verify(x => x.SearchBy(It.IsAny<PostQueryParameters>()), Times.Once);
+		}
+
+        private PostRequest GetPostRequest()
 		{
 			return new PostRequest
 			{

@@ -383,6 +383,33 @@ namespace ForumTemplate.Tests.UserServiceTests
             userRepositoryMock.Verify(x => x.UnBanUser(It.IsAny<User>()), Times.Once);
         }
 
+        [TestMethod]
+
+        public void GetAllUsers_ShouldInvoke()
+        {
+            //Act
+            var result = sut.GetAllUsers();
+
+            //Assert
+            userRepositoryMock.Verify(x => x.GetAll(), Times.Once);
+        }
+
+        [TestMethod]
+
+        public void UsernameExists_ShouldInvoke()
+        {
+            //Arrange
+            userRepositoryMock
+                .Setup(x => x.DoesExist(It.IsAny<string>()))
+                .Returns(new bool());
+
+            //Act
+            var result = sut.UsernameExists(It.IsAny<string>());
+
+            //Assert
+            userRepositoryMock.Verify(x => x.DoesExist(It.IsAny<string>()), Times.Once);
+        }
+
         private User GetUser()
         {
             return new User()
