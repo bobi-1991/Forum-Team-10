@@ -8,6 +8,7 @@ using ForumTemplate.Services.UserService;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Hosting;
+using System.Text.RegularExpressions;
 
 namespace ForumTemplate.Controllers
 {
@@ -81,6 +82,19 @@ namespace ForumTemplate.Controllers
                 var user = this.authManager.CurrentUser;
                 var post = postMapper.MapToPostRequest(postViewModel, user.UserId);
                 var createdPost = postService.Create(user, post);
+
+                //var tagRegex = new Regex(@"(?<=#|\s|^)(\w+)");
+                //var matches = tagRegex.Matches(post.Content);
+
+                //// Създайте колекция за съхранение на таговете
+                //var tags = new List<string>();
+
+                //// Извлечете само текста на таговете и го добавете към колекцията
+                //foreach (Match match in matches)
+                //{
+                //    var tag = match.Groups[1].Value;
+                //    tags.Add(tag);
+                //}
 
                 return RedirectToAction("Details", "Posts", new { id = createdPost.Id });
 

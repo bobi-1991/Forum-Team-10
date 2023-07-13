@@ -8,6 +8,7 @@ namespace ForumTemplate.Persistence.UserRepository
         User GetUserByEmail(string email);
         void AddUser(User user);
         List<User> GetAll();
+        List<User> SearchByAdminCriteria(string searchInfo);
         User GetById(Guid id);
         User GetByUsername(string name);
         User Update( Guid id, User user);

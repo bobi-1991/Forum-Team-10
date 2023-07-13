@@ -3,6 +3,7 @@ using ForumTemplate.Exceptions;
 using ForumTemplate.Models;
 using ForumTemplate.Models.ViewModels;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 
 namespace ForumTemplate.Persistence.UserRepository
 {
@@ -65,6 +66,19 @@ namespace ForumTemplate.Persistence.UserRepository
                 .FirstOrDefault(u => u.Username.Equals(username));
 
             return user;
+        }
+        public List<User> SearchByAdminCriteria(string searchInfo)
+        {
+            var isSearch = false;
+            List<User> result = this.GetAll();
+            result = SearchByUsername(result, searchInfo,ref isSearch);
+            result = SearchByFirstName(result, searchInfo,ref isSearch);
+            result = SearchByEmail(result, searchInfo,ref isSearch);
+            if (!isSearch)
+            {
+                return new List<User>();
+            }
+            return result.ToList();
         }
         public User Update(Guid id, User user)
         {
@@ -191,5 +205,38 @@ namespace ForumTemplate.Persistence.UserRepository
         }
 
     
+        public static List<User> SearchByUsername(List<User> users, string searchInfo,ref bool isSearch)
+        {
+            if (users.Any(x => x.Username.Equals(searchInfo)))
+            {
+                isSearch = true;
+                return users.FindAll(x => x.Username.Equals(searchInfo));
+            }
+
+            return users;
+        }
+        public static List<User> SearchByFirstName(List<User> users, string searchInfo, ref bool isSearch)
+        {
+            if (users.Any(x => x.FirstName.Equals(searchInfo)))
+            {
+                isSearch = true;
+                return users.FindAll(x => x.FirstName.Equals(searchInfo));
+            }
+
+            return users;
+        }
+        public static List<User> SearchByEmail(List<User> users, string searchInfo,ref bool isSearch)
+        {
+
+            if (users.Any(x => x.Email.Equals(searchInfo)))
+            {
+                isSearch = true;
+                return users.FindAll(x => x.Email.Equals(searchInfo));
+            }
+
+            return users;
+        }
+
+  
     }
 }

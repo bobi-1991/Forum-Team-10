@@ -38,6 +38,10 @@ namespace ForumTemplate.Services.UserService
         {
             return userRepository.GetAll();
         }
+        public List<User> SearchByAdminCriteria(string searchInfo)
+        {
+            return userRepository.SearchByAdminCriteria(searchInfo);
+        }
 
         public UserResponse GetById(Guid id)
         {

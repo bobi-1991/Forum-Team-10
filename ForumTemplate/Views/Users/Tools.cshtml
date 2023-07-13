@@ -1,28 +1,4 @@
-﻿@*@{
-	this.ViewData["Title"] = "Tools";
-}
-
-@model List<User>
-
-<h2 class="my-section-title">Users</h2>
-
-@foreach (var user in Model)
-{
-    <div class="row">
-        <div>
-            <a class="row clickable-row" href="@Url.Action("Info", "Users", new { id = user.UserId})">
-                <div class="cell">@user.Username</div>
-            </a>
-        </div>
-    </div>
-}
-
-
-
-*@
-
-
-@{
+﻿@{
     this.ViewData["Title"] = "Tools";
 }
 
@@ -33,18 +9,32 @@
 @using (Html.BeginForm("Search", "Users", FormMethod.Get))
 {
     <div class="search-form">
-        <input type="text" name="searchTerm" placeholder="Search by username, email, or first name" />
+        <input type="text" name="search" placeholder="Search by username, email, or first name" />
         <button type="submit" class="btn-primary">Search</button>
     </div>
 }
 
 @foreach (var user in Model)
 {
-    <div class="row">
-        <div>
-            <a class="row clickable-row" href="@Url.Action("Info", "Users", new { id = user.UserId})">
-                <div class="cell">@user.Username</div>
-            </a>
+    @if (user is null)
+    {
+        <p>
+            <i>No results</i>
+        </p>
+    }
+    else
+    {
+        <div class="row">
+            <div>
+                <a class="row clickable-row" href="@Url.Action("Info", "Users", new { id = user.UserId})">
+                    <div class="cell">@user.Username</div>
+                </a>
+            </div>
         </div>
-    </div>
+       
+    }
 }
+<br>
+<br>
+<a asp-controller="Users" asp-action="Tools" class="nav">See all users</a>
+

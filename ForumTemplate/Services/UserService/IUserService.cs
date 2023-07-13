@@ -16,6 +16,7 @@ namespace ForumTemplate.Services.UserService
         void ValidateUpdatedUserEmail(User loggedUser, string email);
 		bool UsernameExists(string username);
 		UserResponse Update(User loggedUser, Guid id, UpdateUserRequest registerRequest);
+        List<User> SearchByAdminCriteria(string searchInfo);
         User AdminEditionUpdate(User loggedUser, AdminEditViewModel adminEditViewModel);
         string Delete(User loggedUser, Guid id);
         string RegisterUser(RegisterUserRequestModel user, string encodedPassword);

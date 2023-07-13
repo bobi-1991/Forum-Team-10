@@ -18,15 +18,15 @@ namespace ForumTemplate.Controllers
         private readonly IUserService userService;
         private readonly IUserAuthenticationValidator uservalidator;
 
-		public UsersController(IAuthManager authManager, IUserMapper userMapper, IUserService userService, IUserAuthenticationValidator uservalidator)
-		{
-			this.authManager = authManager;
-			this.userMapper = userMapper;
-			this.userService = userService;
-			this.uservalidator = uservalidator;
-		}
+        public UsersController(IAuthManager authManager, IUserMapper userMapper, IUserService userService, IUserAuthenticationValidator uservalidator)
+        {
+            this.authManager = authManager;
+            this.userMapper = userMapper;
+            this.userService = userService;
+            this.uservalidator = uservalidator;
+        }
 
-		[HttpGet]
+        [HttpGet]
         public IActionResult Index()
         {
             if (this.authManager.CurrentUser == null)
@@ -54,39 +54,39 @@ namespace ForumTemplate.Controllers
             return View(userEditModel);
         }
 
-		[HttpPost]
-		public IActionResult Edit(UserEditViewModel userEditModel)
-		{
-			try
-			{
-				if (!this.ModelState.IsValid)
-				{
-					return this.View(userEditModel);
-				}
+        [HttpPost]
+        public IActionResult Edit(UserEditViewModel userEditModel)
+        {
+            try
+            {
+                if (!this.ModelState.IsValid)
+                {
+                    return this.View(userEditModel);
+                }
 
 
-				if (userEditModel.Password != userEditModel.ConfirmPassword)
-				{
-					this.ModelState.AddModelError("ConfirmPassword", "The password and confirmation password do not match.");
+                if (userEditModel.Password != userEditModel.ConfirmPassword)
+                {
+                    this.ModelState.AddModelError("ConfirmPassword", "The password and confirmation password do not match.");
 
-					return this.View(userEditModel);
-				}
+                    return this.View(userEditModel);
+                }
 
-				var user = this.authManager.CurrentUser;
-				var userInfoForUpdate = userMapper.MapToUpdateUserRequest(userEditModel);
-				this.userService.ValidateUpdatedUserEmail(user, userInfoForUpdate.Email);
-				var updatedUser = userService.Update(user, user.UserId, userInfoForUpdate);
-				this.userService.ValidateUpdatedUserEmail(user, updatedUser.Email);
+                var user = this.authManager.CurrentUser;
+                var userInfoForUpdate = userMapper.MapToUpdateUserRequest(userEditModel);
+                this.userService.ValidateUpdatedUserEmail(user, userInfoForUpdate.Email);
+                var updatedUser = userService.Update(user, user.UserId, userInfoForUpdate);
+                this.userService.ValidateUpdatedUserEmail(user, updatedUser.Email);
 
-				return RedirectToAction("Index", "Users");
-			}
-			catch (DuplicateEntityException e)
-			{
-				this.ModelState.AddModelError("Email", "This email is already exist.");
+                return RedirectToAction("Index", "Users");
+            }
+            catch (DuplicateEntityException e)
+            {
+                this.ModelState.AddModelError("Email", "This email is already exist.");
 
-				return this.View(userEditModel);
-			}
-		}
+                return this.View(userEditModel);
+            }
+        }
 
         [HttpGet]
         public IActionResult Tools()
@@ -124,7 +124,7 @@ namespace ForumTemplate.Controllers
 
                 var user = userService.GetByUserId(id);
                 var editModel = this.userMapper.MapToAdminEditUserModel(user);
-              
+
                 return this.View(editModel);
             }
             catch (EntityNotFoundException e)
@@ -138,12 +138,26 @@ namespace ForumTemplate.Controllers
 
         [HttpPost]
         public IActionResult AdminUpdate(AdminEditViewModel adminEditViewModel)
-        {          
-                var loggedUser = this.authManager.CurrentUser;
-                var user = this.userMapper.MapToUser(adminEditViewModel);
-                var updatedUser = userService.AdminEditionUpdate(loggedUser, adminEditViewModel);
+        {
+            var loggedUser = this.authManager.CurrentUser;
+            var user = this.userMapper.MapToUser(adminEditViewModel);
+            var updatedUser = userService.AdminEditionUpdate(loggedUser, adminEditViewModel);
 
-                return RedirectToAction("Info", "Users", new { id = updatedUser.UserId });          
+            return RedirectToAction("Info", "Users", new { id = updatedUser.UserId });
+        }
+
+        [HttpGet]
+        public IActionResult Search([FromQuery]string search)
+        {
+
+            if (this.authManager.CurrentUser == null)
+            {
+                return this.RedirectToAction("Login", "Auth");
+            }
+
+            var users = userService.SearchByAdminCriteria(search);
+
+            return View("Tools", users);
         }
     }
 }
