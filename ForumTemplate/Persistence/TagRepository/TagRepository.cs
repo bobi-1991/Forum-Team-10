@@ -37,6 +37,15 @@ namespace ForumTemplate.Persistence.TagRepository
                  .Where(p => p.UserId == id).ToList();
         }
 
+        public Tag GetByContent(string content)
+        {
+            return dbContext.Tags
+                  .Where(x => !x.IsDelete)
+                  .Where(x => !x.Post.IsDelete)
+                  .Where(x => !x.User.IsDelete)
+                  .FirstOrDefault(p => p.Content == content);
+        }
+
         public Tag Create(Tag tag)
         {
             this.dbContext.Tags.Add(tag);

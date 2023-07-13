@@ -1,9 +1,11 @@
 ﻿using ForumTemplate.Authorization;
+using ForumTemplate.DTOs.TagDTOs;
 using ForumTemplate.Exceptions;
 using ForumTemplate.Mappers;
 using ForumTemplate.Models;
 using ForumTemplate.Models.ViewModels;
 using ForumTemplate.Services.PostService;
+using ForumTemplate.Services.TagService;
 using ForumTemplate.Services.UserService;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -17,18 +19,21 @@ namespace ForumTemplate.Controllers
         private readonly IPostService postService;
         private readonly IPostMapper postMapper;
         private readonly IAuthManager authManager;
+        private readonly ITagService tagService;
 
-        public PostsController(IPostService postService, IPostMapper postMapper, IAuthManager authManager)
+        public PostsController(IPostService postService, IPostMapper postMapper, IAuthManager authManager, ITagService tagService)
         {
             this.postService = postService;
             this.postMapper = postMapper;
             this.authManager = authManager;
+            this.tagService = tagService;
         }
 
         [HttpGet]
-        public IActionResult Index([FromQuery] PostQueryParameters postQueryParameters)
+        //  public IActionResult Index([FromQuery] PostQueryParameters postQueryParameters)
+        public IActionResult Index([FromQuery] PostQueryParameters parameter)
         {
-            var posts = this.postService.SearchBy(postQueryParameters);
+            var posts = this.postService.SearchBy(parameter);
 
             return this.View(posts);
         }
@@ -83,18 +88,26 @@ namespace ForumTemplate.Controllers
                 var post = postMapper.MapToPostRequest(postViewModel, user.UserId);
                 var createdPost = postService.Create(user, post);
 
-                //var tagRegex = new Regex(@"(?<=#|\s|^)(\w+)");
-                //var matches = tagRegex.Matches(post.Content);
+                var tagRegex = new Regex(@"#(\w+)");
+                var matches = tagRegex.Matches(post.Title);
+                var tag = "";
 
-                //// Създайте колекция за съхранение на таговете
-                //var tags = new List<string>();
+                foreach (Match match in matches)
+                {
+                    tag = "#" + match.Groups[1].Value;
+                    break;
+                }
 
-                //// Извлечете само текста на таговете и го добавете към колекцията
-                //foreach (Match match in matches)
-                //{
-                //    var tag = match.Groups[1].Value;
-                //    tags.Add(tag);
-                //}
+                if (tag != "")
+                {
+                    var tagRequest = new TagRequest
+                    {
+                        Content = tag,
+                        UserId = user.UserId,
+                        PostId = createdPost.Id
+                    };
+                    this.tagService.Create(user, tagRequest);
+                }
 
                 return RedirectToAction("Details", "Posts", new { id = createdPost.Id });
 
@@ -106,6 +119,14 @@ namespace ForumTemplate.Controllers
 
                 return this.View("Error");
             }
+            catch (EntityNotFoundException e)
+            {
+                this.Response.StatusCode = StatusCodes.Status404NotFound;
+                this.ViewData["ErrorMessage"] = e.Message;
+
+                return this.View("Error");
+            }
+
         }
 
         [HttpGet]
@@ -115,7 +136,7 @@ namespace ForumTemplate.Controllers
             {
                 return this.RedirectToAction(actionName: "Login", controllerName: "Auth");
             }
-      
+
             try
             {
                 var post = postService.GetByPostId(id);

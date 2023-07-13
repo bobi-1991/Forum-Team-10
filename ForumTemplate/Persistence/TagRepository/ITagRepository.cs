@@ -6,6 +6,8 @@ namespace ForumTemplate.Persistence.TagRepository
     {
         Tag GetById(Guid id);
 
+        Tag GetByContent(string content);
+
         List<Tag> GetByUserId(Guid id);
 
         List<Tag> GetByPostId(Guid postId);

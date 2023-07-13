@@ -2,18 +2,22 @@
 using ForumTemplate.Exceptions;
 using ForumTemplate.Models;
 using ForumTemplate.Models.Pagination;
+using ForumTemplate.Persistence.TagRepository;
 using ForumTemplate.Services.PostService;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
+using System.Runtime.CompilerServices;
 
 namespace ForumTemplate.Persistence.PostRepository
 {
     public class PostRepository : IPostRepository
     {
         private readonly ApplicationContext dbContext;
-        public PostRepository(ApplicationContext dbContext)
+        private readonly ITagRepository tagRepository;
+        public PostRepository(ApplicationContext dbContext, ITagRepository tagRepository)
         {
             this.dbContext = dbContext;
+            this.tagRepository = tagRepository;
         }
         public List<Post> GetAll()
         {
@@ -36,7 +40,18 @@ namespace ForumTemplate.Persistence.PostRepository
         public PaginatedList<Post> SearchBy(PostQueryParameters filter)
         {
             List<Post> posts = this.GetAll();
-            posts = FilterByTitle(posts,filter.Title);
+
+            if (!string.IsNullOrEmpty(filter.Title))
+            {
+                if (filter.Title.StartsWith('#'))
+                {
+                    posts = FilterByTag(posts, filter.Title);
+                }
+            }
+            else if (!string.IsNullOrEmpty(filter.Title))
+            {
+                posts = FilterByTitle(posts, filter.Title);
+            }
 
             int totalPages = (posts.Count() + 1) / filter.PageSize;
             posts = Paginate(posts, filter.PageNumber, filter.PageSize);
@@ -155,6 +170,19 @@ namespace ForumTemplate.Persistence.PostRepository
             if (!string.IsNullOrEmpty(title))
             {
                 return posts.FindAll(post => post.Title.StartsWith(title, StringComparison.InvariantCultureIgnoreCase));
+            }
+
+            return posts;
+        }
+
+        public List<Post> FilterByTag(List<Post> posts, string tag)
+        {
+            if (!string.IsNullOrEmpty(tag))
+            {
+                var currentTag = tagRepository.GetByContent(tag);
+
+                return posts.Where(x => x.Tags.Contains(currentTag)).ToList();
+
             }
 
             return posts;

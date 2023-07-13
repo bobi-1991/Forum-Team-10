@@ -9,7 +9,8 @@ namespace ForumTemplate.Persistence.PostRepository
         List<Post> GetAll();
         IQueryable<Post> GetAllToQueriable();
         List<Post> FilterBy(PostQueryParameters filterParameters);
-        PaginatedList<Post> SearchBy(PostQueryParameters search);
+        PaginatedList<Post> SearchBy(PostQueryParameters parameters);
+        List<Post> FilterByTag(List<Post> posts, string tag);
         Post GetById(Guid id);
         Post GetByTitle(string title);
         Post Create(Post post);

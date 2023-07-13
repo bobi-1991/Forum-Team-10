@@ -9,15 +9,12 @@
     <p>
         <a asp-controller="Posts" asp-action="Create" class="btn btn-primary">Create a new post</a>
     </p>
+    <p>Find a post</p>
+    <form asp-controller="Posts" asp-action="Index" method="get">
+        <input type="text" name="Title" />
+        <input type="submit" value="Search" class="btn btn-primary" />
+    </form>
 }
-
-<p>Find a post</p>
-<form asp-controller="Posts" asp-action="Index" method="get">
-    <input type="text" name="Title" />
-    <input type="submit" value="Search" class="btn btn-primary" />
-</form>
-
-
 <div class="table">
     <div class="header">
         <div class="header-cell">Title</div>
@@ -79,6 +76,7 @@
         <span><a asp-controller="Posts" asp-action="Index" asp-route-PageNumber="@totalPages">@totalPages</a></span>
     }
 }
-
 <a asp-controller="Posts" asp-action="Index" asp-route-PageNumber="@(this.Model.PageNumber + 1)" class="btn btn-link @nextButtonState">Next</a>
+<br>
+<a asp-controller="Posts" asp-action="Index" class="nav">See all posts</a>
 
