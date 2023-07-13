@@ -1,6 +1,7 @@
 ﻿using ForumTemplate.Data;
 using ForumTemplate.Exceptions;
 using ForumTemplate.Models;
+using ForumTemplate.Models.ViewModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace ForumTemplate.Persistence.UserRepository
@@ -35,7 +36,7 @@ namespace ForumTemplate.Persistence.UserRepository
                 .Include(x => x.Tags)
                         .ToList();
         }
-        public User GetById(Guid id)
+        public User GetById(Guid userId)
         {
             var user = dbContext.Users
 				 .Where(x => !x.IsDelete)
@@ -43,11 +44,11 @@ namespace ForumTemplate.Persistence.UserRepository
 				.Include(x => x.Posts)
 				.Include(x => x.Comments)
                 .Include(x => x.Tags)
-                .FirstOrDefault(u => u.UserId == id);
+                .FirstOrDefault(u => u.UserId == userId);
 
             if (user is null)
             {
-                throw new EntityNotFoundException($"User with ID: {id} not found.");
+                throw new EntityNotFoundException($"User with ID: {userId} not found.");
             }
 
             return user;
@@ -74,6 +75,17 @@ namespace ForumTemplate.Persistence.UserRepository
             dbContext.SaveChanges();
 
             return updatedUser;
+        }
+        public User AdminEditionUpdate(Guid id, User user)
+        {
+            User userToUpdate = GetById(id);
+            var updatedUser = userToUpdate.AdminEditionUpdatee(user);
+
+            dbContext.Update(updatedUser);
+            dbContext.SaveChanges();
+
+            return updatedUser;
+
         }
 
         public string Delete(Guid id)

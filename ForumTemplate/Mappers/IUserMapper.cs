@@ -17,6 +17,7 @@ namespace ForumTemplate.Mappers
         UpdateUserRequest MapToUpdateUserRequest(UserEditViewModel userEditViewModel);
         UpdateUserRequestModel MapToUpdateUserRequestModel(User user);
         AdminEditViewModel MapToAdminEditUserModel(User user);
+        User MapToUser(AdminEditViewModel adminEditViewModel);
 
 
 

@@ -1,4 +1,6 @@
-﻿namespace ForumTemplate.Models
+﻿using ForumTemplate.Models.ViewModels;
+
+namespace ForumTemplate.Models
 {
     public class User
     {
@@ -58,6 +60,20 @@
             this.UpdatedAt = DateTime.UtcNow;
 
             return this;
-        }        
+        }
+        public User AdminEditionUpdatee(User user)
+        {
+            this.Username = user.Username;
+            this.FirstName = user.FirstName;
+            this.LastName = user.LastName;
+            this.Country = user.Country;
+            this.Password = user.Password;
+            this.Email = user.Email;
+            this.IsAdmin = user.IsAdmin;
+            this.IsBlocked = user.IsBlocked;
+            this.UpdatedAt = DateTime.UtcNow;
+
+            return this;
+        }
     }           
 }

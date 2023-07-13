@@ -116,7 +116,7 @@ namespace ForumTemplate.Controllers
         }
 
         [HttpGet]
-        public IActionResult AdminEdit(Guid id)
+        public IActionResult AdminUpdate(Guid id)
         {
             try
             {
@@ -137,31 +137,13 @@ namespace ForumTemplate.Controllers
         }
 
         [HttpPost]
-        public IActionResult AdminEdit(AdminEditViewModel adminEditViewModel)
-        {
-            try
-            {
-                var loggeduser = this.authManager.CurrentUser;
+        public IActionResult AdminUpdate(AdminEditViewModel adminEditViewModel)
+        {          
+                var loggedUser = this.authManager.CurrentUser;
+                var user = this.userMapper.MapToUser(adminEditViewModel);
+                var updatedUser = userService.AdminEditionUpdate(loggedUser, adminEditViewModel);
 
-              //  var user = userService.GetByUserId(id);
-
-
-                return RedirectToAction("Index", "Home");
-            }
-            catch (EntityNotFoundException e)
-            {
-                this.Response.StatusCode = StatusCodes.Status404NotFound;
-                this.ViewData["ErrorMessage"] = e.Message;
-
-                return this.View("Error");
-            }
-            catch (ArgumentException e)
-            {
-                this.Response.StatusCode = StatusCodes.Status403Forbidden;
-                this.ViewData["ErrorMessage"] = e.Message;
-
-                return this.View("Error");
-            }
+                return RedirectToAction("Info", "Users", new { id = updatedUser.UserId });          
         }
     }
 }

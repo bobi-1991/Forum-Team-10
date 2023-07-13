@@ -52,7 +52,7 @@
                                     @if (authManager.CurrentUser is not null && @authManager.CurrentUser.IsAdmin)
                                     {
                                         <a asp-controller="Users" asp-action="Tools" class="dropdown-item" onmouseover="changeColor(this, 'blue')" onmouseout="resetColor(this)">
-                                            <i class="fas fa-user-circle"></i> Tools
+                                            <i class="fas fa-toolbox"></i> Tools
                                         </a>
                                     }
                                     <a asp-controller="Auth" asp-action="Logout" class="dropdown-item" id="logout-link" onmouseover="changeColor(this, 'red')" onmouseout="resetColor(this)">

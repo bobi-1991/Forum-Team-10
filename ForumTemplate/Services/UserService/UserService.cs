@@ -3,6 +3,7 @@ using ForumTemplate.DTOs.Authentication;
 using ForumTemplate.DTOs.UserDTOs;
 using ForumTemplate.Mappers;
 using ForumTemplate.Models;
+using ForumTemplate.Models.ViewModels;
 using ForumTemplate.Persistence.UserRepository;
 using ForumTemplate.Services.LikeService;
 using ForumTemplate.Services.PostService;
@@ -145,6 +146,15 @@ namespace ForumTemplate.Services.UserService
             var user = userRepository.Update(id, userData);
 
             return userMapper.MapToUserResponse(user);
+        }
+        public User AdminEditionUpdate(User loggedUser, AdminEditViewModel adminEditViewModel)
+        {
+            userValidator.ValidateByGUIDUserLoggedAndAdmin(loggedUser, adminEditViewModel.Id);
+
+            var user = userMapper.MapToUser(adminEditViewModel);
+
+            return userRepository.AdminEditionUpdate(adminEditViewModel.Id, user);
+
         }
 
         public string Delete(User loggedUser, Guid id)
