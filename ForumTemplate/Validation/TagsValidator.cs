@@ -40,28 +40,6 @@ namespace ForumTemplate.Validation
             }
         }
 
-        public void Validate(Guid id, TagRequest tagRequest)
-        {
-            var errors = new List<string>();
-            
-
-            if (string.IsNullOrWhiteSpace(tagRequest.Content))
-            {
-                errors.Add("Tag content cannot be null or whitespace");
-            }
-
-            if (!this.postRepository.Exist(tagRequest.PostId))
-            {
-                errors.Add($"Tag with Id {tagRequest.PostId} does not exist");
-            }
-
-            if (errors.Count > 0)
-            {
-                throw new ValidationException($"Following Validation Errors Occured: {string.Join(", ", errors)}");
-
-            }
-        }
-
         public void GetTagsByPostID(Guid postId)
         {
             var tagsById = this.tagRepository.GetByPostId(postId);
