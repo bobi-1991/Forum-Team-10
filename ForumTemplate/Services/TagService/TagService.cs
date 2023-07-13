@@ -74,7 +74,11 @@ namespace ForumTemplate.Services.TagService
                 throw new EntityNotFoundException($"You Cannot Write Tag on someone else's post");
             }
 
-
+            var tagsOfPost = postOfTag.Tags;
+            if (tagsOfPost.Any(t => t.Content.Equals(tagRequest.Content)))
+            {
+                throw new EntityNotFoundException("You cannot apply the same Tag Twice");
+            }
 
             var tag = this.tagsMapper.MapToTag(tagRequest);
             var createdTag = tagRepository.Create(tag);

@@ -1,4 +1,5 @@
 ﻿using ForumTemplate.DTOs.TagDTOs;
+using ForumTemplate.Exceptions;
 using ForumTemplate.Mappers;
 using ForumTemplate.Models;
 using ForumTemplate.Persistence.PostRepository;
@@ -6,13 +7,7 @@ using ForumTemplate.Persistence.TagRepository;
 using ForumTemplate.Persistence.UserRepository;
 using ForumTemplate.Services.TagService;
 using ForumTemplate.Validation;
-using Microsoft.AspNetCore.Identity;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ForumTemplate.Tests.TagServiceTests
 {
@@ -69,18 +64,26 @@ namespace ForumTemplate.Tests.TagServiceTests
 
         private void SetupUserRepositoryMock()
         {
-
+            userRepositoryMock
+                .Setup(x => x.GetById(It.IsAny<Guid>()))
+                .Returns(new User());
         }
 
         private void SetupPostRepositoryMock()
         {
-
+            postRepositoryMock
+                .Setup(x => x.GetById(It.IsAny<Guid>()))
+                .Returns(new Post()
+                );
         }
 
         private void SetupUserValidatorMock()
         {
             userValidatorMock
                 .Setup(x => x.ValidateUserIdMatchAuthorIdTag(It.IsAny<User>(), It.IsAny<Guid?>()));
+
+            userValidatorMock
+                .Setup(x => x.ValidateUserIsNotBannedTagCreate(It.IsAny<User>()));
         }
 
         private void SetupTagRepositoryMock()
@@ -99,15 +102,22 @@ namespace ForumTemplate.Tests.TagServiceTests
             tagRepositoryMock
                 .Setup(x => x.Delete(It.IsAny<Guid>()))
                 .Returns("Tag was successfully deleted.");
+
+            tagRepositoryMock
+                .Setup(x => x.Create(It.IsAny<Tag>()))
+                .Returns(new Tag());
         }
 
         private void SetupTagValidatorMock()
         {
             tagValidatorMock
                 .Setup(x => x.Validate(It.IsAny<Guid>()));
+
+            tagValidatorMock
+                .Setup(x => x.Validate(It.IsAny<TagRequest>()));
         }
 
-        private void SetupTagMapperMock() 
+        private void SetupTagMapperMock()
         {
             tagMapperMock
                 .Setup(x => x.MapToTagResponse(It.IsAny<List<Tag>>()))
@@ -116,22 +126,11 @@ namespace ForumTemplate.Tests.TagServiceTests
             tagMapperMock
                 .Setup(x => x.MapToTagResponse(It.IsAny<Tag>()))
                 .Returns(It.IsAny<TagResponse>());
+
+            tagMapperMock
+                .Setup(x => x.MapToTag(It.IsAny<TagRequest>()))
+                .Returns(new Tag());
         }
-
-        //public string Delete(User loggedUser, Guid id)
-        //{
-        //    //Validation
-        //    tagsValidator.Validate(id);
-
-        //    var tagToDelete = tagRepository.GetById(id);
-
-        //    var authorId = tagToDelete.UserId;
-
-        //    //Validation
-        //    userValidator.ValidateUserIdMatchAuthorIdTag(loggedUser, authorId);
-
-        //    return this.tagRepository.Delete(id);
-        //}
 
         [TestMethod]
 
@@ -189,7 +188,116 @@ namespace ForumTemplate.Tests.TagServiceTests
             tagRepositoryMock.Verify(x => x.Delete(It.IsAny<Guid>()), Times.Once);
         }
 
-       
+        [TestMethod]
 
+        public void Delete_ShouldReturnCorrectResult()
+        {
+            //Act
+            var result = sut.Delete(It.IsAny<User>(), It.IsAny<Guid>());
+
+            //Assert
+            Assert.AreEqual("Tag was successfully deleted.", result);
+        }
+
+        [TestMethod]
+
+        public void Create_ShouldInvokeCorrectMethods_WhenAllIsValid()
+        {
+            //Arrange
+            postRepositoryMock
+                .Setup(x => x.GetById(It.IsAny<Guid>()))
+                .Returns(new Post()
+                {
+                    PostId = postId,
+                    UserId = userId
+                });
+
+            //Act
+            var result = sut.Create(GetUser(), GetTagRequest());
+
+            //Assert
+            userValidatorMock.Verify(x => x.ValidateUserIsNotBannedTagCreate(It.IsAny<User>()), Times.Once);
+
+            tagValidatorMock.Verify(x => x.Validate(It.IsAny<TagRequest>()), Times.Once);
+
+            userRepositoryMock.Verify(x => x.GetById(userId), Times.Once);
+
+            postRepositoryMock.Verify(x => x.GetById(postId), Times.Once);
+
+            tagMapperMock.Verify(x => x.MapToTag(It.IsAny<TagRequest>()), Times.Once);
+
+            tagRepositoryMock.Verify(x => x.Create(It.IsAny<Tag>()), Times.Once);
+
+            tagMapperMock.Verify(x => x.MapToTagResponse(It.IsAny<Tag>()), Times.Once);
+        }
+
+        [TestMethod]
+
+        public void Create_ShouldThrow_WhenAuthorOfPostIsNull()
+        {
+            //Arrange
+            userRepositoryMock
+                .Setup(x => x.GetById(It.IsAny<Guid>()))
+                .Returns(null as User);
+
+            //Act && Assert
+            //Assert
+            var ex = Assert.ThrowsException<EntityNotFoundException>(
+                 () => sut.Create(It.IsAny<User>(), GetTagRequest()));
+
+            Assert.AreEqual($"User with ID: {userId} not found.", ex.Message);
+        }
+
+        [TestMethod]
+
+        public void Create_ShouldThrow_WhenPostOfTagIsNull()
+        {
+            //Arrange
+            postRepositoryMock
+                .Setup(x => x.GetById(It.IsAny<Guid>()))
+                .Returns(null as Post);
+
+            //Act && Assert
+            //Assert
+            var ex = Assert.ThrowsException<EntityNotFoundException>(
+                 () => sut.Create(It.IsAny<User>(), GetTagRequest()));
+
+            Assert.AreEqual($"Post with ID: {postId} not found.", ex.Message);
+        }
+
+        [TestMethod]
+
+        public void Create_ShouldThrow_WhenPostOfTagUserId_DoNotMatch_TagRequestUserId()
+        {
+            //Assert && Act
+            var ex = Assert.ThrowsException<EntityNotFoundException>(
+                () => sut.Create(GetUser(), GetTagRequest()));
+
+            Assert.AreEqual($"You Cannot Write Tag on someone else's post", ex.Message);
+        }
+        
+        private TagRequest GetTagRequest()
+        {
+            return new TagRequest
+            {
+                Content = "Fitness",
+                UserId = userId,
+                PostId = postId
+            };
+        }
+
+        private User GetUser()
+        {
+            return new User()
+            {
+                UserId = userId,
+                FirstName = "TestTestUser",
+                LastName = "TestTestUserLast",
+                Username = "TestUsername",
+                Email = "TestMail@abv.bg",
+                Password = "1234Passw0rd@",
+                Country = "BG",
+            };
+        }
     }
 }
