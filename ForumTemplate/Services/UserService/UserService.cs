@@ -1,5 +1,4 @@
-﻿using ForumTemplate.Authorization;
-using ForumTemplate.DTOs.Authentication;
+﻿using ForumTemplate.DTOs.Authentication;
 using ForumTemplate.DTOs.UserDTOs;
 using ForumTemplate.Mappers;
 using ForumTemplate.Models;
@@ -75,7 +74,6 @@ namespace ForumTemplate.Services.UserService
             userValidator.ValidateDoesExist(user.Username);
             userValidator.ValidateIfEmailDoesExist(user.Email);
 
-            //Must be done by mapper
             var userDB = new User
             {
                 FirstName = user.FirstName,
@@ -160,7 +158,6 @@ namespace ForumTemplate.Services.UserService
             return userRepository.AdminEditionUpdate(adminEditViewModel.Id, user);
 
         }
-
         public string Delete(User loggedUser, Guid id)
         {
             userValidator.ValidateByGUIDUserLoggedAndAdmin(loggedUser, id);

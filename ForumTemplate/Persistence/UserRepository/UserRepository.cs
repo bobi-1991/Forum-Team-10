@@ -1,9 +1,7 @@
 ﻿using ForumTemplate.Data;
 using ForumTemplate.Exceptions;
 using ForumTemplate.Models;
-using ForumTemplate.Models.ViewModels;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Hosting;
 
 namespace ForumTemplate.Persistence.UserRepository
 {
@@ -139,7 +137,6 @@ namespace ForumTemplate.Persistence.UserRepository
             }
             catch (Exception ex)
             {
-                //Must be made another custom exception
                 throw new ValidationException(ex.Message);
             }
 
@@ -236,7 +233,5 @@ namespace ForumTemplate.Persistence.UserRepository
 
             return users;
         }
-
-  
     }
 }

@@ -1,5 +1,4 @@
 ﻿using ForumTemplate.Models;
-using ForumTemplate.Models.ViewModels;
 
 namespace ForumTemplate.Persistence.UserRepository
 {
@@ -16,21 +15,10 @@ namespace ForumTemplate.Persistence.UserRepository
         string Delete( Guid id);
         bool DoesExist(string usernme);
         bool EmailDoesExists(string email);
-
-        //Authentication
-
-        //  User Login(string username, string encodedPassword);
-
-        //  User Logout(string username);
-
         string RegisterUser(User user);
-
         string PromoteUser(User user);
-
         string DemoteUser(User user);
-
         string BanUser(User user);
-
         string UnBanUser(User user);
 
     }

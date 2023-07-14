@@ -109,8 +109,6 @@ namespace ForumTemplate.Mappers
         }
         public UpdateUserRequest MapToUpdateUserRequest(UserEditViewModel userEditViewModel)
         {
-
-
             return new UpdateUserRequest
             {
                 FirstName = userEditViewModel.FirstName,
@@ -141,7 +139,6 @@ namespace ForumTemplate.Mappers
                 Country = user.Country,
                 Username = user.Username,
                 Password = decodedPassword,
-                // Password = user.Password,
                 Email = user.Email,
                 IsAdmin = user.IsAdmin,
                 IsBlocked = user.IsBlocked
@@ -156,7 +153,6 @@ namespace ForumTemplate.Mappers
                 LastName = adminEditViewModel.LastName,
                 Country = adminEditViewModel.Country,
                 Username = adminEditViewModel.Username,
-                // Password = adminEditViewModel.Password,
                 Password = Convert.ToBase64String(Encoding.UTF8.GetBytes(adminEditViewModel.Password)),
                 Email = adminEditViewModel.Email,
                 IsAdmin = adminEditViewModel.IsAdmin,

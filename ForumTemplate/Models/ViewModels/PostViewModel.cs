@@ -3,7 +3,6 @@
 namespace ForumTemplate.Models.ViewModels
 {
     public class PostViewModel : PostRequest
-    {
-        
+    {       
     }
 }

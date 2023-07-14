@@ -1,5 +1,4 @@
 ﻿using ForumTemplate.DTOs.Authentication;
-using ForumTemplate.DTOs.PostDTOs;
 using ForumTemplate.DTOs.UserDTOs;
 using ForumTemplate.Models;
 using ForumTemplate.Models.ViewModels;

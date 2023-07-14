@@ -1,5 +1,4 @@
-﻿using ForumTemplate.Models.ViewModels;
-
+﻿
 namespace ForumTemplate.Models
 {
     public class User

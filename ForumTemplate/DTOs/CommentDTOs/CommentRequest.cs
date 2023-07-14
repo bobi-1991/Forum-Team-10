@@ -1,9 +1,5 @@
 ﻿namespace ForumTemplate.DTOs.CommentDTOs
 {
-    //public record CommentRequest(
-    //   string? Content,
-    //   Guid UserId,
-    //   Guid PostId);
     public class CommentRequest
     { 
     public string Content { get; set; }

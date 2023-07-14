@@ -1,8 +1,6 @@
-﻿using ForumTemplate.Authorization;
-using ForumTemplate.DTOs.PostDTOs;
+﻿using ForumTemplate.DTOs.PostDTOs;
 using ForumTemplate.Exceptions;
 using ForumTemplate.Models;
-using ForumTemplate.Persistence.PostRepository;
 using ForumTemplate.Persistence.UserRepository;
 
 namespace ForumTemplate.Validation

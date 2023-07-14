@@ -140,10 +140,10 @@ namespace ForumTemplate.Migrations
                 columns: new[] { "UserId", "Country", "Email", "FirstName", "IsAdmin", "IsBlocked", "IsDelete", "LastName", "Password", "UpdatedAt", "Username" },
                 values: new object[,]
                 {
-                    { new Guid("33a667b4-598b-4e98-9762-c401d2fb8b2e"), "Bulgaria", "strahil@email", "strahil", false, false, false, "mladenov", "MTIz", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "strahil" },
-                    { new Guid("8d027fb7-a15a-4d15-82dd-5ec0bceadfcd"), "Bulgaria", "bobi@email", "borislav", false, false, false, "penchev", "MTIz", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "bobi" },
-                    { new Guid("f9bdd8e9-69c2-4d0a-8871-38bccc806111"), "Bulgaria", "admin@forum.com", "Admin", true, false, false, "Adminov", "MTIz", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "admin" },
-                    { new Guid("fa64b04f-d80b-4e59-a5a2-190b621f911b"), "Bulgaria", "iliyan@email", "iliyan", false, false, false, "tsvetkov", "MTIz", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "iliyan" }
+                    { new Guid("2adc1a04-4dbe-4f2b-92c3-541257665b4f"), "Bulgaria", "iliyan@email", "iliyan", false, false, false, "tsvetkov", "MTIz", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "iliyan" },
+                    { new Guid("83678bcd-cec2-43e4-b98c-95444e841492"), "Bulgaria", "admin@forum.com", "Admin", true, false, false, "Adminov", "MTIz", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "admin" },
+                    { new Guid("8c710c8e-a48a-48d6-9a59-638e1d76aed7"), "Bulgaria", "strahil@email", "strahil", false, false, false, "mladenov", "MTIz", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "strahil" },
+                    { new Guid("ce968729-4835-4e6a-b651-6d75e6329437"), "Bulgaria", "bobi@email", "borislav", false, false, false, "penchev", "MTIz", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "bobi" }
                 });
 
             migrationBuilder.CreateIndex(

@@ -1,12 +1,9 @@
 ﻿using ForumTemplate.Data;
-using ForumTemplate.Exceptions;
 using ForumTemplate.Models;
 using ForumTemplate.Models.Pagination;
 using ForumTemplate.Persistence.TagRepository;
-using ForumTemplate.Services.PostService;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Hosting;
-using System.Runtime.CompilerServices;
+
 
 namespace ForumTemplate.Persistence.PostRepository
 {
@@ -45,12 +42,13 @@ namespace ForumTemplate.Persistence.PostRepository
             {
                 if (filter.Title.StartsWith('#'))
                 {
-                    posts = FilterByTag(posts, filter.Title);
+                   posts = FilterByTag(posts, filter.Title);
+                   
                 }
-            }
-            else if (!string.IsNullOrEmpty(filter.Title))
-            {
-                posts = FilterByTitle(posts, filter.Title);
+                else 
+                {
+                    posts = FilterByTitle(posts, filter.Title);
+                }
             }
 
             int totalPages = (posts.Count() + 1) / filter.PageSize;

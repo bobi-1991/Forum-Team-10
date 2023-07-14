@@ -19,8 +19,5 @@ namespace ForumTemplate.Mappers
         AdminEditViewModel MapToAdminEditUserModel(User user);
         User MapToUser(AdminEditViewModel adminEditViewModel);
 
-
-
-
     }
 }
